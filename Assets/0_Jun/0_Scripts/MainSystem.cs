@@ -14,16 +14,22 @@ public class MainSystem : MonoBehaviour
     DebugManager debugManager;
 
     [SerializeField]
+    ShotInfoManager shotInfoManager;
+
+    [SerializeField]
     GameObject Player;
 
     Camera PlayerCamera;
 
     LayerMask wallLayerMask = 1 << 6;
 
+    List<Bullet> ABList;
+
     // Start is called before the first frame update
     void Start()
     {
         PlayerCamera = Camera.main;
+        ABList = shotInfoManager.AllBulletInfoList;
     }
 
     // Update is called once per frame
@@ -31,19 +37,35 @@ public class MainSystem : MonoBehaviour
     {
         //マウスの位置デバッグ
         //debugManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
-
-        //左クリックを押したら移動
-        if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftShift))
+        if(ABList.Count > 0)
         {
+            shotInfoManager.BulletRemove(ABList, wallLayerMask);
+            shotInfoManager.AllBulletMove(ABList);
+        }
 
-            playerMoveManager.NormalMove(
+        if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            //移動
+            if (Input.GetMouseButtonDown(0))
+            {
+                playerMoveManager.NormalMove(
                 Player,
                 Player.transform.position,
-                playerInputManager.MouseVector(Player, PlayerCamera, Input.mousePosition, 10),
+                playerInputManager.MouseVector(Player, PlayerCamera, 10),
                 100,
                 wallLayerMask,
                 QueryTriggerInteraction.Collide
                 );
+            }
+        }
+        else
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector3 mouseVec = playerInputManager.MouseVector(Player, PlayerCamera, 10);
+
+                shotInfoManager.BulletInfoInstantiate(shotInfoManager.bullet1, Player.transform.position, mouseVec);
+            }
         }
     }
 }

@@ -15,9 +15,9 @@ public class DebugManager : MonoBehaviour
         //    zValue);
 
         mouseObject.transform.position = new Vector3(
-           playerInputManager.MousePoint(camera, Input.mousePosition).x,
+           playerInputManager.MousePoint(camera).x,
            zValue,
-           playerInputManager.MousePoint(camera, Input.mousePosition).z
+           playerInputManager.MousePoint(camera).z
            );
     }
 }

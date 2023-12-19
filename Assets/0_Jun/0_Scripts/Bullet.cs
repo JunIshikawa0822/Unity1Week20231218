@@ -22,4 +22,9 @@ public class Bullet
         Vector3 moveValue = bulletMoveDir * bulletSpeed;
         bulletObject.transform.position += moveValue;
     }
+
+    public GameObject BulletGameObject()
+    {
+        return bulletObject;
+    }
 }

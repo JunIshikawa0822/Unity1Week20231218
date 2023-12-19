@@ -7,7 +7,7 @@ public class PlayerMoveManager : MonoBehaviour
     //移動できるかどうか
     public void NormalMove(GameObject playerObject, Vector3 originPos, Vector3 directionVec, float maxDistance, int layerMask, QueryTriggerInteraction triggerDetectMode)
     {
-        Debug.DrawRay(originPos, directionVec, Color.red, 3);
+        //Debug.DrawRay(originPos, directionVec, Color.red, 3);
         if (!Physics.Raycast(originPos, directionVec, out RaycastHit hitInfo, maxDistance, layerMask, triggerDetectMode))
         {
             //できない
