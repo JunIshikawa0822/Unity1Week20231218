@@ -30,7 +30,7 @@ public class MainSystem : MonoBehaviour
     void Update()
     {
         //マウスの位置デバッグ
-        debugManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
+        //debugManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
 
         //左クリックを押したら移動
         if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftShift))
