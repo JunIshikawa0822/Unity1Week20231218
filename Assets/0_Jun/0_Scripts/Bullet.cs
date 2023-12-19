@@ -7,17 +7,19 @@ public class Bullet
     float bulletSpeed;
     Vector3 bulletMoveDir;
     float bulletDamage;
+    GameObject bulletObject;
 
-    public Bullet(float speed, Vector3 moveDir, float damage)
+    public Bullet(float speed, float damage, Vector3 moveDir, GameObject bulletGameObj)
     {
         bulletSpeed = speed;
         bulletMoveDir = moveDir;
         bulletDamage = damage;
+        bulletObject = bulletGameObj;
     }
 
-    public Vector3 bulletMove()
+    public void BulletGetMove()
     {
         Vector3 moveValue = bulletMoveDir * bulletSpeed;
-        return moveValue;
+        bulletObject.transform.position += moveValue;
     }
 }
