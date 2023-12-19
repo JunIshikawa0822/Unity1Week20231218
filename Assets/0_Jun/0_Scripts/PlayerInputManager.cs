@@ -16,7 +16,8 @@ public class PlayerInputManager : MonoBehaviour
     public Vector3 MouseVector(GameObject playerObject, Camera camera, Vector3 mousePos2d, float zValue)
     {
         Vector3 playerPos = playerObject.transform.position;
-        Vector3 mousePos = new Vector3(MousePoint(camera, mousePos2d).x, MousePoint(camera, mousePos2d).y, zValue);
+        //Vector3 mousePos = new Vector3(MousePoint(camera, mousePos2d).x, MousePoint(camera, mousePos2d).y, zValue);
+        Vector3 mousePos = new Vector3(MousePoint(camera, mousePos2d).x, zValue, MousePoint(camera, mousePos2d).z);
 
         //プレイヤーからマウスへ向かうベクトルを標準化
         Vector3 mouseVector = (mousePos - playerPos).normalized;
