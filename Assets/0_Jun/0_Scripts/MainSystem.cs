@@ -5,16 +5,19 @@ using UnityEngine;
 public class MainSystem : MonoBehaviour
 {
     [SerializeField]
-    PlayerInputManager playerInputManager;
+    PlayerInputManager PIManager;
 
     [SerializeField]
-    PlayerMoveManager playerMoveManager;
+    PlayerMoveManager PMManager;
 
     [SerializeField]
-    DebugManager debugManager;
+    DebugManager DBManager;
 
     [SerializeField]
-    ShotInfoManager shotInfoManager;
+    ShotInfoManager SIManager;
+
+    [SerializeField]
+    CollideManager CLManager;
 
     [SerializeField]
     GameObject Player;
@@ -23,35 +26,49 @@ public class MainSystem : MonoBehaviour
 
     LayerMask wallLayerMask = 1 << 6;
 
-    List<Bullet> ABList;
+    LayerMask bulletHitLayer = 1 << 6 | 1 << 7;
+
+    List<Bullet> ABIList;
 
     // Start is called before the first frame update
     void Start()
     {
         PlayerCamera = Camera.main;
-        ABList = shotInfoManager.AllBulletInfoList;
+        ABIList = SIManager.allBulletInfoList;
     }
 
     // Update is called once per frame
     void Update()
     {
         //マウスの位置デバッグ
-        //debugManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
-        if(ABList.Count > 0)
+        //DBManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
+        if(ABIList.Count > 0)
         {
-            shotInfoManager.BulletRemove(ABList, wallLayerMask);
-            shotInfoManager.AllBulletMove(ABList);
+            for(int i = 0; i < ABIList.Count; i++)
+            {
+                //一定距離飛んでいる
+                if (ABIList[i].isDestroyByDis())
+                {
+                    CLManager.BulletRemove(ABIList, i);
+                }
+                //一定距離飛んでいない
+                else
+                {
+                    //そのまま飛ばす
+                    BulletProcess(ABIList, i, bulletHitLayer, CLManager.CollideEnemyList, "Enemy", SIManager.isPenetrate);
+                }       
+            }
         }
 
         if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            //移動
+            //プレイヤーの移動
             if (Input.GetMouseButtonDown(0))
             {
-                playerMoveManager.NormalMove(
+                PMManager.NormalMove(
                 Player,
                 Player.transform.position,
-                playerInputManager.MouseVector(Player, PlayerCamera, 10),
+                PIManager.MouseVector(Player, PlayerCamera, 10),
                 100,
                 wallLayerMask,
                 QueryTriggerInteraction.Collide
@@ -62,10 +79,51 @@ public class MainSystem : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 mouseVec = playerInputManager.MouseVector(Player, PlayerCamera, 10);
+                Vector3 mouseVec = PIManager.MouseVector(Player, PlayerCamera, PIManager.zAdjust);
 
-                shotInfoManager.BulletInfoInstantiate(shotInfoManager.bullet1, Player.transform.position, mouseVec);
+                //SIManager.BulletInfoInstantiate(
+                //    SIManager.bulletTypeObjArray,
+                //    SIManager.bullet1,
+                //    Player.transform.position,
+                //    mouseVec,
+                //    SIManager.destroyDistance
+                //    );
+
+                SIManager.BulletShotSimultaniously(
+                    mouseVec,
+                    SIManager.simultaniousNum,
+                    SIManager.bulletTypeObjArray,
+                    SIManager.bullet1,
+                    Player.transform.position,
+                    SIManager.destroyDistance,
+                    SIManager.bulletAngle,
+                    PIManager.zAdjust
+                    );
             }
         }
+    }
+
+    void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, List<Collider> ColOponentList, string tagName, bool isPen)
+    {
+        bool isCollide = CLManager.BulletCollide(ABIList[number], bHitLayer, ColOponentList, tagName);
+
+        //ぶつかっている
+        if (isCollide)
+        {
+            //貫通しない
+            if (!isPen)
+            {
+                //oponentListの最初のオブジェクトにダメージを与える
+                //弾を破壊する
+            }
+            //貫通
+            else
+            {
+                //oponentListのすべてのオブジェクトにダメージを与える
+                //弾を破壊しない
+            }
+        }
+
+        ABIList[number].BulletGetMove();
     }
 }

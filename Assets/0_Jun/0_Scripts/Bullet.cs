@@ -9,22 +9,43 @@ public class Bullet
     float bulletDamage;
     GameObject bulletObject;
 
-    public Bullet(float speed, float damage, Vector3 moveDir, GameObject bulletGameObj)
+    float moveDistance;
+    float destroyDistance;
+
+    public Bullet(float speed, float damage, Vector3 moveDir, GameObject bulletGameObj, float destroyDist)
     {
         bulletSpeed = speed;
         bulletMoveDir = moveDir;
         bulletDamage = damage;
         bulletObject = bulletGameObj;
+        moveDistance = 0;
+        destroyDistance = destroyDist;
     }
 
+    //動かし続ける
     public void BulletGetMove()
     {
         Vector3 moveValue = bulletMoveDir * bulletSpeed;
         bulletObject.transform.position += moveValue;
+        moveDistance += moveValue.magnitude;
     }
 
+    //GameObjectの情報を返す
     public GameObject BulletGameObject()
     {
         return bulletObject;
+    }
+
+    //一定距離飛んだら合図
+    public bool isDestroyByDis()
+    {
+        if(moveDistance < destroyDistance)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

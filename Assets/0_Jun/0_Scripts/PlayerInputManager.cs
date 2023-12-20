@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerInputManager : MonoBehaviour
 {
+    [SerializeField]
+    public float zAdjust = 10;
+
     //マウスカーソルを置いた場所のWorld座標を返す（クリックしているか否かはこのメソッドでは扱わない）
     public Vector3 MousePoint(Camera camera)
     {
