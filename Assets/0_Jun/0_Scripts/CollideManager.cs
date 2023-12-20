@@ -13,9 +13,10 @@ public class CollideManager : MonoBehaviour
         ABIList.RemoveAt(number);
     }
 
-    //ぶつかったかを判定すると同時にぶつかった相手（敵）をリストに入れる
+    //壁にぶつかって消えるかどうかを判定
     public bool BulletCollide(Bullet bullet, LayerMask bulletHitLayer, List<Collider> ColOponentList, string tagName)
     {
+        //すべてのオブジェクトを取得
         Collider[] colArray = Physics.OverlapSphere(
             bullet.BulletGameObject().transform.position,
             bullet.BulletGameObject().transform.lossyScale.x / 2,
@@ -28,24 +29,31 @@ public class CollideManager : MonoBehaviour
         else
         {
             //ぶつかっていたら
-            isObjectCollide(ColOponentList, colArray, tagName);
-            return true;
+            return isObjectCollide(ColOponentList, colArray, tagName);
         }
     }
 
     //タグを比較してリストに追加
-    void isObjectCollide(List<Collider> ColOponentList, Collider[] cols, string tagName)
+    bool isObjectCollide(List<Collider> ColOponentList, Collider[] cols, string tagName)
     {
+        bool isWall = false;
+
         foreach(Collider objectCol in cols)
         {
+            //壁にぶつかった瞬間break
             if (objectCol.gameObject.tag != tagName)
             {
-                continue;
+                isWall = true;
+                break;
             }
+            //敵にぶつかっている間はそのまま
             else
             {
+                isWall = false;
                 ColOponentList.Add(objectCol);
             }
         }
+
+        return isWall;
     }
 }

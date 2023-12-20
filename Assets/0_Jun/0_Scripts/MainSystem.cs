@@ -105,22 +105,26 @@ public class MainSystem : MonoBehaviour
 
     void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, List<Collider> ColOponentList, string tagName, bool isPen)
     {
-        bool isCollide = CLManager.BulletCollide(ABIList[number], bHitLayer, ColOponentList, tagName);
+        bool isCollideWall = CLManager.BulletCollide(ABIList[number], bHitLayer, ColOponentList, tagName);
 
-        //ぶつかっている
-        if (isCollide)
+        //壁にぶつかっている
+        if (isCollideWall)
         {
-            //貫通しない
-            if (!isPen)
+            //弾を破壊
+            CLManager.BulletRemove(ABIList, number);
+        }
+        //壁にまだぶつかっていない
+        else
+        {
+            if (isPen)
             {
-                //oponentListの最初のオブジェクトにダメージを与える
-                //弾を破壊する
+                //ColOponentListの全員にダメージを与える
+                //弾を破壊しない
             }
-            //貫通
             else
             {
-                //oponentListのすべてのオブジェクトにダメージを与える
-                //弾を破壊しない
+                //ColOponentListの先頭にダメージを与える
+                CLManager.BulletRemove(ABIList, number);
             }
         }
 
