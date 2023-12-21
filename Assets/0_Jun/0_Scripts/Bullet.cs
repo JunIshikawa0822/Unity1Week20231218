@@ -21,7 +21,7 @@ public class Bullet
         moveDistance = 0;
         destroyDistance = destroyDist;
     }
-
+    
     //動かし続ける
     public void BulletGetMove()
     {

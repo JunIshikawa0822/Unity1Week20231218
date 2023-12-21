@@ -19,9 +19,6 @@ public class MainSystem : MonoBehaviour
     [SerializeField]
     CollideManager CLManager;
 
-    [SerializeField]
-    GameObject Player;
-
     Camera PlayerCamera;
 
     LayerMask wallLayerMask = 1 << 6;
@@ -56,7 +53,7 @@ public class MainSystem : MonoBehaviour
                 else
                 {
                     //そのまま飛ばす
-                    BulletProcess(ABIList, i, bulletHitLayer, CLManager.CollideEnemyList, "Enemy", SIManager.isPenetrate);
+                    BulletProcess(ABIList, i, bulletHitLayer, CLManager.CollideEnemyList, "Enemy");
                 }       
             }
         }
@@ -67,9 +64,9 @@ public class MainSystem : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 PMManager.NormalMove(
-                Player,
-                Player.transform.position,
-                PIManager.MouseVector(Player, PlayerCamera, 10),
+                PMManager.Player,
+                PMManager.Player.transform.position,
+                PIManager.MouseVector(PMManager.Player, PlayerCamera, 10),
                 100,
                 wallLayerMask,
                 QueryTriggerInteraction.Collide
@@ -80,7 +77,7 @@ public class MainSystem : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 mouseVec = PIManager.MouseVector(Player, PlayerCamera, PIManager.zAdjust);
+                Vector3 mouseVec = PIManager.MouseVector(PMManager.Player, PlayerCamera, PIManager.zAdjust);
 
                 //SIManager.BulletInfoInstantiate(
                 //    SIManager.bulletTypeObjArray,
@@ -104,7 +101,7 @@ public class MainSystem : MonoBehaviour
         }
     }
 
-    void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, List<Collider> ColOponentList, string tagName, bool isPen)
+    void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, List<Collider> ColOponentList, string tagName)
     {
         bool isCollideWall = CLManager.BulletCollide(ABIList[number], bHitLayer, ColOponentList, tagName);
 

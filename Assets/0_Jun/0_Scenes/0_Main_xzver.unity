@@ -264,7 +264,6 @@ MonoBehaviour:
   DBManager: {fileID: 820090150}
   SIManager: {fileID: 518410448}
   CLManager: {fileID: 2031953356}
-  Player: {fileID: 781191850}
 --- !u!1 &455504476
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotOriginObject: {fileID: 1771956169}
+  Player: {fileID: 781191850}
 --- !u!1 &518410446
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +361,6 @@ MonoBehaviour:
   simultaniousNum: 3
   destroyDistance: 15
   bulletAngle: 20
-  isPenetrate: 0
 --- !u!1 &773007706
 GameObject:
   m_ObjectHideFlags: 0

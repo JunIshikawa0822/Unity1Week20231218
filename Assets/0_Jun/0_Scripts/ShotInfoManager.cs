@@ -28,8 +28,8 @@ public class ShotInfoManager : MonoBehaviour
     [Range(5, 30), SerializeField]
     public int bulletAngle = 10;
 
-    [SerializeField]
-    public bool isPenetrate = false;
+    //[SerializeField]
+    //public bool isPenetrate = false;
 
     // 一つの弾を生成する
     //・弾のオブジェクト配列・弾情報Dic・生成場所・進むベクトル・消える距離
