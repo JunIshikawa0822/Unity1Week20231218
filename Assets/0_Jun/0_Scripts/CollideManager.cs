@@ -5,16 +5,14 @@ using UnityEngine;
 public class CollideManager : MonoBehaviour
 {
     //弾を消す
-    public List<Collider> CollideEnemyList = new List<Collider>();
-
     public void BulletRemove(List<Bullet> ABIList, int number)
     {
         Destroy(ABIList[number].BulletGameObject());
         ABIList.RemoveAt(number);
     }
 
-    //壁にぶつかって消えるかどうかを判定
-    public bool BulletCollide(Bullet bullet, LayerMask bulletHitLayer, List<Collider> ColOponentList, string tagName)
+    //ぶつかったオブジェクトを返す
+    public Collider[] whatBulletCollide(Bullet bullet, LayerMask bulletHitLayer)
     {
         //すべてのオブジェクトを取得
         Collider[] colArray = Physics.OverlapSphere(
@@ -22,38 +20,28 @@ public class CollideManager : MonoBehaviour
             bullet.BulletGameObject().transform.lossyScale.x / 2,
             bulletHitLayer);
 
-        if (colArray.Length < 1)
-        {
-            return false;
-        }
-        else
-        {
-            //ぶつかっていたら
-            return isObjectCollide(ColOponentList, colArray, tagName);
-        }
+        return colArray;
     }
 
-    //タグを比較してリストに追加
-    bool isObjectCollide(List<Collider> ColOponentList, Collider[] cols, string tagName)
+    //tagNameがみつかるまで探索
+    public List<Collider> FindWhatYouWant(Collider[] cols, string tagName)
     {
-        bool isWall = false;
+        List<Collider> colsList = new List<Collider>();
 
         foreach(Collider objectCol in cols)
         {
-            //壁にぶつかった瞬間break
-            if (objectCol.gameObject.tag != tagName)
+            //壁があったらおしまい
+            if (objectCol.gameObject.tag == tagName)
             {
-                isWall = true;
                 break;
             }
-            //敵にぶつかっている間はそのまま
+            //壁がない
             else
             {
-                isWall = false;
-                ColOponentList.Add(objectCol);
+                colsList.Add(objectCol);
             }
         }
 
-        return isWall;
+        return colsList;
     }
 }

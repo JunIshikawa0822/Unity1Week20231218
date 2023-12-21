@@ -4,22 +4,21 @@ using UnityEngine;
 
 public class DamageManager : MonoBehaviour
 {
-    //敵のリストをチェック
-    void CheckEnemy(List<Collider> ColOponentList, bool isPen, Bullet bullet)
+    public void GiveDamage(Bullet bullet,Enemy enemy)
     {
-        if (isPen)
-        {
-            //ColOponentListの全員にダメージを与える
-        }
-        else
-        {
-            //ColOponentListの先頭にダメージを与える
-        }
+        //弾からダメージ値を取得
+        float damage = bullet.BulletDamage();
+
+        //敵にダメージを与える
+        enemy.GetDamage(damage);
     }
 
-    void Damage(int num, Bullet bullet, float EnemyHp, Enemy enemy)
+    //ダメージ処理
+    public void bulletDamegeProcess(List<Collider> ColOpList)
     {
-        float damage = bullet.bulletDamage;
-        enemy.GetDamage(damage);
+        //for (int i = 0; i < ColOpList.Count; i++)
+        //{
+        Debug.Log("ダメージ");
+        //}
     }
 }

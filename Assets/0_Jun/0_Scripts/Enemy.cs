@@ -9,23 +9,44 @@ public class Enemy
     float enemyDamage;
     float enemyEXP;
 
+    GameObject enemyObject;
+
     int enemyMoveType;
     Animation enemyAnim;
 
-    public Enemy(float enHp, float enSpeed, float enDamage, float enEXP, int enMoveType, Animation enAnim)
+    public Enemy(float enHp, float enSpeed, float enDamage, float enEXP, int enMoveType, Animation enAnim, GameObject enObject)
     {
         enemyHP = enHp;
         enemySpeed = enSpeed;
         enemyDamage = enDamage;
         enemyEXP = enEXP;
+
+        enemyObject = enObject;
         enemyMoveType = enMoveType;
 
         enemyAnim = enAnim;
     }
 
-    //ダメージ判定＆死んだかどうか
+    //public Enemy EnemyGameObject(GameObject enemyObject)
+    //{
+    //    return enemyObject.
+    //}
+
+    //ダメージをHPに与える
     public void GetDamage(float givenDamage)
     {
         enemyHP -= givenDamage;
+    }
+
+    public bool isDead()
+    {
+        if (enemyHP < 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

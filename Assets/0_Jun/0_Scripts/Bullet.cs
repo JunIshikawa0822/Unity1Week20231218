@@ -6,13 +6,15 @@ public class Bullet
 {
     float bulletSpeed;
     Vector3 bulletMoveDir;
-    public float bulletDamage;
+    float bulletDamage;
     GameObject bulletObject;
 
     float moveDistance;
     float destroyDistance;
 
-    public Bullet(float speed, float damage, Vector3 moveDir, GameObject bulletGameObj, float destroyDist)
+    bool isPenetrate;
+
+    public Bullet(float speed, float damage, Vector3 moveDir, GameObject bulletGameObj, float destroyDist, bool isPen)
     {
         bulletSpeed = speed;
         bulletMoveDir = moveDir;
@@ -20,6 +22,7 @@ public class Bullet
         bulletObject = bulletGameObj;
         moveDistance = 0;
         destroyDistance = destroyDist;
+        isPenetrate = isPen;
     }
     
     //動かし続ける
@@ -39,6 +42,11 @@ public class Bullet
     public float BulletDamage()
     {
         return bulletDamage;
+    }
+
+    public bool isBulletPenetrate()
+    {
+        return isPenetrate;
     }
 
     //一定距離飛んだら合図

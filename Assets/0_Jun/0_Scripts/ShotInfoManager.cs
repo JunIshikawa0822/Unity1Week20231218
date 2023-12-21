@@ -28,23 +28,23 @@ public class ShotInfoManager : MonoBehaviour
     [Range(5, 30), SerializeField]
     public int bulletAngle = 10;
 
-    //[SerializeField]
-    //public bool isPenetrate = false;
+    [SerializeField]
+    public bool isPenetrate = false;
 
     // 一つの弾を生成する
     //・弾のオブジェクト配列・弾情報Dic・生成場所・進むベクトル・消える距離
-    void BulletInfoInstantiate(GameObject[] bTObjArray, Dictionary<string, float> bTypeDic, Vector3 instantPos, Vector3 moveDir, float destroyDist)
+    public void BulletInfoInstantiate(GameObject[] bTObjArray, Dictionary<string, float> bTypeDic, Vector3 instantPos, Vector3 moveDir, float destroyDist, bool isbPen)
     {
         GameObject bulletObj = Instantiate(bTObjArray[(int)bTypeDic["BTypeNum"]], instantPos, Quaternion.identity);
-        Bullet bullet = new Bullet(bTypeDic["speed"], bTypeDic["damage"], moveDir, bulletObj, destroyDist);
+        Bullet bullet = new Bullet(bTypeDic["speed"], bTypeDic["damage"], moveDir, bulletObj, destroyDist, isbPen);
         allBulletInfoList.Add(bullet);
     }
 
     //同時に弾を発射する
-    public void BulletShotSimultaniously(Vector3 mouseVec, int simulNum, GameObject[] bTObjArray, Dictionary<string, float> bTypeDic, Vector3 instantPos, float destroyDist, float bAngle, float zValue)
+    public void BulletShotSimultaniously(Vector3 mouseVec, int simulNum, GameObject[] bTObjArray, Dictionary<string, float> bTypeDic, Vector3 instantPos, float destroyDist, float bAngle, bool isbPen)
     {
         float theta;
-        Debug.Log(mouseVec);
+        //Debug.Log(mouseVec);
         for (int i = 0; i < simulNum; i++)
         {
             //奇数なら
@@ -57,14 +57,13 @@ public class ShotInfoManager : MonoBehaviour
             {
                 theta = Mathf.Pow(-1, i) * ((i + 1) / 2) * bAngle + bAngle / 2;
             }
-
             Vector3 vec = Quaternion.Euler(0, theta, 0) * mouseVec;
             //Vector3 vec = new Vector3(
             //    mouseVec.x * Mathf.Cos(theta) - mouseVec.z * Mathf.Sin(theta),
             //    zValue,
             //    mouseVec.x * Mathf.Sin(theta) + mouseVec.z * Mathf.Cos(theta)).normalized;
             //Debug.Log(theta);
-            BulletInfoInstantiate(bTObjArray, bTypeDic, instantPos, vec, destroyDist);
+            BulletInfoInstantiate(bTObjArray, bTypeDic, instantPos, vec, destroyDist, isbPen);
         }
     }
 }

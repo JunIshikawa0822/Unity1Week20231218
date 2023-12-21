@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MainSystem : MonoBehaviour
@@ -18,6 +19,9 @@ public class MainSystem : MonoBehaviour
 
     [SerializeField]
     CollideManager CLManager;
+
+    [SerializeField]
+    DamageManager DMManager;
 
     Camera PlayerCamera;
 
@@ -53,7 +57,7 @@ public class MainSystem : MonoBehaviour
                 else
                 {
                     //そのまま飛ばす
-                    BulletProcess(ABIList, i, bulletHitLayer, CLManager.CollideEnemyList, "Enemy");
+                    BulletProcess(ABIList, i, bulletHitLayer, "Wall", SIManager.isPenetrate);
                 }       
             }
         }
@@ -77,14 +81,16 @@ public class MainSystem : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 mouseVec = PIManager.MouseVector(PMManager.Player, PlayerCamera, PIManager.zAdjust);
+                //発射方向を決める
+                Vector3 mouseVec = PIManager.MouseVector(PMManager.shotOriginObject, PlayerCamera, PIManager.zAdjust);
 
                 //SIManager.BulletInfoInstantiate(
                 //    SIManager.bulletTypeObjArray,
                 //    SIManager.bullet1,
-                //    Player.transform.position,
+                //    PMManager.shotOriginObject.transform.position,
                 //    mouseVec,
-                //    SIManager.destroyDistance
+                //    SIManager.destroyDistance,
+                //    SIManager.isPenetrate
                 //    );
 
                 SIManager.BulletShotSimultaniously(
@@ -95,33 +101,73 @@ public class MainSystem : MonoBehaviour
                     PMManager.shotOriginObject.transform.position,
                     SIManager.destroyDistance,
                     SIManager.bulletAngle,
-                    PIManager.zAdjust
+                    SIManager.isPenetrate
                     );
             }
         }
     }
 
-    void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, List<Collider> ColOponentList, string tagName)
+    //弾が一回で行う処理　壁に衝突するか　敵に衝突するか　＋移動
+    void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, string tagName, bool isPen)
     {
-        bool isCollideWall = CLManager.BulletCollide(ABIList[number], bHitLayer, ColOponentList, tagName);
+        Collider[] cols = CLManager.whatBulletCollide(ABIList[number], bHitLayer);
 
-        //壁にぶつかっている
-        if (isCollideWall)
+        //何かにぶつかっている
+        if (cols.Length > 0)
         {
-            //弾を破壊
-            CLManager.BulletRemove(ABIList, number);
-            return;
-        }
-        //壁にまだぶつかっていない
-        else
-        {
-            //敵にぶつかっている
-            if (ColOponentList.Count > 0)
+            List<Collider> colOponentList = CLManager.FindWhatYouWant(cols, tagName);
+
+            //colsが初っ端から壁だった
+            if(colOponentList.Count < 1)
             {
-                //ダメージ処理
+                //弾を破壊
+                CLManager.BulletRemove(ABIList, number);
+
+                //判定を行ったのでColOpListの中身を削除
+                colOponentList.Clear();
+
+                return;
+            }
+
+            //衝突したリストに壁があった
+            if(colOponentList.Count < cols.Length)
+            {
+                //敵にダメージ判定
+                DMManager.bulletDamegeProcess(colOponentList);
+
+                //弾を破壊
+                CLManager.BulletRemove(ABIList, number);
+
+                //判定を行ったのでColOpListの中身を削除
+                colOponentList.Clear();
+                
+                return;
+            }
+            //なかった
+            else
+            {
+                Debug.Log(colOponentList[0].name);
+
+                //貫通でない
+                if (!isPen)
+                {
+                    DMManager.bulletDamegeProcess(colOponentList);
+
+                    //弾を破壊
+                    CLManager.BulletRemove(ABIList, number);
+                    return;
+                }
+                //貫通なら
+                else
+                {
+                    DMManager.bulletDamegeProcess(colOponentList);
+                }
+                   
+                //判定を行ったのでColOpListの中身を削除
+                colOponentList.Clear();
             }
         }
-
+        
         ABIList[number].BulletGetMove();
     }
 }
