@@ -6,7 +6,7 @@ public class Bullet
 {
     float bulletSpeed;
     Vector3 bulletMoveDir;
-    float bulletDamage;
+    public float bulletDamage;
     GameObject bulletObject;
 
     float moveDistance;
@@ -34,6 +34,11 @@ public class Bullet
     public GameObject BulletGameObject()
     {
         return bulletObject;
+    }
+
+    public float BulletDamage()
+    {
+        return bulletDamage;
     }
 
     //一定距離飛んだら合図

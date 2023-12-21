@@ -8,6 +8,7 @@ public class ShotInfoManager : MonoBehaviour
 {
     [System.NonSerialized]
     public Dictionary<string, float> bullet1 = new Dictionary<string, float>(){ {"BTypeNum",1},{"speed", 0.2f},{"damage", 1}};
+
     [System.NonSerialized]
     public Dictionary<string, float> bullet2 = new Dictionary<string, float>(){ {"BTypeNum",2},{"speed", 7},{"damage", 3}};
 

@@ -50,6 +50,7 @@ public class MainSystem : MonoBehaviour
                 if (ABIList[i].isDestroyByDis())
                 {
                     CLManager.BulletRemove(ABIList, i);
+                    continue;
                 }
                 //一定距離飛んでいない
                 else
@@ -94,7 +95,7 @@ public class MainSystem : MonoBehaviour
                     SIManager.simultaniousNum,
                     SIManager.bulletTypeObjArray,
                     SIManager.bullet1,
-                    Player.transform.position,
+                    PMManager.shotOriginObject.transform.position,
                     SIManager.destroyDistance,
                     SIManager.bulletAngle,
                     PIManager.zAdjust
@@ -112,19 +113,15 @@ public class MainSystem : MonoBehaviour
         {
             //弾を破壊
             CLManager.BulletRemove(ABIList, number);
+            return;
         }
         //壁にまだぶつかっていない
         else
         {
-            if (isPen)
+            //敵にぶつかっている
+            if (ColOponentList.Count > 0)
             {
-                //ColOponentListの全員にダメージを与える
-                //弾を破壊しない
-            }
-            else
-            {
-                //ColOponentListの先頭にダメージを与える
-                CLManager.BulletRemove(ABIList, number);
+                //ダメージ処理
             }
         }
 

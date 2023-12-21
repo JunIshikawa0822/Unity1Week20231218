@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerMoveManager : MonoBehaviour
 {
+    [SerializeField]
+    public GameObject shotOriginObject;
     //移動できるかどうか
     public void NormalMove(GameObject playerObject, Vector3 originPos, Vector3 directionVec, float maxDistance, int layerMask, QueryTriggerInteraction triggerDetectMode)
     {
