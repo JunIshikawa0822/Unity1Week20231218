@@ -359,9 +359,9 @@ MonoBehaviour:
   - {fileID: 3840210794078727644, guid: 5456b740aa8cb45159e05b6a5f3a1865, type: 3}
   - {fileID: 3840210794078727644, guid: 5456b740aa8cb45159e05b6a5f3a1865, type: 3}
   - {fileID: 3840210794078727644, guid: 5456b740aa8cb45159e05b6a5f3a1865, type: 3}
-  simultaniousNum: 3
+  simultaniousNum: 5
   destroyDistance: 15
-  bulletAngle: 20
+  bulletAngle: 5
   isPenetrate: 0
 --- !u!1 &617456538
 GameObject:

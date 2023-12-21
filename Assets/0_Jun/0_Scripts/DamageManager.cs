@@ -16,9 +16,9 @@ public class DamageManager : MonoBehaviour
     //ダメージ処理
     public void bulletDamegeProcess(List<Collider> ColOpList)
     {
-        //for (int i = 0; i < ColOpList.Count; i++)
-        //{
-        Debug.Log("ダメージ");
-        //}
+        for (int i = 0; i < ColOpList.Count; i++)
+        {
+            Debug.Log("ダメージ");
+        }
     }
 }

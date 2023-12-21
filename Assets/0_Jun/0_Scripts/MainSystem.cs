@@ -146,7 +146,7 @@ public class MainSystem : MonoBehaviour
             //なかった
             else
             {
-                Debug.Log(colOponentList[0].name);
+                //Debug.Log(colOponentList[0].name);
 
                 //貫通でない
                 if (!isPen)
