@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class GameManager : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
     //public Transform goal;
     
-    public float moveSpeed = 5f;
+    float moveSpeed = 5f;
     public GameObject player;
     
-    Vector3 _inputDirection;
+    // //Vector3 _inputDirection;
     private Rigidbody rb;
-    Vector3 force;
-    int interval;
+    // Vector3 force;
+    // int interval;
     //List<bool> IsEntered = 
     // Start is called before the first frame update
     void Awake()
@@ -29,12 +29,12 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        movePlayer();
+        
         
        
         
     }
-    void movePlayer()
+    public void movePlayer()
     {
         Vector3 dir = Vector3.zero;
         //_inputDirection = new Vector3(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"),0);
@@ -64,19 +64,19 @@ public class GameManager : MonoBehaviour
 
         
     }
-    IEnumerator EnemyGenerate()
-    {
+    // IEnumerator EnemyGenerate()
+    // {
         
-        interval = 30;
+    //     interval = 30;
         
-        //
-        for(int i = 0;i < interval ;i ++)
-        {
-            yield return null;
-        }
+    //     //
+    //     for(int i = 0;i < interval ;i ++)
+    //     {
+    //         yield return null;
+    //     }
         
-        interval = Random.Range(30, 100);
-    }
+    //     interval = Random.Range(30, 100);
+    // }
         
         
         
