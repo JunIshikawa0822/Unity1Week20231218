@@ -7,6 +7,15 @@ public class PlayerInputManager : MonoBehaviour
     [SerializeField]
     public float zAdjust = 10;
 
+    public bool fireTimerIsActive = false;
+    //float fireInterval;
+    WaitForSeconds fireIntervalWait;
+
+    public void InputIntervalInit(float interval)
+    {
+        fireIntervalWait = new WaitForSeconds(interval);
+    }
+
     //マウスカーソルを置いた場所のWorld座標を返す（クリックしているか否かはこのメソッドでは扱わない）
     public Vector3 MousePoint(Camera camera)
     {
@@ -26,6 +35,15 @@ public class PlayerInputManager : MonoBehaviour
         Vector3 mouseVector = (mousePos - playerPos).normalized;
 
         return mouseVector;
+    }
+
+    public IEnumerator FireTimer()
+    {
+        fireTimerIsActive = true;
+
+        yield return fireIntervalWait;
+
+        fireTimerIsActive = false;
     }
 }
 

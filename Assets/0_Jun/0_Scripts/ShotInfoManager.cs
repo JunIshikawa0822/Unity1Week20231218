@@ -17,7 +17,7 @@ public class ShotInfoManager : MonoBehaviour
 
     //全ての弾
     [System.NonSerialized]
-    public List<Bullet> allBulletInfoList = new List<Bullet>();
+    public List<Bullet> AllBulletInfoList = new List<Bullet>();
 
     [Range(1, 7), SerializeField]
     public int simultaniousNum = 1;
@@ -28,8 +28,12 @@ public class ShotInfoManager : MonoBehaviour
     [Range(5, 30), SerializeField]
     public int bulletAngle = 10;
 
+    [Range(0.1f, 5), SerializeField]
+    public float fireInterval = 3.0f;
+
     [SerializeField]
-    public bool isPenetrate = false;
+    public bool isPenetrate = true;
+
 
     // 一つの弾を生成する
     //・弾のオブジェクト配列・弾情報Dic・生成場所・進むベクトル・消える距離
@@ -37,7 +41,7 @@ public class ShotInfoManager : MonoBehaviour
     {
         GameObject bulletObj = Instantiate(bTObjArray[(int)bTypeDic["BTypeNum"]], instantPos, Quaternion.identity);
         Bullet bullet = new Bullet(bTypeDic["speed"], bTypeDic["damage"], moveDir, bulletObj, destroyDist, isbPen);
-        allBulletInfoList.Add(bullet);
+        AllBulletInfoList.Add(bullet);
     }
 
     //同時に弾を発射する
@@ -66,4 +70,5 @@ public class ShotInfoManager : MonoBehaviour
             BulletInfoInstantiate(bTObjArray, bTypeDic, instantPos, vec, destroyDist, isbPen);
         }
     }
+    
 }

@@ -7,6 +7,12 @@ public class DebugManager : MonoBehaviour
     [SerializeField]
     public GameObject MouseObject;
 
+    [SerializeField]
+    public GameObject EnemyObj;
+
+    [SerializeField]
+    public GameObject InstaPosObj;
+
     public void mousePosDebug(GameObject mouseObject, PlayerInputManager playerInputManager, Camera camera, float zValue)
     {
         //mouseObject.transform.position = new Vector3(

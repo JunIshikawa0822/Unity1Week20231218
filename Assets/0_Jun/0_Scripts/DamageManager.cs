@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DamageManager : MonoBehaviour
 {
-    public void GiveDamage(Bullet bullet,Enemy enemy)
+    void GiveDamage(Bullet bullet,Enemy enemy)
     {
         //弾からダメージ値を取得
         float damage = bullet.BulletDamage();
@@ -14,11 +14,27 @@ public class DamageManager : MonoBehaviour
     }
 
     //ダメージ処理
-    public void bulletDamegeProcess(List<Collider> ColOpList)
+    public void bulletDamegeProcess(List<Collider> ColOpList, List<Enemy> AEIList, List<GameObject> enemyObjList, Bullet bullet)
     {
-        for (int i = 0; i < ColOpList.Count; i++)
+        for(int i = 0; i < ColOpList.Count; i++)
         {
-            Debug.Log("ダメージ");
-        }
+            int enListIndex = enemyObjList.IndexOf(ColOpList[i].gameObject);
+
+            Enemy enemy = AEIList[enListIndex];
+
+            GiveDamage(bullet, enemy);
+
+            //死なない
+            if (enemy.isDead())
+            {
+                EnemyRemove(AEIList, enListIndex);
+            }
+        }   
+    }
+
+    void EnemyRemove(List<Enemy> AEIList, int number)
+    {
+        Destroy(AEIList[number].EnemyGameObject());
+        AEIList.RemoveAt(number);
     }
 }
