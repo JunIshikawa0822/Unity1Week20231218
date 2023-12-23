@@ -14,7 +14,7 @@ public class EnemyInfoManager : MonoBehaviour
     public void EnemyInfoInstantiate(GameObject enemyObject, GameObject instaPosObj)
     {
         GameObject enemyObj = Instantiate(enemyObject, instaPosObj.transform.position, Quaternion.identity);
-        Enemy enemy = new Enemy(3, 0, 0, 0, 0, enemyObj);
+        Enemy enemy = new Enemy(3, 0, 0, 70, 0, enemyObj);
 
         AllEnemyInfoList.Add(enemy);
         AllEnemyObjectList.Add(enemy.EnemyGameObject());

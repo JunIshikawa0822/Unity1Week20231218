@@ -32,11 +32,16 @@ public class Enemy
         return enemyObject;
     }
 
+    public float EnemyEXP()
+    {
+        return enemyEXP;
+    }
+
     //ダメージをHPに与える
     public void GetDamage(float givenDamage)
     {
         enemyHP -= givenDamage;
-        Debug.Log(enemyHP);
+        //Debug.Log(enemyHP);
     }
 
     public bool isDead()

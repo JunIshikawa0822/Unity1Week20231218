@@ -14,7 +14,7 @@ public class DamageManager : MonoBehaviour
     }
 
     //ダメージ処理
-    public void bulletDamegeProcess(List<Collider> ColOpList, List<Enemy> AEIList, List<GameObject> enemyObjList, Bullet bullet)
+    public void bulletDamegeProcess(List<Collider> ColOpList, List<Enemy> AEIList, List<GameObject> enemyObjList, Bullet bullet, int totalPlayerEXP)
     {
         for(int i = 0; i < ColOpList.Count; i++)
         {
@@ -24,9 +24,13 @@ public class DamageManager : MonoBehaviour
 
             GiveDamage(bullet, enemy);
 
-            //死なない
+            //死んだら
             if (enemy.isDead())
-            {
+            {         
+                //経験値加算
+                totalPlayerEXP += (int)enemy.EnemyEXP();
+
+                //敵の破壊
                 EnemyRemove(AEIList, enListIndex);
             }
         }   

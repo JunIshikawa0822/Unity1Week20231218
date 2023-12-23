@@ -70,5 +70,4 @@ public class ShotInfoManager : MonoBehaviour
             BulletInfoInstantiate(bTObjArray, bTypeDic, instantPos, vec, destroyDist, isbPen);
         }
     }
-    
 }
