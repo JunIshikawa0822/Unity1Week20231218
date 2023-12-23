@@ -54,25 +54,6 @@ public class PlayerMoveManager : MonoBehaviour
         }
     }
 
-    //public void SetInstaObjectPos(GameObject[] blocksObjArray, Vector3 setPos)
-    //{
-    //    foreach(GameObject blockObj in blocksObjArray)
-    //    {
-    //        //場に出ていない
-    //        if (!blockObj.activeSelf)
-    //        {
-    //            SetObjPos(setPos, blockObj);
-
-    //            blockObj.SetActive(true);
-    //            break;
-    //        }
-    //        else
-    //        {
-    //            continue;
-    //        }
-    //    }
-    //}
-
     public void SetObjPos(Vector3 setPos, GameObject obj)
     {
         obj.transform.position = setPos;

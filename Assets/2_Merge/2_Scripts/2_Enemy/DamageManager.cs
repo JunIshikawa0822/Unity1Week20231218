@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DamageManager : MonoBehaviour
 {
-    void GiveDamage(Bullet bullet,Enemy enemy)
+    void GiveDamage(Bullet bullet, Enemy enemy)
     {
         //弾からダメージ値を取得
         int damage = bullet.BulletDamage();

@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
-public class MainSystem : MonoBehaviour
+public class JunMainSystem : MonoBehaviour
 {
     [SerializeField]
     PlayerInputManager PIManager;
@@ -12,8 +12,8 @@ public class MainSystem : MonoBehaviour
     [SerializeField]
     PlayerMoveManager PMManager;
 
-    [SerializeField]
-    DebugManager DBManager;
+    //[SerializeField]
+    //DebugManager DBManager;
 
     [SerializeField]
     ShotInfoManager SIManager;
@@ -33,6 +33,9 @@ public class MainSystem : MonoBehaviour
     [SerializeField]
     UserInterfaceManager UIManager;
 
+    [SerializeField]
+    EnemyManager ENManager;
+
     Camera PlayerCamera;
 
     LayerMask wallLayer = 1 << 6;
@@ -42,10 +45,13 @@ public class MainSystem : MonoBehaviour
     LayerMask playerLayer = 1 << 8;
 
     List<Bullet> ABIList;
-    List<Enemy> AEIList;
     List<GameObject> AEOList;
 
+    List<Enemy> AEIList;
+
     int gamePhase = 0;
+
+    GameObject Player;
 
     // Start is called before the first frame update
     void Start()
@@ -53,18 +59,20 @@ public class MainSystem : MonoBehaviour
         PlayerCamera = Camera.main;
 
         ABIList = SIManager.AllBulletInfoList;
-        AEIList = EIManager.AllEnemyInfoList;
-        AEOList = EIManager.AllEnemyObjectList;
+        AEIList = ENManager.AllEnemyInfoList;
+        AEOList = ENManager.AllEnemyObjectList;
 
-        EIManager.EnemyInfoInstantiate(DBManager.EnemyObj, DBManager.InstaPosObj);
+        //EIManager.EnemyInfoInstantiate(DBManager.EnemyObj, DBManager.InstaPosObj);
 
         PIManager.InputInterval(SIManager.fireInterval);
 
         UIManager.SliderMaxInit();
 
-        //Debug.Log(PEXPManager.EXPtoLevel());
+        Player = PMManager.Player;
 
         gamePhase = 0;
+
+        ENManager.EnemyInit(Player);
     }
 
     // Update is called once per frame
@@ -78,8 +86,10 @@ public class MainSystem : MonoBehaviour
                 break;
 
             case 1:
+
                 //マウスの位置デバッグ
                 //DBManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
+
                 if (Input.GetKey(KeyCode.Space))
                 {
                     BaseObjShotProcess(
@@ -98,9 +108,9 @@ public class MainSystem : MonoBehaviour
                     if (Input.GetMouseButtonDown(0))
                     {
                         PMManager.NormalMove(
-                        PMManager.Player,
-                        PMManager.Player.transform.position,
-                        PIManager.MouseVector(PMManager.Player, PlayerCamera, PIManager.zAdjust),
+                        Player,
+                        Player.transform.position,
+                        PIManager.MouseVector(Player, PlayerCamera, PIManager.zAdjust),
                         100,
                         wallLayer,
                         QueryTriggerInteraction.Collide
@@ -119,15 +129,6 @@ public class MainSystem : MonoBehaviour
                         //発射方向を決める
                         Vector3 mouseVec = PIManager.MouseVector(PMManager.shotOriginObject, PlayerCamera, PIManager.zAdjust);
 
-                        //SIManager.BulletInfoInstantiate(
-                        //    SIManager.bulletTypeObjArray,
-                        //    SIManager.bullet1,
-                        //    PMManager.shotOriginObject.transform.position,
-                        //    mouseVec,
-                        //    SIManager.destroyDistance,
-                        //    SIManager.isPenetrate
-                        //    );
-
                         SIManager.BulletShotSimultaniously(
                             mouseVec,
                             SIManager.simultaniousNum,
@@ -140,10 +141,19 @@ public class MainSystem : MonoBehaviour
                             );
 
                         PIManager.StartCoroutine("FireTimer");
-
                     }
                 }
 
+                //敵の処理
+                if(AEIList.Count > 0)
+                {
+                    for(int i = 0; i < AEIList.Count; i++)
+                    {
+                        EnemyProcess(AEIList, i, Player);
+                    }
+                }
+
+                //弾の処理
                 if (ABIList.Count > 0)
                 {
                     for (int i = 0; i < ABIList.Count; i++)
@@ -171,7 +181,7 @@ public class MainSystem : MonoBehaviour
         }
     }
 
-    //弾が一回で行う処理　壁に衝突するか　敵に衝突するか　＋移動
+    //弾が一回で行う処理　壁に衝突するか　敵に衝突するか　+移動
     void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, string tagName, bool isPen)
     {
         Bullet bullet = ABIList[number];
@@ -294,5 +304,10 @@ public class MainSystem : MonoBehaviour
             gamePhase = 2;
             Debug.Log("フェーズ移行");
         }
+    }
+
+    void EnemyProcess(List<Enemy> AEIList, int number, GameObject target)
+    {
+        AEIList[number].EnemyNavMove(target.transform, AEIList[number].enemyObject.transform.position);   
     }
 }

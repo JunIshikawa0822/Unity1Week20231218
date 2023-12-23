@@ -62,11 +62,6 @@ public class ShotInfoManager : MonoBehaviour
                 theta = Mathf.Pow(-1, i) * ((i + 1) / 2) * bAngle + bAngle / 2;
             }
             Vector3 vec = Quaternion.Euler(0, theta, 0) * mouseVec;
-            //Vector3 vec = new Vector3(
-            //    mouseVec.x * Mathf.Cos(theta) - mouseVec.z * Mathf.Sin(theta),
-            //    zValue,
-            //    mouseVec.x * Mathf.Sin(theta) + mouseVec.z * Mathf.Cos(theta)).normalized;
-            //Debug.Log(theta);
             BulletInfoInstantiate(bTObjArray, bTypeDic, instantPos, vec, destroyDist, isbPen);
         }
     }

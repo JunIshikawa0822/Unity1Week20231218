@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerInputManager : MonoBehaviour
 {
     [SerializeField]
     public float zAdjust = 10;
 
+    [System.NonSerialized]
     public bool fireTimerIsActive = false;
     //float fireInterval;
     WaitForSeconds fireIntervalWait;

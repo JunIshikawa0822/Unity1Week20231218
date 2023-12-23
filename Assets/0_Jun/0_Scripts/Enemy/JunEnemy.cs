@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy
+public class JunEnemy
 {
     int enemyHP;
     float enemySpeed;
@@ -14,7 +14,7 @@ public class Enemy
     int enemyMoveType;
     //Animation enemyAnim;
 
-    public Enemy(int enHp, float enSpeed, float enDamage, int enEXP, int enMoveType, GameObject enObject)
+    public JunEnemy(int enHp, float enSpeed, float enDamage, int enEXP, int enMoveType, GameObject enObject)
     {
         enemyHP = enHp;
         enemySpeed = enSpeed;

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7951937228484609280}
   - component: {fileID: 8891391961194021209}
   - component: {fileID: 8430449219157445887}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1487708111746069771}
   - component: {fileID: 658744244924187656}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1548417597
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d74318faccd3cfd4792a285e705fc5c5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 3707977745003540024}
   - component: {fileID: 5715853367183962132}
   - component: {fileID: 2001163822972775946}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -332,9 +332,9 @@ GameObject:
   - component: {fileID: 9170450260979722872}
   - component: {fileID: 6293940256714392157}
   - component: {fileID: 8503367795398223143}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: swarmPrefab
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

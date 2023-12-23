@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1034227864084379798}
   - component: {fileID: 6672882124786873870}
   - component: {fileID: 9185415771307551307}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 1294489797068082971}
   - component: {fileID: 2341458241505866084}
   - component: {fileID: 5985924095801507758}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,9 +248,9 @@ GameObject:
   - component: {fileID: 1791611369243263641}
   - component: {fileID: 7648547270519411590}
   - component: {fileID: 8291922536989755500}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: enemyPrefab
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -352,7 +352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4863861974593529045}
   - component: {fileID: 8868988548023929299}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +413,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1548417597
-  m_SortingLayer: 2
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d280dad0830093142b2013dcfee178a7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
