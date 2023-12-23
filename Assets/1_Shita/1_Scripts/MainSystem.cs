@@ -16,11 +16,11 @@ public class MainSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Vector3 enemyPos = new Vector3(0.0f,0.0f,0.0f);
+        
         enemyPos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 1.1f, Camera.main.nearClipPlane));
         enemyPos.z = enemyPos.y;
         enemyPos.y = 0;
-        enG.spawnNormal(playerPos);
+        StartCoroutine(enG.SpawnCoroutine(playerPos,5));
         EnList = enG.allEnemyInfoList;
         
     }
@@ -31,11 +31,20 @@ public class MainSystem : MonoBehaviour
         plM.movePlayer();
         for(int i = 0; i < EnList.Count; i++)
         {
-            EnList[i].EnemyNavMove(playerPos);
+            EnList[i].EnemyNavMove(playerPos,EnList[i].enemyObject.transform.position);
+            if(EnList[i].IsEnemyDestroy(playerPos,EnList[i].enemyObject.transform.position)) 
+            {
+                if(Input.GetKeyUp("space"))
+                {
+                    if(EnList[i].GetDamage(5))
+                    {
+                        Destroy(EnList[i].enemyObject);
+                        EnList.RemoveAt(i);
+                    }
+                }
+                // 
+            }
 
         }
-        
-        
-        //EnList[0].EnemyMove(playerPos,enemyPos);
     }
 }

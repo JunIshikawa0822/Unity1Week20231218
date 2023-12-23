@@ -2,19 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-public class Enemy : MonoBehaviour
+public class Enemy 
 {
     int enemyHP;
     float enemySpeed;
     float enemyDamage;
     float enemyEXP;
-    GameObject enemyObject;
+    public GameObject enemyObject;
     UnityEngine.AI.NavMeshAgent agent;
     Collider enemyCollider;
-    //Transform EnemyPos;
+    Vector3 enemyPos;
 
-    //int enemyMoveType;
-    //Animation enemyAnim;
 
     public Enemy(int enHP, float enSpeed, float enDamage, float enEXP,GameObject enemyObj)
     {
@@ -23,7 +21,7 @@ public class Enemy : MonoBehaviour
         enemyDamage = enDamage;
         enemyEXP = enEXP;
         enemyObject = enemyObj;
-        //EnemyPos = enemyObject.transform.position;
+        enemyPos = enemyObject.transform.position;
         agent = enemyObject.GetComponent<UnityEngine.AI.NavMeshAgent>();
         enemyCollider = enemyObject.GetComponent<SphereCollider>();
         agent.updateRotation = false;
@@ -55,22 +53,22 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void EnemyNavMove(Transform playerPos)
+    public void EnemyNavMove(Transform playerPos,Vector3 enemyPos)
     {
+        
         agent.destination = playerPos.transform.position;
+        
+        
     }
-
-    public void OnTriggerExit(Collider wall)
+    public bool IsEnemyDestroy(Transform playerPos,Vector3 enemyPos)
     {
-        
-        if(wall.CompareTag("Wall"))
+        if (Vector3.Distance(playerPos.transform.position,enemyPos) < agent.stoppingDistance + 1.0f)
         {
-            enemyCollider.isTrigger = false;
-            Debug.Log("hogehoge");
-
+           return true;
         }
-        
+        else return false;
     }
+    
 
 
 }

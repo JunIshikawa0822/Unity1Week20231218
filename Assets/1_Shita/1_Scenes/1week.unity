@@ -2324,6 +2324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 5951750590389392643, guid: 959e3a75461891d4ab9be54e5f9603bb, type: 3}
+  enemySwarmPrefab: {fileID: 8340126834287645655, guid: 8a55e005900969645af98025af252afa, type: 3}
 --- !u!1 &1624014575
 GameObject:
   m_ObjectHideFlags: 0
@@ -2896,7 +2897,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2920,12 +2921,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090750240}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.24, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2451573444947860856}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!4 &232463112382977682
 Transform:
@@ -2954,7 +2955,8 @@ Transform:
   m_LocalPosition: {x: -0.24, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2090750243}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &4061243100278713399
@@ -3162,7 +3164,7 @@ GameObject:
   - component: {fileID: 4674909347466526426}
   m_Layer: 0
   m_Name: Chara 2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3171,7 +3173,6 @@ GameObject:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 2090750243}
   - {fileID: 1624014577}
   - {fileID: 702140359}
   - {fileID: 2451573444947860856}
