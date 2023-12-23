@@ -87,6 +87,35 @@ public class JunMainSystem : MonoBehaviour
 
             case 1:
 
+                //敵の処理
+                if (AEIList.Count > 0)
+                {
+                    for (int i = 0; i < AEIList.Count; i++)
+                    {
+                        EnemyProcess(AEIList, i, Player);
+                    }
+                }
+
+                //弾の処理
+                if (ABIList.Count > 0)
+                {
+                    for (int i = 0; i < ABIList.Count; i++)
+                    {
+                        //一定距離飛んでいる
+                        if (ABIList[i].isDestroyByDis())
+                        {
+                            CLManager.BulletRemove(ABIList, i);
+                            continue;
+                        }
+                        //一定距離飛んでいない
+                        else
+                        {
+                            //そのまま飛ばす
+                            BulletProcess(ABIList, i, bulletHitLayer, "Wall", SIManager.isPenetrate);
+                        }
+                    }
+                }
+
                 //マウスの位置デバッグ
                 //DBManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
 
@@ -141,42 +170,13 @@ public class JunMainSystem : MonoBehaviour
                             );
 
                         PIManager.StartCoroutine("FireTimer");
-                    }
-                }
-
-                //敵の処理
-                if(AEIList.Count > 0)
-                {
-                    for(int i = 0; i < AEIList.Count; i++)
-                    {
-                        EnemyProcess(AEIList, i, Player);
-                    }
-                }
-
-                //弾の処理
-                if (ABIList.Count > 0)
-                {
-                    for (int i = 0; i < ABIList.Count; i++)
-                    {
-                        //一定距離飛んでいる
-                        if (ABIList[i].isDestroyByDis())
-                        {
-                            CLManager.BulletRemove(ABIList, i);
-                            continue;
-                        }
-                        //一定距離飛んでいない
-                        else
-                        {
-                            //そのまま飛ばす
-                            BulletProcess(ABIList, i, bulletHitLayer, "Wall", SIManager.isPenetrate);
-                        }
-                    }
+                    }   
                 }
 
                 break;
 
             case 2:
-                
+
                 break;
         }
     }
@@ -260,6 +260,7 @@ public class JunMainSystem : MonoBehaviour
         }
 
         ABIList[number].BulletGetMove();
+        //Debug.Log("うごいた");
     }
 
     void BaseObjShotProcess(GameObject originObj, GameObject predictObj, GameObject baseObj, LayerMask rayHitLayer, LayerMask collideLayer)
