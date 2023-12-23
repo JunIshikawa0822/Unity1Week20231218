@@ -30,6 +30,9 @@ public class MainSystem : MonoBehaviour
     [SerializeField]
     PlayerEXPManager PEXPManager;
 
+    [SerializeField]
+    UserInterfaceManager UIManager;
+
     Camera PlayerCamera;
 
     LayerMask wallLayer = 1 << 6;
@@ -55,7 +58,11 @@ public class MainSystem : MonoBehaviour
 
         EIManager.EnemyInfoInstantiate(DBManager.EnemyObj, DBManager.InstaPosObj);
 
-        PIManager.InputIntervalInit(SIManager.fireInterval);
+        PIManager.InputInterval(SIManager.fireInterval);
+
+        UIManager.SliderMaxInit();
+
+        //Debug.Log(PEXPManager.EXPtoLevel());
 
         gamePhase = 0;
     }
@@ -66,47 +73,11 @@ public class MainSystem : MonoBehaviour
         switch (gamePhase)
         {
             //移動フェーズ
-            case 1:
-
-                //PMManager.NormalMove(
-                //        PMManager.Player,
-                //        PMManager.Player.transform.position,
-                //        PIManager.MouseVector(PMManager.Player, PlayerCamera, PIManager.zAdjust),
-                //        100,
-                //        wallLayer,
-                //        QueryTriggerInteraction.Collide
-                //        );
-
-                //gamePhase = 0;
-
-                break;
-
-            case 2:
-
-                break;
-
-
             case 0:
+                gamePhase = 1;
+                break;
 
-                if(ABIList.Count > 0)
-                {
-                    for (int i = 0; i < ABIList.Count; i++)
-                    {
-                        //一定距離飛んでいる
-                        if (ABIList[i].isDestroyByDis())
-                        {
-                            CLManager.BulletRemove(ABIList, i);
-                            continue;
-                        }
-                        //一定距離飛んでいない
-                        else
-                        {
-                            //そのまま飛ばす
-                            BulletProcess(ABIList, i, bulletHitLayer, "Wall", SIManager.isPenetrate, PEXPManager.totalPlayerEXP);
-                        }
-                    }
-                }
-
+            case 1:
                 //マウスの位置デバッグ
                 //DBManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
                 if (Input.GetKey(KeyCode.Space))
@@ -173,17 +144,43 @@ public class MainSystem : MonoBehaviour
                     }
                 }
 
+                if (ABIList.Count > 0)
+                {
+                    for (int i = 0; i < ABIList.Count; i++)
+                    {
+                        //一定距離飛んでいる
+                        if (ABIList[i].isDestroyByDis())
+                        {
+                            CLManager.BulletRemove(ABIList, i);
+                            continue;
+                        }
+                        //一定距離飛んでいない
+                        else
+                        {
+                            //そのまま飛ばす
+                            BulletProcess(ABIList, i, bulletHitLayer, "Wall", SIManager.isPenetrate);
+                        }
+                    }
+                }
+
+                break;
+
+            case 2:
+                
                 break;
         }
     }
 
     //弾が一回で行う処理　壁に衝突するか　敵に衝突するか　＋移動
-    void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, string tagName, bool isPen, int totalPlayerEXP)
+    void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, string tagName, bool isPen)
     {
         Bullet bullet = ABIList[number];
         Collider[] cols = CLManager.whatBulletCollide(bullet, bHitLayer);
 
-        int totalEXP = totalPlayerEXP;
+        int beforeLevel = PEXPManager.EXPtoLevel();
+        //Debug.Log("加算前レベル" + beforeLevel);
+
+        //Debug.Log("加算前" + PEXPManager.totalPlayerEXP);
 
         //何かにぶつかっている
         if (cols.Length > 0)
@@ -206,14 +203,16 @@ public class MainSystem : MonoBehaviour
             if(colOponentList.Count < cols.Length)
             {
                 //敵にダメージ判定
-                DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet, totalEXP);
+                PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
+
+                //レベルアップするかどうか
+                LevelUpCheckProcess(beforeLevel);
 
                 //弾を破壊
                 CLManager.BulletRemove(ABIList, number);
 
                 //判定を行ったのでColOpListの中身を削除
                 colOponentList.Clear();
-                
                 return;
             }
             //なかった
@@ -224,27 +223,30 @@ public class MainSystem : MonoBehaviour
                 //貫通でない
                 if (!isPen)
                 {
-                    DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet, totalEXP);
+                    PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
+
+                    //レベルアップするかどうか
+                    LevelUpCheckProcess(beforeLevel);
 
                     //弾を破壊
                     CLManager.BulletRemove(ABIList, number);
+
+                    //判定を行ったのでColOpListの中身を削除
+                    colOponentList.Clear();
                     return;
                 }
                 //貫通なら
                 else
                 {
-                    DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet, totalEXP);
-                }
-                   
-                //判定を行ったのでColOpListの中身を削除
-                colOponentList.Clear();
-            }
-        }
+                    PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
 
-        //レベルアップしたか
-        if (PEXPManager.isPlayerLevelUp(PEXPManager.totalPlayerEXP, PEXPManager.playerLevel))
-        {
-            gamePhase = 2;
+                    //レベルアップするかどうか
+                    LevelUpCheckProcess(beforeLevel);
+
+                    //判定を行ったのでColOpListの中身を削除
+                    colOponentList.Clear();
+                }
+            }
         }
 
         ABIList[number].BulletGetMove();
@@ -276,6 +278,21 @@ public class MainSystem : MonoBehaviour
             {
                 PMManager.SetObjPos(pos, baseObj);
             }
+        }
+    }
+
+    void LevelUpCheckProcess(int beforeLevel)
+    {
+        //print(PEXPManager.totalPlayerEXP);
+        UIManager.SliderValueChange(UIManager.EXPSlider, PEXPManager.BarPersent(beforeLevel));
+
+        int afterLevel = PEXPManager.EXPtoLevel();
+        //Debug.Log("加算後レベル" + afterLevel);
+
+        if (afterLevel > beforeLevel)
+        {
+            gamePhase = 2;
+            Debug.Log("フェーズ移行");
         }
     }
 }

@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Enemy
 {
-    float enemyHP;
+    int enemyHP;
     float enemySpeed;
     float enemyDamage;
-    float enemyEXP;
+    int enemyEXP;
 
     GameObject enemyObject;
 
     int enemyMoveType;
     //Animation enemyAnim;
 
-    public Enemy(float enHp, float enSpeed, float enDamage, float enEXP, int enMoveType, GameObject enObject)
+    public Enemy(int enHp, float enSpeed, float enDamage, int enEXP, int enMoveType, GameObject enObject)
     {
         enemyHP = enHp;
         enemySpeed = enSpeed;
@@ -38,7 +38,7 @@ public class Enemy
     }
 
     //ダメージをHPに与える
-    public void GetDamage(float givenDamage)
+    public void GetDamage(int givenDamage)
     {
         enemyHP -= givenDamage;
         //Debug.Log(enemyHP);

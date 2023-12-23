@@ -11,7 +11,8 @@ public class PlayerInputManager : MonoBehaviour
     //float fireInterval;
     WaitForSeconds fireIntervalWait;
 
-    public void InputIntervalInit(float interval)
+    //intervalWaitの更新　レベルアップの時に再度更新する
+    public void InputInterval(float interval)
     {
         fireIntervalWait = new WaitForSeconds(interval);
     }

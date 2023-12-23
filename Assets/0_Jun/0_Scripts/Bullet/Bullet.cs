@@ -6,7 +6,7 @@ public class Bullet
 {
     float bulletSpeed;
     Vector3 bulletMoveDir;
-    float bulletDamage;
+    int bulletDamage;
     GameObject bulletObject;
 
     float moveDistance;
@@ -14,7 +14,7 @@ public class Bullet
 
     bool isPenetrate;
 
-    public Bullet(float speed, float damage, Vector3 moveDir, GameObject bulletGameObj, float destroyDist, bool isPen)
+    public Bullet(float speed, int damage, Vector3 moveDir, GameObject bulletGameObj, float destroyDist, bool isPen)
     {
         bulletSpeed = speed;
         bulletMoveDir = moveDir;
@@ -39,7 +39,7 @@ public class Bullet
         return bulletObject;
     }
 
-    public float BulletDamage()
+    public int BulletDamage()
     {
         return bulletDamage;
     }

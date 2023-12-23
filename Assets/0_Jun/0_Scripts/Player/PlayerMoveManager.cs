@@ -35,23 +35,7 @@ public class PlayerMoveManager : MonoBehaviour
     void MoveAndRot(GameObject playerObject, RaycastHit hitInfo)
     {
         playerObject.transform.position = hitInfo.point;
-
-        //Debug.Log(Quaternion.FromToRotation(transform.up, hitInfo.normal));
-
-        //Transform rot = Quaternion.FromToRotation(transform.up, hitInfo.normal);
-        //playerObject.transform.rotation = Quaternion.FromToRotation(transform.up, hitInfo.normal);
-
-        Vector3 rot = Quaternion.FromToRotation(transform.up, hitInfo.normal).eulerAngles;
-        playerObject.transform.rotation = Quaternion.Euler(rot);
-
-        //playerObject.transform.localRotation = Quaternion.Euler(new Vector3(playerObject.transform.localEulerAngles.x, 0, playerObject.transform.localEulerAngles.z));
-
-        //Vector3 vec = transform.TransformPoint(new Vector3(playerObject.transform.localEulerAngles.x, 0, playerObject.transform.localEulerAngles.z));
-
-        //playerObject.transform.rotation = Quaternion.Euler(vec);
-        //Debug.Log("LEA：" + playerObject.transform.localEulerAngles + ", R：" + rot);
-
-        //Debug.Log("LEA：" + new Vector3(playerObject.transform.localEulerAngles.x, 0, playerObject.transform.localEulerAngles.z) + ", R：" + rot);
+        playerObject.transform.rotation = Quaternion.LookRotation(-Vector3.up, hitInfo.normal);
     }
 
     public Vector3 BaseObjPos(Vector3 mouseVec, Vector3 originPos, Vector3 directionVec, float maxDistance, int layerMask)
@@ -60,7 +44,7 @@ public class PlayerMoveManager : MonoBehaviour
         if (!Physics.Raycast(originPos, directionVec, out RaycastHit hitInfo, maxDistance, layerMask))
         {
             //マウスの先
-            Debug.Log(mouseVec);
+            //Debug.Log(mouseVec);
             return originPos + new Vector3(mouseVec.x * maxDistance, mouseVec.y, mouseVec.z * maxDistance);
         }
         else

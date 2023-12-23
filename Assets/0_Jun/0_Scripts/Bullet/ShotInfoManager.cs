@@ -32,7 +32,7 @@ public class ShotInfoManager : MonoBehaviour
     public float fireInterval = 3.0f;
 
     [SerializeField]
-    public bool isPenetrate = true;
+    public bool isPenetrate = false;
 
 
     // 一つの弾を生成する
@@ -40,7 +40,7 @@ public class ShotInfoManager : MonoBehaviour
     public void BulletInfoInstantiate(GameObject[] bTObjArray, Dictionary<string, float> bTypeDic, Vector3 instantPos, Vector3 moveDir, float destroyDist, bool isbPen)
     {
         GameObject bulletObj = Instantiate(bTObjArray[(int)bTypeDic["BTypeNum"]], instantPos, Quaternion.identity);
-        Bullet bullet = new Bullet(bTypeDic["speed"], bTypeDic["damage"], moveDir, bulletObj, destroyDist, isbPen);
+        Bullet bullet = new Bullet(bTypeDic["speed"], (int)bTypeDic["damage"], moveDir, bulletObj, destroyDist, isbPen);
         AllBulletInfoList.Add(bullet);
     }
 
