@@ -82,6 +82,8 @@ public class JunMainSystem : MonoBehaviour
         LVManager.nowBullet = LVManager.bullet1;
 
         gamePhase = 0;
+
+        PEXPManager.AccumulationEXP(2);
     }
 
     // Update is called once per frame
@@ -352,14 +354,14 @@ public class JunMainSystem : MonoBehaviour
         UIManager.SliderValueChange(UIManager.EXPSlider, PEXPManager.BarPersent(beforeLevel));
 
         int afterLevel = PEXPManager.EXPtoLevel();
-        Debug.Log("現在のレベル" + afterLevel);
+        //Debug.Log("現在のレベル" + afterLevel);
 
         if (afterLevel > beforeLevel)
         {
             UIManager.SliderValueChange(UIManager.EXPSlider, 0);
             UIManager.selectedPanelnum = 0;
             gamePhase = 2;
-            Debug.Log("フェーズ移行");
+            //Debug.Log("フェーズ移行");
         }
     }
 

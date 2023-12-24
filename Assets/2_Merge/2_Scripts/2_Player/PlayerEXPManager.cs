@@ -14,10 +14,10 @@ public class PlayerEXPManager : MonoBehaviour
     //public int playerLevel = 0;
 
     [Range(3, 10), System.NonSerialized]
-    int demandEXPprime = 3;
+    int demandEXPprime = 10;
 
     [Range(1, 2), System.NonSerialized]
-    float EXPRatio = 1.2f;
+    float EXPRatio = 2f;
 
     [SerializeField]
     TextMeshProUGUI totalEXP;
@@ -30,6 +30,9 @@ public class PlayerEXPManager : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI EXPtoNextLevel;
+
+    [SerializeField]
+    TextMeshProUGUI AccumeEXP;
 
     //経験値からレベルを計算
     public int EXPtoLevel()
@@ -56,7 +59,7 @@ public class PlayerEXPManager : MonoBehaviour
     }
 
     //指定したレベルまでの累積経験値計算
-    int AccumulationEXP(int level)
+    public int AccumulationEXP(int level)
     {
         int aEXP;
 
@@ -66,7 +69,7 @@ public class PlayerEXPManager : MonoBehaviour
         }
         else
         {
-            aEXP = Mathf.FloorToInt(demandEXPprime * (Mathf.Pow(EXPRatio, level) / EXPRatio));
+            aEXP = Mathf.FloorToInt(demandEXPprime * ((Mathf.Pow(EXPRatio, level - 1) - 1) / (EXPRatio - 1)));
         }
 
         return aEXP;
@@ -93,8 +96,9 @@ public class PlayerEXPManager : MonoBehaviour
 
         totalEXP.text = "TotalEXP: " + totalPlayerEXP.ToString();
         Level.text = "Level: " + level.ToString();
-        demandEXP.text = "You need " + demandEXPtoNextLevel(level).ToString() + "EXP to levelUp";
+        demandEXP.text = "You need " + demandEXPtoNextLevel(level).ToString() + " EXP to levelUp";
         EXPtoNextLevel.text = "You have " + toNextLevel.ToString() + "EXP";
+        AccumeEXP.text = "you got " + (int)AccumulationEXP(level) + " for " + level + " level"; 
     }
 
     public void EXPdebugTextInit()
@@ -103,5 +107,6 @@ public class PlayerEXPManager : MonoBehaviour
         Level.text = "0";
         demandEXP.text = "0";
         EXPtoNextLevel.text = "0";
+        AccumeEXP.text = "0";
     }
 }

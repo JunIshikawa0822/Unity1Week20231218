@@ -54,14 +54,14 @@ public class Enemy
    
     }
 
-    //public bool IsEnemyDestroy(Transform playerPos,Vector3 enemyPos)
-    //{
-    //    if (Vector3.Distance(playerPos.transform.position,enemyPos) < agent.stoppingDistance + 1.0f)
-    //    {
-    //       return true;
-    //    }
-    //    else return false;
-    //}
+    public bool IsEnemyDestroy(Transform playerPos, Vector3 enemyPos)
+    {
+        if (Vector3.Distance(playerPos.transform.position, enemyPos) < agent.stoppingDistance + 1.0f)
+        {
+            return true;
+        }
+        else return false;
+    }
 
     public bool isDead()
     {

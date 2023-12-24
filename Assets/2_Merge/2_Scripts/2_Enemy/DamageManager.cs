@@ -22,6 +22,13 @@ public class DamageManager : MonoBehaviour
         {
             int enListIndex = enemyObjList.IndexOf(ColOpList[i].gameObject);
 
+            //Debug.Log("Index" + enListIndex);
+
+            if(enListIndex < 0)
+            {
+                continue;
+            }
+
             Enemy enemy = AEIList[enListIndex];
 
             GiveDamage(bullet, enemy);

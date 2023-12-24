@@ -16,12 +16,12 @@ public class MainSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        //enemyPos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 1.1f, Camera.main.nearClipPlane));
-        //enemyPos.z = enemyPos.y;
-        //enemyPos.y = 0;
-        //StartCoroutine(enG.SpawnCoroutine(playerPos,5, 30));
-        //EnList = enG.AllEnemyInfoList;  
+
+        enemyPos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 1.1f, Camera.main.nearClipPlane));
+        enemyPos.z = enemyPos.y;
+        enemyPos.y = 0;
+        StartCoroutine(enG.SpawnCoroutine(playerPos, 5, 30));
+        EnList = enG.AllEnemyInfoList;
     }
 
     // Update is called once per frame
@@ -31,17 +31,17 @@ public class MainSystem : MonoBehaviour
         for(int i = 0; i < EnList.Count; i++)
         {
             EnList[i].EnemyNavMove(playerPos, EnList[i].enemyObject.transform.position);
-            //if(EnList[i].IsEnemyDestroy(playerPos,EnList[i].enemyObject.transform.position)) 
-            //{
-            //    if(Input.GetKeyUp("space"))
-            //    {
-            //        if(EnList[i].GetDamage(5))
-            //        {
-            //            Destroy(EnList[i].enemyObject);
-            //            EnList.RemoveAt(i);
-            //        }
-            //    }
-            //}
+            if (EnList[i].IsEnemyDestroy(playerPos, EnList[i].enemyObject.transform.position))
+            {
+                if (Input.GetKeyUp("space"))
+                {
+                    //if (EnList[i].GetDamage(5))
+                    //{
+                    //    Destroy(EnList[i].enemyObject);
+                    //    EnList.RemoveAt(i);
+                    //}
+                }
+            }
         }
     }
 }

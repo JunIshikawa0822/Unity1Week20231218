@@ -14,7 +14,7 @@ public class EnemyManager : MonoBehaviour
     private GameObject enemySwarmPrefab;
 
     Dictionary<string, float> Enemy1 = new Dictionary<string, float>() { { "eTypeNum", 0 }, {"eHP", 3}, { "eSpeed", 0.2f }, { "eDamage", 1 }, {"eEXP", 1}};
-    Dictionary<string, float> Enemy2 = new Dictionary<string, float>() { { "eTypeNum", 1 }, {"eHP", 5}, { "eSpeed", 0.5f }, { "eDamage", 1 }, {"eEXP", 3}};
+    Dictionary<string, float> Enemy2 = new Dictionary<string, float>() { { "eTypeNum", 1 }, {"eHP", 3}, { "eSpeed", 0.2f }, { "eDamage", 1 }, {"eEXP", 1}};
 
     [System.NonSerialized]
     public List<Enemy> AllEnemyInfoList = new List<Enemy>();
