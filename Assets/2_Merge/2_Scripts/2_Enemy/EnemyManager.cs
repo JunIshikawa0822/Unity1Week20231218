@@ -22,6 +22,9 @@ public class EnemyManager : MonoBehaviour
     [System.NonSerialized]
     public List<GameObject> AllEnemyObjectList = new List<GameObject>();
 
+    [SerializeField]
+    public GameObject CenterObject;
+
     float spawnRadius = 30;
 
     int enemySimultaniousNum = 2;

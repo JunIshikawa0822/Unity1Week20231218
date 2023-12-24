@@ -11,6 +11,9 @@ public class PlayerMoveManager : MonoBehaviour
     public GameObject Player;
 
     [SerializeField]
+    public GameObject Fannel;
+
+    [SerializeField]
     public GameObject[] baseBlocksArray = new GameObject[3];
 
     [SerializeField]
@@ -34,7 +37,7 @@ public class PlayerMoveManager : MonoBehaviour
 
     public void MoveAndRot(GameObject playerObject, RaycastHit hitInfo)
     {
-        playerObject.transform.position = hitInfo.point;
+        playerObject.transform.position = hitInfo.point + hitInfo.normal;
         playerObject.transform.rotation = Quaternion.LookRotation(-Vector3.up, hitInfo.normal);
     }
 

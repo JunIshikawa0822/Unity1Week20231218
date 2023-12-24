@@ -56,6 +56,8 @@ public class JunMainSystem : MonoBehaviour
     int gamePhase = 0;
 
     GameObject Player;
+    GameObject Fannel;
+    GameObject ShotOrigin;
 
     private void Awake()
     {
@@ -77,7 +79,10 @@ public class JunMainSystem : MonoBehaviour
         PIManager.InputInterval(LVManager.fireInterval);
 
         Player = PMManager.Player;
-        ENManager.EnemyInit(Player);
+        Fannel = PMManager.Fannel;
+        ShotOrigin = PMManager.shotOriginObject;
+
+        ENManager.EnemyInit(ENManager.CenterObject);
 
         LVManager.nowBullet = LVManager.bullet1;
 
@@ -129,47 +134,43 @@ public class JunMainSystem : MonoBehaviour
                     }
                 }
 
-                //マウスの位置デバッグ
-                //DBManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
-
-
                 if (Input.GetKey(KeyCode.Space))
                 {
-                    Vector3 mouseVec = PIManager.MouseVector(PMManager.shotOriginObject, PlayerCamera, PIManager.zAdjust);
+                    Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
                     Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
 
-                    LineDrawProcess(PMManager.shotOriginObject, restVec, wallLayer, 7);
+                    FannelProcess(true, mouseVec);
+                    LineDrawProcess(Fannel, restVec, wallLayer, 7);
 
                     BaseObjShotProcess(
                         restVec,
-                        PMManager.shotOriginObject,
+                        ShotOrigin,
                         PMManager.predictObject,
                         PMManager.baseBlocksArray[0],
                         wallLayer,
                         playerLayer,
                         7
                         );
-                    
                 }
                 else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
-                    Vector3 mouseVec = PIManager.MouseVector(Player, PlayerCamera, PIManager.zAdjust);
-                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 60);
+                    Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
 
-                    
+                    FannelProcess(false, mouseVec);
 
                     PMManager.predictObject.SetActive(false);
 
-                    if (!Physics.Raycast(Player.transform.position, restVec, out RaycastHit hitInfo, 20, wallLayer))
+                    if (!Physics.Raycast(ShotOrigin.transform.position, restVec, out RaycastHit hitInfo, 10, wallLayer))
                     {
                         //できない
-                        LineDrawProcess(Player, restVec, wallLayer, 0);
+                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 0);
                         return;
                     }
                     else
                     {
                         //できる
-                        LineDrawProcess(Player, restVec, wallLayer, 20);
+                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 10);
 
                         if (Input.GetMouseButtonDown(0))
                         {
@@ -193,10 +194,11 @@ public class JunMainSystem : MonoBehaviour
                 }
                 else
                 {
-                    Vector3 mouseVec = PIManager.MouseVector(PMManager.shotOriginObject, PlayerCamera, PIManager.zAdjust);
-                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 60);
+                    Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
 
-                    LineDrawProcess(PMManager.shotOriginObject, restVec, wallLayer, 3);
+                    FannelProcess(true, mouseVec);
+                    LineDrawProcess(Fannel, restVec, wallLayer, 3);
 
                     PMManager.predictObject.SetActive(false);
                     if (Input.GetMouseButton(0))
@@ -212,7 +214,7 @@ public class JunMainSystem : MonoBehaviour
                             LVManager.simultaniousNum,
                             SIManager.bulletTypeObjArray,
                             LVManager.nowBullet,
-                            PMManager.shotOriginObject.transform.position,
+                            Fannel.transform.position,
                             LVManager.destroyDistance,
                             LVManager.bulletAngle,
                             LVManager.isPenetrate
@@ -226,13 +228,13 @@ public class JunMainSystem : MonoBehaviour
 
             case 2:
                 
-                LevelUpUIProcess(true, true);
+                LevelUpUIProcess(true);
 
                 if(UIManager.selectedPanelnum > 0)
-                {
-                    gamePhase = 1;
+                {   
 
-                    LevelUpUIProcess(false, false);
+                    LevelUpUIProcess(false);
+                    gamePhase = 1;
                 }
 
                 break;
@@ -381,10 +383,10 @@ public class JunMainSystem : MonoBehaviour
         PIManager.LineDraw(originObj, pos);
     }
 
-    void LevelUpUIProcess(bool isGameStop, bool isUISetActive)
+    void LevelUpUIProcess(bool isGameStop)
     {
         AgentStopProcess(isGameStop);
-        UIManager.LevelUpUIParent.SetActive(isUISetActive);
+        UIManager.LevelUpUIParent.SetActive(isGameStop);
     }
 
     void AgentStopProcess(bool isStop)
@@ -395,6 +397,19 @@ public class JunMainSystem : MonoBehaviour
             {
                 AEIList[i].agent.isStopped = isStop;
             }
+        }
+    }
+
+    void FannelProcess(bool isFannel, Vector3 fannelVec)
+    {
+        if (isFannel)
+        {
+            Fannel.SetActive(true);
+            Fannel.transform.position = PMManager.BaseObjPos(ShotOrigin.transform.position, fannelVec, 2, wallLayer);
+        }
+        else
+        {
+            Fannel.SetActive(false);
         }
     }
 }
