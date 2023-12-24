@@ -20,20 +20,20 @@ public class PlayerMoveManager : MonoBehaviour
     public GameObject predictObject;
 
     //移動できるかどうか
-    public void NormalMove(GameObject playerObject, Vector3 originPos, Vector3 directionVec, float maxDistance, int layerMask, QueryTriggerInteraction triggerDetectMode)
-    {
-        //Debug.DrawRay(originPos, directionVec, Color.red, 3);
-        if (!Physics.Raycast(originPos, directionVec, out RaycastHit hitInfo, maxDistance, layerMask, triggerDetectMode))
-        {
-            //できない
-            return;   
-        }
-        else
-        {
-            //できる
-            MoveAndRot(playerObject, hitInfo);
-        }    
-    }
+    //public void NormalMove(GameObject playerObject, Vector3 originPos, Vector3 directionVec, float maxDistance, int layerMask, QueryTriggerInteraction triggerDetectMode)
+    //{
+    //    //Debug.DrawRay(originPos, directionVec, Color.red, 3);
+    //    if (!Physics.Raycast(originPos, directionVec, out RaycastHit hitInfo, maxDistance, layerMask, triggerDetectMode))
+    //    {
+    //        //できない
+    //        return;   
+    //    }
+    //    else
+    //    {
+    //        //できる
+    //        MoveAndRot(playerObject, hitInfo);
+    //    }    
+    //}
 
     public void MoveAndRot(GameObject playerObject, RaycastHit hitInfo)
     {

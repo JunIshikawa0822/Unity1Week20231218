@@ -76,7 +76,7 @@ public class UserInterfaceManager : MonoBehaviour
 
     public void RewardUISet(int[] infotoPanel, int[] levelArray)
     {
-        Debug.Log(string.Join(",", infotoPanel));
+        //Debug.Log(string.Join(",", infotoPanel));
         for(int i = 0; i < infotoPanel.Length; i++)
         {
             int indexOfRewards = infotoPanel[i];

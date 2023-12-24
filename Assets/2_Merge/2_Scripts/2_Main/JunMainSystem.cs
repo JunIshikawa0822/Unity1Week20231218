@@ -176,64 +176,6 @@ public class JunMainSystem : MonoBehaviour
                     Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 150);
 
                     FannelProcess(true, restVec);
-                    LineDrawProcess(Fannel, restVec, wallLayer, 7);
-
-                    BaseObjShotProcess(
-                        restVec,
-                        ShotOrigin,
-                        PMManager.predictObject,
-                        PMManager.baseBlocksArray[0],
-                        wallLayer,
-                        playerLayer,
-                        9
-                        );
-                }
-                else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-                {
-                    Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
-                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
-
-                    FannelProcess(false, restVec);
-
-                    PMManager.predictObject.SetActive(false);
-
-                    if (!Physics.Raycast(ShotOrigin.transform.position, restVec, out RaycastHit hitInfo, 16, wallLayer))
-                    {
-                        //できない
-                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 0);
-                        return;
-                    }
-                    else
-                    {
-                        //できる
-                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 16);
-
-                        if (Input.GetMouseButtonDown(0))
-                        {
-                            PMManager.MoveAndRot(Player, hitInfo);
-                        }
-                    }
-
-                    
-                    //プレイヤーの移動
-                    //if (Input.GetMouseButtonDown(0))
-                    //{
-                    //    PMManager.NormalMove(
-                    //    Player,
-                    //    Player.transform.position,
-                    //    restVec,
-                    //    20,
-                    //    wallLayer,
-                    //    QueryTriggerInteraction.Collide
-                    //    );
-                    //}
-                }
-                else
-                {
-                    Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
-                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 150);
-
-                    FannelProcess(true, restVec);
                     LineDrawProcess(Fannel, restVec, wallLayer, 3);
 
                     PMManager.predictObject.SetActive(false);
@@ -257,7 +199,66 @@ public class JunMainSystem : MonoBehaviour
                             );
 
                         PIManager.StartCoroutine("FireTimer");
-                    }   
+                    }
+                }
+                else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                {
+                    Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 150);
+
+                    FannelProcess(true, restVec);
+                    LineDrawProcess(Fannel, restVec, wallLayer, 7);
+
+                    BaseObjShotProcess(
+                        restVec,
+                        ShotOrigin,
+                        PMManager.predictObject,
+                        PMManager.baseBlocksArray[0],
+                        wallLayer,
+                        playerLayer,
+                        9
+                        );
+
+
+                    //プレイヤーの移動
+                    //if (Input.GetMouseButtonDown(0))
+                    //{
+                    //    PMManager.NormalMove(
+                    //    Player,
+                    //    Player.transform.position,
+                    //    restVec,
+                    //    20,
+                    //    wallLayer,
+                    //    QueryTriggerInteraction.Collide
+                    //    );
+                    //}
+                }
+                else
+                {
+                    Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
+
+                    FannelProcess(false, restVec);
+
+                    PMManager.predictObject.SetActive(false);
+
+                    if (!Physics.Raycast(ShotOrigin.transform.position, restVec, out RaycastHit hitInfo, 16, wallLayer))
+                    {
+                        //できない
+                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 0);
+                        return;
+                    }
+                    else
+                    {
+                        //できる
+                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 16);
+
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            //Invokeここに書けるよ
+                            PMManager.MoveAndRot(Player, hitInfo);
+                        }
+                    }
                 }
 
                 break;
