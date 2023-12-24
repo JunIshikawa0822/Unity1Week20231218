@@ -10,7 +10,7 @@ public class Enemy
     float enemyDamage;
     float enemyEXP;
     public GameObject enemyObject;
-    UnityEngine.AI.NavMeshAgent agent;
+    public UnityEngine.AI.NavMeshAgent agent;
 
     Collider enemyCollider;
     Vector3 enemyPos;
@@ -32,23 +32,10 @@ public class Enemy
        // enemyAnim = enAnim;
     }
 
-    //public bool GetDamage(int givenDamage)
-    //{
-    //    enemyHP -= givenDamage;
-    //    if(enemyHP < 1)
-    //    {
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-    //}
-
     public void GetDamage(int givenDamage)
     {
         enemyHP -= givenDamage;
-        Debug.Log(enemyHP);
+        //Debug.Log(enemyHP);
     }
 
     public void EnemyMove(Transform playerPos,Vector3 enemyPos)
@@ -56,7 +43,7 @@ public class Enemy
         enemyPos = Vector3.MoveTowards(
             enemyPos,
             playerPos.transform.position,
-            1.0f * Time.deltaTime
+            1.0f
         );
     }
 
@@ -64,8 +51,7 @@ public class Enemy
     {
         
         agent.destination = playerPos.transform.position;
-        
-        
+   
     }
 
     //public bool IsEnemyDestroy(Transform playerPos,Vector3 enemyPos)

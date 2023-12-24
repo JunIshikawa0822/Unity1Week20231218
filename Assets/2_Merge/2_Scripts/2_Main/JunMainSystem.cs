@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using static UnityEditor.PlayerSettings;
 
 public class JunMainSystem : MonoBehaviour
@@ -36,6 +37,9 @@ public class JunMainSystem : MonoBehaviour
     [SerializeField]
     EnemyManager ENManager;
 
+    [SerializeField]
+    LevelManager LVManager;
+
     Camera PlayerCamera;
 
     LayerMask wallLayer = 1 << 6;
@@ -53,6 +57,14 @@ public class JunMainSystem : MonoBehaviour
 
     GameObject Player;
 
+    private void Awake()
+    {
+        UIManager.LevelUpUIInit();
+        UIManager.SliderMaxInit();
+        PIManager.LineRendererInit();
+        PEXPManager.EXPdebugTextInit();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -62,17 +74,14 @@ public class JunMainSystem : MonoBehaviour
         AEIList = ENManager.AllEnemyInfoList;
         AEOList = ENManager.AllEnemyObjectList;
 
-        //EIManager.EnemyInfoInstantiate(DBManager.EnemyObj, DBManager.InstaPosObj);
-
-        PIManager.InputInterval(SIManager.fireInterval);
-
-        UIManager.SliderMaxInit();
+        PIManager.InputInterval(LVManager.fireInterval);
 
         Player = PMManager.Player;
+        ENManager.EnemyInit(Player);
+
+        LVManager.nowBullet = LVManager.bullet1;
 
         gamePhase = 0;
-
-        ENManager.EnemyInit(Player);
     }
 
     // Update is called once per frame
@@ -87,14 +96,7 @@ public class JunMainSystem : MonoBehaviour
 
             case 1:
 
-                //敵の処理
-                if (AEIList.Count > 0)
-                {
-                    for (int i = 0; i < AEIList.Count; i++)
-                    {
-                        EnemyProcess(AEIList, i, Player);
-                    }
-                }
+                PEXPManager.EXPdebugText();
 
                 //弾の処理
                 if (ABIList.Count > 0)
@@ -111,19 +113,30 @@ public class JunMainSystem : MonoBehaviour
                         else
                         {
                             //そのまま飛ばす
-                            BulletProcess(ABIList, i, bulletHitLayer, "Wall", SIManager.isPenetrate);
+                            BulletProcess(ABIList, i, bulletHitLayer, "Wall", LVManager.isPenetrate);
                         }
+                    }
+                }
+
+                //敵の処理
+                if (AEIList.Count > 0)
+                {
+                    for (int i = 0; i < AEIList.Count; i++)
+                    {
+                        EnemyProcess(AEIList, i, Player);
                     }
                 }
 
                 //マウスの位置デバッグ
                 //DBManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
-                
+
 
                 if (Input.GetKey(KeyCode.Space))
                 {
                     Vector3 mouseVec = PIManager.MouseVector(PMManager.shotOriginObject, PlayerCamera, PIManager.zAdjust);
                     Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
+
+                    LineDrawProcess(PMManager.shotOriginObject, restVec, wallLayer, 7);
 
                     BaseObjShotProcess(
                         restVec,
@@ -131,7 +144,8 @@ public class JunMainSystem : MonoBehaviour
                         PMManager.predictObject,
                         PMManager.baseBlocksArray[0],
                         wallLayer,
-                        playerLayer
+                        playerLayer,
+                        7
                         );
                     
                 }
@@ -140,23 +154,47 @@ public class JunMainSystem : MonoBehaviour
                     Vector3 mouseVec = PIManager.MouseVector(Player, PlayerCamera, PIManager.zAdjust);
                     Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 60);
 
+                    
+
                     PMManager.predictObject.SetActive(false);
-                    //プレイヤーの移動
-                    if (Input.GetMouseButtonDown(0))
+
+                    if (!Physics.Raycast(Player.transform.position, restVec, out RaycastHit hitInfo, 20, wallLayer))
                     {
-                        PMManager.NormalMove(
-                        Player,
-                        Player.transform.position,
-                        restVec,
-                        100,
-                        wallLayer,
-                        QueryTriggerInteraction.Collide
-                        );
+                        //できない
+                        LineDrawProcess(Player, restVec, wallLayer, 0);
+                        return;
                     }
+                    else
+                    {
+                        //できる
+                        LineDrawProcess(Player, restVec, wallLayer, 20);
+
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            PMManager.MoveAndRot(Player, hitInfo);
+                        }
+                    }
+
+                    
+                    //プレイヤーの移動
+                    //if (Input.GetMouseButtonDown(0))
+                    //{
+                    //    PMManager.NormalMove(
+                    //    Player,
+                    //    Player.transform.position,
+                    //    restVec,
+                    //    20,
+                    //    wallLayer,
+                    //    QueryTriggerInteraction.Collide
+                    //    );
+                    //}
                 }
                 else
                 {
-                    
+                    Vector3 mouseVec = PIManager.MouseVector(PMManager.shotOriginObject, PlayerCamera, PIManager.zAdjust);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 60);
+
+                    LineDrawProcess(PMManager.shotOriginObject, restVec, wallLayer, 3);
 
                     PMManager.predictObject.SetActive(false);
                     if (Input.GetMouseButton(0))
@@ -167,18 +205,15 @@ public class JunMainSystem : MonoBehaviour
                         }
                         //発射方向を決める
 
-                        Vector3 mouseVec = PIManager.MouseVector(PMManager.shotOriginObject, PlayerCamera, PIManager.zAdjust);
-                        Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 60);
-
                         SIManager.BulletShotSimultaniously(
                             restVec,
-                            SIManager.simultaniousNum,
+                            LVManager.simultaniousNum,
                             SIManager.bulletTypeObjArray,
-                            SIManager.bullet1,
+                            LVManager.nowBullet,
                             PMManager.shotOriginObject.transform.position,
-                            SIManager.destroyDistance,
-                            SIManager.bulletAngle,
-                            SIManager.isPenetrate
+                            LVManager.destroyDistance,
+                            LVManager.bulletAngle,
+                            LVManager.isPenetrate
                             );
 
                         PIManager.StartCoroutine("FireTimer");
@@ -188,6 +223,15 @@ public class JunMainSystem : MonoBehaviour
                 break;
 
             case 2:
+                
+                LevelUpUIProcess(true, true);
+
+                if(UIManager.selectedPanelnum > 0)
+                {
+                    gamePhase = 1;
+
+                    LevelUpUIProcess(false, false);
+                }
 
                 break;
         }
@@ -246,7 +290,6 @@ public class JunMainSystem : MonoBehaviour
                 if (!isPen)
                 {
                     PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
-
                     //レベルアップするかどうか
                     LevelUpCheckProcess(beforeLevel);
 
@@ -275,7 +318,7 @@ public class JunMainSystem : MonoBehaviour
         //Debug.Log("うごいた");
     }
 
-    void BaseObjShotProcess(Vector3 direction, GameObject originObj, GameObject predictObj, GameObject baseObj, LayerMask rayHitLayer, LayerMask collideLayer)
+    void BaseObjShotProcess(Vector3 direction, GameObject originObj, GameObject predictObj, GameObject baseObj, LayerMask rayHitLayer, LayerMask collideLayer, float dist)
     {
         //Vector3 mouseVec = PIManager.MouseVector(originObj, PlayerCamera, PIManager.zAdjust);
 
@@ -283,7 +326,7 @@ public class JunMainSystem : MonoBehaviour
         Vector3 pos = PMManager.BaseObjPos(
             originObj.transform.position,
             direction,
-            7,
+            dist,
             rayHitLayer);
 
         predictObj.SetActive(true);
@@ -309,10 +352,12 @@ public class JunMainSystem : MonoBehaviour
         UIManager.SliderValueChange(UIManager.EXPSlider, PEXPManager.BarPersent(beforeLevel));
 
         int afterLevel = PEXPManager.EXPtoLevel();
-        //Debug.Log("加算後レベル" + afterLevel);
+        Debug.Log("現在のレベル" + afterLevel);
 
         if (afterLevel > beforeLevel)
         {
+            UIManager.SliderValueChange(UIManager.EXPSlider, 0);
+            UIManager.selectedPanelnum = 0;
             gamePhase = 2;
             Debug.Log("フェーズ移行");
         }
@@ -321,5 +366,33 @@ public class JunMainSystem : MonoBehaviour
     void EnemyProcess(List<Enemy> AEIList, int number, GameObject target)
     {
         AEIList[number].EnemyNavMove(target.transform, AEIList[number].enemyObject.transform.position);   
+    }
+
+    void LineDrawProcess(GameObject originObj, Vector3 direction, LayerMask rayHitLayer, float dist)
+    {
+        Vector3 pos = PMManager.BaseObjPos(
+            originObj.transform.position,
+            direction,
+            dist,
+            rayHitLayer);
+
+        PIManager.LineDraw(originObj, pos);
+    }
+
+    void LevelUpUIProcess(bool isGameStop, bool isUISetActive)
+    {
+        AgentStopProcess(isGameStop);
+        UIManager.LevelUpUIParent.SetActive(isUISetActive);
+    }
+
+    void AgentStopProcess(bool isStop)
+    {
+        if (AEIList.Count > 0)
+        {
+            for (int i = 0; i < AEIList.Count; i++)
+            {
+                AEIList[i].agent.isStopped = isStop;
+            }
+        }
     }
 }

@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using UnityEditor.PackageManager;
 
 public class PlayerEXPManager : MonoBehaviour
 {
@@ -15,6 +18,18 @@ public class PlayerEXPManager : MonoBehaviour
 
     [Range(1, 2), System.NonSerialized]
     float EXPRatio = 1.2f;
+
+    [SerializeField]
+    TextMeshProUGUI totalEXP;
+
+    [SerializeField]
+    TextMeshProUGUI demandEXP;
+
+    [SerializeField]
+    TextMeshProUGUI Level;
+
+    [SerializeField]
+    TextMeshProUGUI EXPtoNextLevel;
 
     //経験値からレベルを計算
     public int EXPtoLevel()
@@ -57,20 +72,6 @@ public class PlayerEXPManager : MonoBehaviour
         return aEXP;
     }
 
-    //bool isPlayerLevelUp(int nowLevel)
-    //{
-    //    int aEXP = AccumulationEXP(nowLevel + 1);
-
-    //    if (totalPlayerEXP > aEXP)
-    //    {
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-    //}
-
     //現在の経験値から現在のレベルまでの累積経験値を引く
     public float BarPersent(int nowLevel)
     {
@@ -83,5 +84,24 @@ public class PlayerEXPManager : MonoBehaviour
         //Debug.Log(persent);
 
         return persent;
+    }
+
+    public void EXPdebugText()
+    {
+        int level = EXPtoLevel();
+        int toNextLevel = totalPlayerEXP - (int)AccumulationEXP(level);
+
+        totalEXP.text = "TotalEXP: " + totalPlayerEXP.ToString();
+        Level.text = "Level: " + level.ToString();
+        demandEXP.text = "You need " + demandEXPtoNextLevel(level).ToString() + "EXP to levelUp";
+        EXPtoNextLevel.text = "You have " + toNextLevel.ToString() + "EXP";
+    }
+
+    public void EXPdebugTextInit()
+    {
+        totalEXP.text = "0";
+        Level.text = "0";
+        demandEXP.text = "0";
+        EXPtoNextLevel.text = "0";
     }
 }

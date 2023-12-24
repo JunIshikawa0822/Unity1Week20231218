@@ -14,6 +14,8 @@ public class PlayerInputManager : MonoBehaviour
     //float fireInterval;
     WaitForSeconds fireIntervalWait;
 
+    LineRenderer lineRenderer;
+
     //intervalWaitの更新　レベルアップの時に再度更新する
     public void InputInterval(float interval)
     {
@@ -57,10 +59,12 @@ public class PlayerInputManager : MonoBehaviour
         Vector3 toVec = Vector3.ProjectOnPlane(baseVec, -playerObject.transform.forward);
 
         float Angle = Vector3.SignedAngle(fromVec, toVec, -playerObject.transform.forward);
+        //Debug.Log(Angle);
 
         if(Mathf.Abs(Angle) > restrictAngle)
         {
-            restVec = Quaternion.Euler(0, Mathf.Sin(Angle) * restrictAngle, 0) * baseVec;
+            //Debug.Log(Mathf.Sign(Angle));
+            restVec = Quaternion.Euler(0, Mathf.Sign(Angle) * restrictAngle, 0) * playerObject.transform.up;
         }
         else
         {
@@ -68,6 +72,18 @@ public class PlayerInputManager : MonoBehaviour
         }
 
         return restVec.normalized;
+    }
+
+    public void LineRendererInit()
+    {
+        lineRenderer = GetComponent<LineRenderer>();
+    }
+
+    public void LineDraw(GameObject originObj, Vector3 endPos)
+    {
+        Vector3[] positions = new Vector3[] {originObj.transform.position, endPos};
+
+        lineRenderer.SetPositions(positions);
     }
 }
 

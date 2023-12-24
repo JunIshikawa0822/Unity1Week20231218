@@ -6,11 +6,7 @@ using System;
 
 public class ShotInfoManager : MonoBehaviour
 {
-    [System.NonSerialized]
-    public Dictionary<string, float> bullet1 = new Dictionary<string, float>(){ {"BTypeNum",1},{"speed", 0.2f},{"damage", 1}};
-
-    [System.NonSerialized]
-    public Dictionary<string, float> bullet2 = new Dictionary<string, float>(){ {"BTypeNum",2},{"speed", 7},{"damage", 3}};
+    //[System.NonSerialized]
 
     [SerializeField]
     public GameObject[] bulletTypeObjArray = new GameObject[3];
@@ -18,21 +14,6 @@ public class ShotInfoManager : MonoBehaviour
     //全ての弾
     [System.NonSerialized]
     public List<Bullet> AllBulletInfoList = new List<Bullet>();
-
-    [Range(1, 7), SerializeField]
-    public int simultaniousNum = 1;
-
-    [Range(0, 100), SerializeField]
-    public float destroyDistance = 50;
-
-    [Range(5, 30), SerializeField]
-    public int bulletAngle = 10;
-
-    [Range(0.1f, 5), SerializeField]
-    public float fireInterval = 3.0f;
-
-    [SerializeField]
-    public bool isPenetrate = false;
 
 
     // 一つの弾を生成する

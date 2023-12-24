@@ -32,7 +32,7 @@ public class PlayerMoveManager : MonoBehaviour
         }    
     }
 
-    void MoveAndRot(GameObject playerObject, RaycastHit hitInfo)
+    public void MoveAndRot(GameObject playerObject, RaycastHit hitInfo)
     {
         playerObject.transform.position = hitInfo.point;
         playerObject.transform.rotation = Quaternion.LookRotation(-Vector3.up, hitInfo.normal);

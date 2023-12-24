@@ -39,15 +39,16 @@ public class DamageManager : MonoBehaviour
                 //Debug.Log("加算後：" + totalPlayerEXP);
 
                 //敵の破壊
-                EnemyRemove(AEIList, enListIndex);
+                EnemyRemove(AEIList, enemyObjList, enListIndex);
             }
         }
         return addEXP;
     }
 
-    void EnemyRemove(List<Enemy> AEIList, int number)
+    void EnemyRemove(List<Enemy> AEIList, List<GameObject> enemyObjList, int number)
     {
         Destroy(AEIList[number].EnemyGameObject());
         AEIList.RemoveAt(number);
+        enemyObjList.RemoveAt(number);
     }
 }
