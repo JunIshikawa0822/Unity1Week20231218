@@ -960,10 +960,10 @@ MonoBehaviour:
   - {fileID: 3840210794078727644, guid: 5456b740aa8cb45159e05b6a5f3a1865, type: 3}
   - {fileID: 3840210794078727644, guid: 5456b740aa8cb45159e05b6a5f3a1865, type: 3}
   - {fileID: 3840210794078727644, guid: 5456b740aa8cb45159e05b6a5f3a1865, type: 3}
-  simultaniousNum: 1
+  simultaniousNum: 4
   destroyDistance: 15
   bulletAngle: 10
-  fireInterval: 0.4
+  fireInterval: 1.29
   isPenetrate: 0
 --- !u!1 &772459929
 GameObject:

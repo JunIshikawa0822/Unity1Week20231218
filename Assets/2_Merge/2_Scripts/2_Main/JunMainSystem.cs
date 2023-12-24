@@ -118,10 +118,15 @@ public class JunMainSystem : MonoBehaviour
 
                 //マウスの位置デバッグ
                 //DBManager.mousePosDebug(debugManager.MouseObject, playerInputManager, PlayerCamera, 10);
+                
 
                 if (Input.GetKey(KeyCode.Space))
                 {
+                    Vector3 mouseVec = PIManager.MouseVector(PMManager.shotOriginObject, PlayerCamera, PIManager.zAdjust);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
+
                     BaseObjShotProcess(
+                        restVec,
                         PMManager.shotOriginObject,
                         PMManager.predictObject,
                         PMManager.baseBlocksArray[0],
@@ -132,6 +137,9 @@ public class JunMainSystem : MonoBehaviour
                 }
                 else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
+                    Vector3 mouseVec = PIManager.MouseVector(Player, PlayerCamera, PIManager.zAdjust);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 60);
+
                     PMManager.predictObject.SetActive(false);
                     //プレイヤーの移動
                     if (Input.GetMouseButtonDown(0))
@@ -139,7 +147,7 @@ public class JunMainSystem : MonoBehaviour
                         PMManager.NormalMove(
                         Player,
                         Player.transform.position,
-                        PIManager.MouseVector(Player, PlayerCamera, PIManager.zAdjust),
+                        restVec,
                         100,
                         wallLayer,
                         QueryTriggerInteraction.Collide
@@ -148,6 +156,8 @@ public class JunMainSystem : MonoBehaviour
                 }
                 else
                 {
+                    
+
                     PMManager.predictObject.SetActive(false);
                     if (Input.GetMouseButton(0))
                     {
@@ -156,10 +166,12 @@ public class JunMainSystem : MonoBehaviour
                             return;
                         }
                         //発射方向を決める
+
                         Vector3 mouseVec = PIManager.MouseVector(PMManager.shotOriginObject, PlayerCamera, PIManager.zAdjust);
+                        Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 60);
 
                         SIManager.BulletShotSimultaniously(
-                            mouseVec,
+                            restVec,
                             SIManager.simultaniousNum,
                             SIManager.bulletTypeObjArray,
                             SIManager.bullet1,
@@ -263,15 +275,14 @@ public class JunMainSystem : MonoBehaviour
         //Debug.Log("うごいた");
     }
 
-    void BaseObjShotProcess(GameObject originObj, GameObject predictObj, GameObject baseObj, LayerMask rayHitLayer, LayerMask collideLayer)
+    void BaseObjShotProcess(Vector3 direction, GameObject originObj, GameObject predictObj, GameObject baseObj, LayerMask rayHitLayer, LayerMask collideLayer)
     {
-        Vector3 mouseVec = PIManager.MouseVector(originObj, PlayerCamera, PIManager.zAdjust);
+        //Vector3 mouseVec = PIManager.MouseVector(originObj, PlayerCamera, PIManager.zAdjust);
 
         //オブジェクトを飛ばす場所を決定
         Vector3 pos = PMManager.BaseObjPos(
-            mouseVec,
             originObj.transform.position,
-            mouseVec,
+            direction,
             7,
             rayHitLayer);
 

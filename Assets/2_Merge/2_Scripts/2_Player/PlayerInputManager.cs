@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class PlayerInputManager : MonoBehaviour
 {
@@ -47,6 +48,26 @@ public class PlayerInputManager : MonoBehaviour
         yield return fireIntervalWait;
 
         fireTimerIsActive = false;
+    }
+
+    public Vector3 RestrictVector(GameObject playerObject, Vector3 baseVec, float restrictAngle)
+    {
+        Vector3 restVec;
+        Vector3 fromVec = Vector3.ProjectOnPlane(playerObject.transform.up, -playerObject.transform.forward);
+        Vector3 toVec = Vector3.ProjectOnPlane(baseVec, -playerObject.transform.forward);
+
+        float Angle = Vector3.SignedAngle(fromVec, toVec, -playerObject.transform.forward);
+
+        if(Mathf.Abs(Angle) > restrictAngle)
+        {
+            restVec = Quaternion.Euler(0, Mathf.Sin(Angle) * restrictAngle, 0) * baseVec;
+        }
+        else
+        {
+            restVec = baseVec;
+        }
+
+        return restVec.normalized;
     }
 }
 

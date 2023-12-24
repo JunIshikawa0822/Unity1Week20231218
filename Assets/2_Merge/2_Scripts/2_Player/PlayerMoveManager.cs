@@ -38,14 +38,14 @@ public class PlayerMoveManager : MonoBehaviour
         playerObject.transform.rotation = Quaternion.LookRotation(-Vector3.up, hitInfo.normal);
     }
 
-    public Vector3 BaseObjPos(Vector3 mouseVec, Vector3 originPos, Vector3 directionVec, float maxDistance, int layerMask)
+    public Vector3 BaseObjPos(Vector3 originPos, Vector3 directionVec, float maxDistance, int layerMask)
     {
         //当たらない
         if (!Physics.Raycast(originPos, directionVec, out RaycastHit hitInfo, maxDistance, layerMask))
         {
             //マウスの先
             //Debug.Log(mouseVec);
-            return originPos + new Vector3(mouseVec.x * maxDistance, mouseVec.y, mouseVec.z * maxDistance);
+            return originPos + new Vector3(directionVec.x * maxDistance, directionVec.y, directionVec.z * maxDistance);
         }
         else
         {
