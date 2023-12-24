@@ -75,7 +75,11 @@ public class LevelManager : MonoBehaviour
 
     public void RewardSelectAndlevelUp(int selectedPanelNum)
     {
+        //Debug.Log(string.Join(",", infotoPanel));
+
         int rewardsIndex = infotoPanel[selectedPanelNum];
+        Debug.Log(rewardsIndex);
+        Debug.Log(rewardsLevelsArray[rewardsIndex]);
         
         if(rewardsLevelsArray[rewardsIndex] >= eachMaxLevelArray[rewardsIndex])
         {

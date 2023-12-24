@@ -41,6 +41,9 @@ public class JunMainSystem : MonoBehaviour
     [SerializeField]
     LevelManager LVManager;
 
+    [SerializeField]
+    PlayerHPManager HPManager;
+
     Camera PlayerCamera;
 
     LayerMask wallLayer = 1 << 6;
@@ -48,6 +51,8 @@ public class JunMainSystem : MonoBehaviour
     LayerMask bulletHitLayer = 1 << 6 | 1 << 7;
 
     LayerMask playerLayer = 1 << 8;
+
+    LayerMask enemyLayer = 1 << 7;
 
     List<Bullet> ABIList;
     List<GameObject> AEOList;
@@ -67,6 +72,10 @@ public class JunMainSystem : MonoBehaviour
         PIManager.LineRendererInit();
         PEXPManager.EXPdebugTextInit();
         LVManager.LevelInit();
+
+        DMManager.PenetrateIntervalInit(0.03f);
+        HPManager.InvincibleIntervalInit(0.5f);
+        HPManager.PlayerHPInit(100);
     }
 
     // Start is called before the first frame update
@@ -151,6 +160,14 @@ public class JunMainSystem : MonoBehaviour
                             AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = false;
                         }
                     }
+                }
+
+                HPManager.PlayerHPCheck(Player, 3, enemyLayer, AEOList, AEIList);
+
+                if (HPManager.playerHP < 1)
+                {
+                    gamePhase = 3;
+                    return;
                 }
 
                 if (Input.GetKey(KeyCode.Space))
@@ -254,14 +271,18 @@ public class JunMainSystem : MonoBehaviour
                     LVManager.RewardSelectAndlevelUp(UIManager.selectedPanelnum);
 
                     LevelUpUIProcess(false);
+
                     PIManager.InputInterval(LVManager.fireIntervalLevelArray[LVManager.LevelofIndex(2)]);
+
                     gamePhase = 1;
+                    Debug.Log(LVManager.rewardsLevelsArray[4]);
                 }
 
                 break;
 
             case 3:
-
+                //死んだ時の処理を書く
+                Debug.Log("ゲームオーバー");
                 break;
         }
     }
@@ -332,6 +353,12 @@ public class JunMainSystem : MonoBehaviour
                 //貫通なら
                 else
                 {
+                    if (DMManager.isPenetrateActive)
+                    {
+                        ABIList[number].BulletGetMove();
+                        return;
+                    }
+
                     PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
 
                     //レベルアップするかどうか
@@ -339,6 +366,8 @@ public class JunMainSystem : MonoBehaviour
 
                     //判定を行ったのでColOpListの中身を削除
                     colOponentList.Clear();
+
+                    DMManager.StartCoroutine("PenetrateIntervalTimer");
                 }
             }
         }

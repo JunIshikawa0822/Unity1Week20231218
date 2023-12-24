@@ -48,7 +48,7 @@ public class UserInterfaceManager : MonoBehaviour
 
     public void select1stPanel()
     {
-        selectedPanelnum = 2;
+        selectedPanelnum = 0;
         Debug.Log("押したよ");
     }
 
@@ -60,8 +60,8 @@ public class UserInterfaceManager : MonoBehaviour
 
     public void select3rdPanel()
     {
-        selectedPanelnum = 0;
-
+        selectedPanelnum = 2;
+        Debug.Log("押したよ");
     }
 
     public void PointerEnter()

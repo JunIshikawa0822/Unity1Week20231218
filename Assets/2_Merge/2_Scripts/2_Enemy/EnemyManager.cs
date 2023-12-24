@@ -29,13 +29,13 @@ public class EnemyManager : MonoBehaviour
     public float enemySpawnRadius = 50;
 
     [SerializeField]
-    public int enemySimultaniousNum = 2;
+    public int enemySimultaniousNum = 6;
 
     [SerializeField]
-    public int enemySpawnInterval = 15;
+    public int enemySpawnInterval = 8;
 
     [SerializeField]
-    public int spawnMaxTime = 240;
+    public int spawnMaxTime = 480;
 
     private void EnemyGenerate(Vector3 enemyPos, float enHP, float enSpeed, float enDamage, float enEXP, float enType)
     {

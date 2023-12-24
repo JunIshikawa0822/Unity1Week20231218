@@ -32,6 +32,11 @@ public class Enemy : MonoBehaviour
        // enemyAnim = enAnim;
     }
 
+    public float GiveDamage()
+    {
+        return enemyDamage;
+    }
+
     public void GetDamage(int givenDamage)
     {
         enemyHP -= givenDamage;
