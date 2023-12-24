@@ -85,7 +85,7 @@ public class JunMainSystem : MonoBehaviour
         ShotOrigin = PMManager.shotOriginObject;
 
         ENManager.EnemyInit(
-            ENManager.CenterObject,
+            Player,
             ENManager.enemySimultaniousNum,
             ENManager.enemySpawnRadius,
             ENManager.spawnMaxTime,
@@ -97,6 +97,8 @@ public class JunMainSystem : MonoBehaviour
         gamePhase = 0;
 
         PEXPManager.AccumulationEXP(2);
+
+        LVManager.RewardInit();
     }
 
     // Update is called once per frame
@@ -139,6 +141,15 @@ public class JunMainSystem : MonoBehaviour
                     for (int i = 0; i < AEIList.Count; i++)
                     {
                         EnemyProcess(AEIList, i, Player);
+
+                        if (AEIList[i].EnemyGameObject().transform.position.x < Player.transform.position.x)
+                        {
+                            AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                        }
+                        else
+                        {
+                            AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                        }
                     }
                 }
 
@@ -148,7 +159,7 @@ public class JunMainSystem : MonoBehaviour
                     Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 150);
 
                     FannelProcess(true, restVec);
-                    LineDrawProcess(Fannel, restVec, wallLayer, 5);
+                    LineDrawProcess(Fannel, restVec, wallLayer, 7);
 
                     BaseObjShotProcess(
                         restVec,
@@ -157,7 +168,7 @@ public class JunMainSystem : MonoBehaviour
                         PMManager.baseBlocksArray[0],
                         wallLayer,
                         playerLayer,
-                        7
+                        9
                         );
                 }
                 else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
@@ -169,7 +180,7 @@ public class JunMainSystem : MonoBehaviour
 
                     PMManager.predictObject.SetActive(false);
 
-                    if (!Physics.Raycast(ShotOrigin.transform.position, restVec, out RaycastHit hitInfo, 12, wallLayer))
+                    if (!Physics.Raycast(ShotOrigin.transform.position, restVec, out RaycastHit hitInfo, 16, wallLayer))
                     {
                         //できない
                         LineDrawProcess(ShotOrigin, restVec, wallLayer, 0);
@@ -178,7 +189,7 @@ public class JunMainSystem : MonoBehaviour
                     else
                     {
                         //できる
-                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 12);
+                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 16);
 
                         if (Input.GetMouseButtonDown(0))
                         {
@@ -246,6 +257,10 @@ public class JunMainSystem : MonoBehaviour
                     PIManager.InputInterval(LVManager.fireIntervalLevelArray[LVManager.LevelofIndex(2)]);
                     gamePhase = 1;
                 }
+
+                break;
+
+            case 3:
 
                 break;
         }
@@ -365,10 +380,10 @@ public class JunMainSystem : MonoBehaviour
         //print(PEXPManager.totalPlayerEXP);
         UIManager.SliderValueChange(UIManager.EXPSlider, PEXPManager.BarPersent(beforeLevel));
 
-        int afterlevel = PEXPManager.EXPtoLevel();
+        int afterLevel = PEXPManager.EXPtoLevel();
         //Debug.Log("現在のレベル" + afterLevel);
 
-        if (PEXPManager.totalPlayerEXP - (int)PEXPManager.AccumulationEXP(afterlevel) > PEXPManager.demandEXPtoNextLevel(afterlevel))
+        if (afterLevel > beforeLevel)
         {
             UIManager.SliderValueChange(UIManager.EXPSlider, 0);
             

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy 
+public class Enemy : MonoBehaviour
 {
     int enemyHP;
     float enemySpeed;
@@ -45,6 +45,11 @@ public class Enemy
             playerPos.transform.position,
             1.0f
         );
+    }
+
+    public Vector3 EnemyPos()
+    {
+        return enemyObject.transform.position;
     }
 
     public void EnemyNavMove(Transform playerPos,Vector3 enemyPos)

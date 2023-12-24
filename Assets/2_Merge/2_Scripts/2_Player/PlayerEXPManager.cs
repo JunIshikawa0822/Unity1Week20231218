@@ -82,7 +82,7 @@ public class PlayerEXPManager : MonoBehaviour
 
         //Debug.Log("nowEXP" + EXPtoNextLevel + ", dem：" + demandEXPtoNextLevel(nowLevel));
 
-        float persent = Mathf.FloorToInt(((float)EXPtoNextLevel / (float)demandEXPtoNextLevel(nowLevel)) * 100);
+        float persent = Mathf.FloorToInt(((float)EXPtoNextLevel / (float)demandEXPtoNextLevel(nowLevel)) * 1000);
 
         //Debug.Log(persent);
 

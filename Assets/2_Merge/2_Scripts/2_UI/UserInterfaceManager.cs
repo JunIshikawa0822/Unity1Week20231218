@@ -16,7 +16,7 @@ public class UserInterfaceManager : MonoBehaviour
     [SerializeField]
     public GameObject LevelUpUIParent;
 
-    float EXPsliderMaxValuePersent = 100;
+    float EXPsliderMaxValuePersent = 1000;
     float HPsliderMaxValuePersent = 100;
 
     [System.NonSerialized]
@@ -76,6 +76,7 @@ public class UserInterfaceManager : MonoBehaviour
 
     public void RewardUISet(int[] infotoPanel, int[] levelArray)
     {
+        Debug.Log(string.Join(",", infotoPanel));
         for(int i = 0; i < infotoPanel.Length; i++)
         {
             int indexOfRewards = infotoPanel[i];
