@@ -61,13 +61,13 @@ public class LevelManager : MonoBehaviour
     //public int bAngleLevel;
 
     [System.NonSerialized]
-    int[] rewardsLevelsArray = new int[6];
+    public int[] rewardsLevelsArray = new int[6];
 
     int[] eachMaxLevelArray = new int[] { 7, 7, 7, 7, 2, 7};
 
     [System.NonSerialized]
     //パネルに表示するオプションの数字を保持
-    int[] infotoPanel = new int[3];
+    public int[] infotoPanel = new int[3];
 
     List<int> rewardsList = new List<int>();
 
@@ -97,10 +97,12 @@ public class LevelManager : MonoBehaviour
         //0~5のオプションのうちパネルに表示するものを3つ選ぶ
         for (int i = 0; i < infotoPanel.Length; i++)
         {
-            int rand = UnityEngine.Random.Range(0, rewardsList.Count); 
+            int rand = UnityEngine.Random.Range(0, rewardsList.Count - 1); 
             infotoPanel[i] = rand;
             rewardsList.RemoveAt(rand);
         }
+
+        Debug.Log("InfotoPanel" + string.Join(",", infotoPanel));
     }
 
     public void LevelInit()

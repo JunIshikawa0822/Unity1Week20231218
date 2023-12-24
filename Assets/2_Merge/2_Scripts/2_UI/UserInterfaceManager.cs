@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
 
 public class UserInterfaceManager : MonoBehaviour
 {
@@ -25,7 +26,9 @@ public class UserInterfaceManager : MonoBehaviour
     public bool onClick = false;
 
     [SerializeField]
-    GameObject[] panels = new GameObject[3];
+    TextMeshProUGUI[] panelTexts = new TextMeshProUGUI[3];
+
+    string[] optionsExplains = new string[] { "Shots", "Bullet Range", "Interval", "Damage", "Penetrate", "Wide"};
 
     public void SliderMaxInit()
     {
@@ -43,23 +46,22 @@ public class UserInterfaceManager : MonoBehaviour
         slider.value = value;
     }
 
-    public void selectRightPanel()
+    public void select1stPanel()
     {
-        selectedPanelnum = 0;
+        selectedPanelnum = 2;
         Debug.Log("押したよ");
     }
 
-    public void selectMiddlePanel()
+    public void select2ndPanel()
     {
         selectedPanelnum = 1;
         Debug.Log("押したよ");
     }
 
-    public void selectLeftPanel()
+    public void select3rdPanel()
     {
-        selectedPanelnum = 2;
-        Debug.Log("押したよ");
-        Debug.Log(selectedPanelnum);
+        selectedPanelnum = 0;
+
     }
 
     public void PointerEnter()
@@ -72,5 +74,14 @@ public class UserInterfaceManager : MonoBehaviour
         onClick = true;
     }
 
+    public void RewardUISet(int[] infotoPanel, int[] levelArray)
+    {
+        for(int i = 0; i < infotoPanel.Length; i++)
+        {
+            int indexOfRewards = infotoPanel[i];
+            int level = levelArray[indexOfRewards];
 
+            panelTexts[i].text = optionsExplains[indexOfRewards] + "\n Lv:" + (level+1);
+        }
+    }
 }

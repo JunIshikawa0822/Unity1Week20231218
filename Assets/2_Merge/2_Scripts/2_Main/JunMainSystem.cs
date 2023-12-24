@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using static Cinemachine.DocumentationSortingAttribute;
 using static UnityEditor.PlayerSettings;
 
 public class JunMainSystem : MonoBehaviour
@@ -235,12 +236,10 @@ public class JunMainSystem : MonoBehaviour
 
             case 2:
                 
-                LevelUpUIProcess(true);
+                
 
-                if(UIManager.selectedPanelnum > -1 && UIManager.onClick)
+                if (UIManager.selectedPanelnum > -1 && UIManager.onClick)
                 {
-                    LVManager.RewardInit();
-
                     LVManager.RewardSelectAndlevelUp(UIManager.selectedPanelnum);
 
                     LevelUpUIProcess(false);
@@ -366,15 +365,20 @@ public class JunMainSystem : MonoBehaviour
         //print(PEXPManager.totalPlayerEXP);
         UIManager.SliderValueChange(UIManager.EXPSlider, PEXPManager.BarPersent(beforeLevel));
 
-        int afterLevel = PEXPManager.EXPtoLevel();
+        int afterlevel = PEXPManager.EXPtoLevel();
         //Debug.Log("現在のレベル" + afterLevel);
 
-        if (afterLevel > beforeLevel)
+        if (PEXPManager.totalPlayerEXP - (int)PEXPManager.AccumulationEXP(afterlevel) > PEXPManager.demandEXPtoNextLevel(afterlevel))
         {
             UIManager.SliderValueChange(UIManager.EXPSlider, 0);
-
+            
             UIManager.selectedPanelnum = 0;
             UIManager.onClick = false;
+
+            LVManager.RewardInit();
+
+            LevelUpUIProcess(true);
+            UIManager.RewardUISet(LVManager.infotoPanel, LVManager.rewardsLevelsArray);
 
             gamePhase = 2;
         }

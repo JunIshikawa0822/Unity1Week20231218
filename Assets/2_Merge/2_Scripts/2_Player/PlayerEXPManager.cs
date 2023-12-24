@@ -49,7 +49,7 @@ public class PlayerEXPManager : MonoBehaviour
     }
 
     //レベルから次のレベルアップに必要な経験値を計算
-    int demandEXPtoNextLevel(int nowLevel)
+    public int demandEXPtoNextLevel(int nowLevel)
     {
         int demandEXP;
 
