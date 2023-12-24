@@ -65,6 +65,7 @@ public class JunMainSystem : MonoBehaviour
         UIManager.SliderMaxInit();
         PIManager.LineRendererInit();
         PEXPManager.EXPdebugTextInit();
+        LVManager.LevelInit();
     }
 
     // Start is called before the first frame update
@@ -76,15 +77,21 @@ public class JunMainSystem : MonoBehaviour
         AEIList = ENManager.AllEnemyInfoList;
         AEOList = ENManager.AllEnemyObjectList;
 
-        PIManager.InputInterval(LVManager.fireInterval);
+        PIManager.InputInterval(LVManager.fireIntervalLevelArray[LVManager.LevelofIndex(2)]);
 
         Player = PMManager.Player;
         Fannel = PMManager.Fannel;
         ShotOrigin = PMManager.shotOriginObject;
 
-        ENManager.EnemyInit(ENManager.CenterObject);
+        ENManager.EnemyInit(
+            ENManager.CenterObject,
+            ENManager.enemySimultaniousNum,
+            ENManager.enemySpawnRadius,
+            ENManager.spawnMaxTime,
+            ENManager.enemySpawnInterval
+            );
 
-        LVManager.nowBullet = LVManager.bullet1;
+        //LVManager.nowBullet = LVManager.bullet1;
 
         gamePhase = 0;
 
@@ -120,7 +127,7 @@ public class JunMainSystem : MonoBehaviour
                         else
                         {
                             //そのまま飛ばす
-                            BulletProcess(ABIList, i, bulletHitLayer, "Wall", LVManager.isPenetrate);
+                            BulletProcess(ABIList, i, bulletHitLayer, "Wall", LVManager.penetrateLevelArray[LVManager.LevelofIndex(4)]);
                         }
                     }
                 }
@@ -137,10 +144,10 @@ public class JunMainSystem : MonoBehaviour
                 if (Input.GetKey(KeyCode.Space))
                 {
                     Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
-                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 150);
 
-                    FannelProcess(true, mouseVec);
-                    LineDrawProcess(Fannel, restVec, wallLayer, 7);
+                    FannelProcess(true, restVec);
+                    LineDrawProcess(Fannel, restVec, wallLayer, 5);
 
                     BaseObjShotProcess(
                         restVec,
@@ -157,11 +164,11 @@ public class JunMainSystem : MonoBehaviour
                     Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
                     Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
 
-                    FannelProcess(false, mouseVec);
+                    FannelProcess(false, restVec);
 
                     PMManager.predictObject.SetActive(false);
 
-                    if (!Physics.Raycast(ShotOrigin.transform.position, restVec, out RaycastHit hitInfo, 10, wallLayer))
+                    if (!Physics.Raycast(ShotOrigin.transform.position, restVec, out RaycastHit hitInfo, 12, wallLayer))
                     {
                         //できない
                         LineDrawProcess(ShotOrigin, restVec, wallLayer, 0);
@@ -170,7 +177,7 @@ public class JunMainSystem : MonoBehaviour
                     else
                     {
                         //できる
-                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 10);
+                        LineDrawProcess(ShotOrigin, restVec, wallLayer, 12);
 
                         if (Input.GetMouseButtonDown(0))
                         {
@@ -195,9 +202,9 @@ public class JunMainSystem : MonoBehaviour
                 else
                 {
                     Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
-                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 150);
 
-                    FannelProcess(true, mouseVec);
+                    FannelProcess(true, restVec);
                     LineDrawProcess(Fannel, restVec, wallLayer, 3);
 
                     PMManager.predictObject.SetActive(false);
@@ -211,13 +218,13 @@ public class JunMainSystem : MonoBehaviour
 
                         SIManager.BulletShotSimultaniously(
                             restVec,
-                            LVManager.simultaniousNum,
+                            LVManager.simulNumLevelArray[LVManager.LevelofIndex(0)],
                             SIManager.bulletTypeObjArray,
-                            LVManager.nowBullet,
+                            LVManager.bulletDamageLevelArray[LVManager.LevelofIndex(3)],
                             Fannel.transform.position,
-                            LVManager.destroyDistance,
-                            LVManager.bulletAngle,
-                            LVManager.isPenetrate
+                            LVManager.destroyDistLevelArray[LVManager.LevelofIndex(1)],
+                            LVManager.bulletAngleLevelArray[LVManager.LevelofIndex(5)],
+                            LVManager.penetrateLevelArray[LVManager.LevelofIndex(4)]
                             );
 
                         PIManager.StartCoroutine("FireTimer");
@@ -230,10 +237,14 @@ public class JunMainSystem : MonoBehaviour
                 
                 LevelUpUIProcess(true);
 
-                if(UIManager.selectedPanelnum > 0)
-                {   
+                if(UIManager.selectedPanelnum > -1 && UIManager.onClick)
+                {
+                    LVManager.RewardInit();
+
+                    LVManager.RewardSelectAndlevelUp(UIManager.selectedPanelnum);
 
                     LevelUpUIProcess(false);
+                    PIManager.InputInterval(LVManager.fireIntervalLevelArray[LVManager.LevelofIndex(2)]);
                     gamePhase = 1;
                 }
 
@@ -361,9 +372,11 @@ public class JunMainSystem : MonoBehaviour
         if (afterLevel > beforeLevel)
         {
             UIManager.SliderValueChange(UIManager.EXPSlider, 0);
+
             UIManager.selectedPanelnum = 0;
+            UIManager.onClick = false;
+
             gamePhase = 2;
-            //Debug.Log("フェーズ移行");
         }
     }
 

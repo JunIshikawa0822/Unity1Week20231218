@@ -14,10 +14,10 @@ public class PlayerEXPManager : MonoBehaviour
     //public int playerLevel = 0;
 
     [Range(3, 10), System.NonSerialized]
-    int demandEXPprime = 10;
+    int demandEXPprime = 3;
 
     [Range(1, 2), System.NonSerialized]
-    float EXPRatio = 2f;
+    float EXPRatio = 1.5f;
 
     [SerializeField]
     TextMeshProUGUI totalEXP;

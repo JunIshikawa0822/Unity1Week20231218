@@ -17,11 +17,11 @@ public class MainSystem : MonoBehaviour
     void Start()
     {
 
-        enemyPos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 1.1f, Camera.main.nearClipPlane));
-        enemyPos.z = enemyPos.y;
-        enemyPos.y = 0;
-        StartCoroutine(enG.SpawnCoroutine(playerPos, 5, 30));
-        EnList = enG.AllEnemyInfoList;
+        //enemyPos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 1.1f, Camera.main.nearClipPlane));
+        //enemyPos.z = enemyPos.y;
+        //enemyPos.y = 0;
+        //StartCoroutine(enG.SpawnCoroutine(playerPos, 5, 30));
+        //EnList = enG.AllEnemyInfoList;
     }
 
     // Update is called once per frame

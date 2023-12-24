@@ -18,15 +18,15 @@ public class ShotInfoManager : MonoBehaviour
 
     // 一つの弾を生成する
     //・弾のオブジェクト配列・弾情報Dic・生成場所・進むベクトル・消える距離
-    public void BulletInfoInstantiate(GameObject[] bTObjArray, Dictionary<string, float> bTypeDic, Vector3 instantPos, Vector3 moveDir, float destroyDist, bool isbPen)
+    public void BulletInfoInstantiate(GameObject[] bTObjArray, int damage, Vector3 instantPos, Vector3 moveDir, float destroyDist, bool isbPen)
     {
-        GameObject bulletObj = Instantiate(bTObjArray[(int)bTypeDic["BTypeNum"]], instantPos, Quaternion.identity);
-        Bullet bullet = new Bullet(bTypeDic["speed"], (int)bTypeDic["damage"], moveDir, bulletObj, destroyDist, isbPen);
+        GameObject bulletObj = Instantiate(bTObjArray[0], instantPos, Quaternion.identity);
+        Bullet bullet = new Bullet(0.2f, damage, moveDir, bulletObj, destroyDist, isbPen);
         AllBulletInfoList.Add(bullet);
     }
 
     //同時に弾を発射する
-    public void BulletShotSimultaniously(Vector3 mouseVec, int simulNum, GameObject[] bTObjArray, Dictionary<string, float> bTypeDic, Vector3 instantPos, float destroyDist, float bAngle, bool isbPen)
+    public void BulletShotSimultaniously(Vector3 mouseVec, int simulNum, GameObject[] bTObjArray, int damage, Vector3 instantPos, float destroyDist, float bAngle, bool isbPen)
     {
         float theta;
         //Debug.Log(mouseVec);
@@ -43,7 +43,7 @@ public class ShotInfoManager : MonoBehaviour
                 theta = Mathf.Pow(-1, i) * ((i + 1) / 2) * bAngle + bAngle / 2;
             }
             Vector3 vec = Quaternion.Euler(0, theta, 0) * mouseVec;
-            BulletInfoInstantiate(bTObjArray, bTypeDic, instantPos, vec, destroyDist, isbPen);
+            BulletInfoInstantiate(bTObjArray, damage, instantPos, vec, destroyDist, isbPen);
         }
     }
 }

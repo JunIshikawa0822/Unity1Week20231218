@@ -21,6 +21,12 @@ public class UserInterfaceManager : MonoBehaviour
     [System.NonSerialized]
     public int selectedPanelnum = 0;
 
+    [System.NonSerialized]
+    public bool onClick = false;
+
+    [SerializeField]
+    GameObject[] panels = new GameObject[3];
+
     public void SliderMaxInit()
     {
         EXPSlider.maxValue = EXPsliderMaxValuePersent;
@@ -39,19 +45,19 @@ public class UserInterfaceManager : MonoBehaviour
 
     public void selectRightPanel()
     {
-        selectedPanelnum = 1;
+        selectedPanelnum = 0;
         Debug.Log("押したよ");
     }
 
     public void selectMiddlePanel()
     {
-        selectedPanelnum = 2;
+        selectedPanelnum = 1;
         Debug.Log("押したよ");
     }
 
     public void selectLeftPanel()
     {
-        selectedPanelnum = 3;
+        selectedPanelnum = 2;
         Debug.Log("押したよ");
         Debug.Log(selectedPanelnum);
     }
@@ -60,4 +66,11 @@ public class UserInterfaceManager : MonoBehaviour
     {
 
     }
+
+    public void SelectEnterPanel()
+    {
+        onClick = true;
+    }
+
+
 }

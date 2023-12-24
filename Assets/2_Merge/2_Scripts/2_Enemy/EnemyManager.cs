@@ -25,9 +25,17 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     public GameObject CenterObject;
 
-    float spawnRadius = 30;
+    [SerializeField]
+    public float enemySpawnRadius = 60;
 
-    int enemySimultaniousNum = 2;
+    [SerializeField]
+    public int enemySimultaniousNum = 2;
+
+    [SerializeField]
+    public int enemySpawnInterval = 10;
+
+    [SerializeField]
+    public int spawnMaxTime = 120;
 
     private void EnemyGenerate(Vector3 enemyPos, float enHP, float enSpeed, float enDamage, float enEXP, float enType)
     {
@@ -78,26 +86,26 @@ public class EnemyManager : MonoBehaviour
             EnemyGenerate(enemyPos, enemyDic["eHP"], enemyDic["eSpeed"], enemyDic["eDamage"], enemyDic["eEXP"], enemyDic["eTypeNum"]);
         }
     }
-    public IEnumerator SpawnCoroutine(Transform player,int enemyNum, float spawnRadius)
+    public IEnumerator SpawnCoroutine(Transform player,int enemyNum, float spawnRadius, float maxTime, float spawnInterval)
     {
         float timer = 0f;
-        while(timer < 120f)
+        while(timer < maxTime)
         {
             if(timer%4 == 0) spawnNormal(player,enemyNum, spawnRadius, Enemy1);
             if(timer%8 == 0) spawnSwarm(player,enemyNum, spawnRadius, Enemy2);
 
-            yield return new WaitForSeconds(8f);
+            yield return new WaitForSeconds(spawnInterval);
 
-            timer += 8f; 
+            timer += spawnInterval; 
             enemyNum++;
         }   
     }
 
-    public void EnemyInit(GameObject player)
+    public void EnemyInit(GameObject player, int enemySimulNum, float enSpawnRadius, float maxTime, float spawnInterval)
     {
         Vector3 enemyPos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 1.1f, Camera.main.nearClipPlane));
         enemyPos.z = enemyPos.y;
         enemyPos.y = 0;
-        StartCoroutine(SpawnCoroutine(player.transform, enemySimultaniousNum, spawnRadius));
+        StartCoroutine(SpawnCoroutine(player.transform, enemySimulNum, enSpawnRadius, maxTime, spawnInterval));
     }
 }
