@@ -10,8 +10,8 @@ public class UserInterfaceManager : MonoBehaviour
     [SerializeField]
     public Slider EXPSlider;
 
-    //[SerializeField]
-    //public Slider HPSlider;
+    [SerializeField]
+    public Slider HPSlider;
 
     [SerializeField]
     public GameObject LevelUpUIParent;
@@ -28,12 +28,15 @@ public class UserInterfaceManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI[] panelTexts = new TextMeshProUGUI[3];
 
+    [SerializeField]
+    public TextMeshProUGUI levelText;
+
     string[] optionsExplains = new string[] { "Shots", "Bullet Range", "Interval", "Damage", "Penetrate", "Wide"};
 
     public void SliderMaxInit()
     {
         EXPSlider.maxValue = EXPsliderMaxValuePersent;
-        //HPSlider.maxValue = HPsliderMaxValuePersent;
+        HPSlider.maxValue = HPsliderMaxValuePersent;
     }
 
     public void LevelUpUIInit()
@@ -84,5 +87,10 @@ public class UserInterfaceManager : MonoBehaviour
 
             panelTexts[i].text = optionsExplains[indexOfRewards] + "\n Lv:" + (level+1);
         }
+    }
+
+    public void TextSet(TextMeshProUGUI text, string str, int value)
+    {
+        text.text = str + value;
     }
 }

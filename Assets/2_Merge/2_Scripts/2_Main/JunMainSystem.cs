@@ -122,7 +122,8 @@ public class JunMainSystem : MonoBehaviour
 
             case 1:
 
-                PEXPManager.EXPdebugText();
+                //PEXPManager.EXPdebugText();
+                UIManager.TextSet(UIManager.levelText, "Lv : ", PEXPManager.EXPtoLevel());
 
                 //弾の処理
                 if (ABIList.Count > 0)
@@ -162,7 +163,8 @@ public class JunMainSystem : MonoBehaviour
                     }
                 }
 
-                HPManager.PlayerHPCheck(Player, 3, enemyLayer, AEOList, AEIList);
+                HPManager.PlayerHPCheck(Player, 2, enemyLayer, AEOList, AEIList);
+                UIManager.SliderValueChange(UIManager.HPSlider, HPManager.playerHP);
 
                 if (HPManager.playerHP < 1)
                 {
@@ -218,20 +220,6 @@ public class JunMainSystem : MonoBehaviour
                         playerLayer,
                         9
                         );
-
-
-                    //プレイヤーの移動
-                    //if (Input.GetMouseButtonDown(0))
-                    //{
-                    //    PMManager.NormalMove(
-                    //    Player,
-                    //    Player.transform.position,
-                    //    restVec,
-                    //    20,
-                    //    wallLayer,
-                    //    QueryTriggerInteraction.Collide
-                    //    );
-                    //}
                 }
                 else
                 {
@@ -264,8 +252,6 @@ public class JunMainSystem : MonoBehaviour
                 break;
 
             case 2:
-                
-                
 
                 if (UIManager.selectedPanelnum > -1 && UIManager.onClick)
                 {
