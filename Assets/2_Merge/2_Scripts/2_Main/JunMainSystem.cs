@@ -200,7 +200,9 @@ public class JunMainSystem : MonoBehaviour
                         if (Input.GetMouseButtonDown(0))
                         {
                             //Invokeここに書けるよ
-                            PMManager.MoveAndRot(Player, hitInfo);
+                            //PMManager.MoveAndRot(Player, hitInfo);
+                            StartCoroutine(Move(Player, hitInfo, 0.4f));
+                            PlayerAnimator.SetTrigger("WarpStart");   
                         }
                     }
                 }
@@ -280,7 +282,7 @@ public class JunMainSystem : MonoBehaviour
                 {
                     LVManager.RewardSelectAndlevelUp(UIManager.selectedPanelnum);
 
-                    AgentStopProcess(true);
+                    AgentStopProcess(false);
                     LevelUpUIProcess(false);
 
                     PIManager.InputInterval(LVManager.fireIntervalLevelArray[LVManager.LevelofIndex(2)]);
@@ -288,8 +290,6 @@ public class JunMainSystem : MonoBehaviour
                     gamePhase = 1;
                     Debug.Log(LVManager.rewardsLevelsArray[4]);
                 }
-
-
 
                 break;
 
@@ -486,5 +486,14 @@ public class JunMainSystem : MonoBehaviour
             Fannel.transform.position = PMManager.BaseObjPos(originObj.transform.position, fannelVec, fannelDist, wallLayer);
             Fannel.SetActive(false);
         }
+    }
+
+    IEnumerator Move(GameObject playerObj, RaycastHit hitInfo, float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        PMManager.MoveAndRot(playerObj, hitInfo);
+
+        PlayerAnimator.SetTrigger("WarpEnd");
     }
 }
