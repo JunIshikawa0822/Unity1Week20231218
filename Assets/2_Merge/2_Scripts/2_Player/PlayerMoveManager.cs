@@ -8,6 +8,9 @@ public class PlayerMoveManager : MonoBehaviour
     public GameObject shotOriginObject;
 
     [SerializeField]
+    public GameObject shotOriginObject2;
+
+    [SerializeField]
     public GameObject Player;
 
     [SerializeField]
