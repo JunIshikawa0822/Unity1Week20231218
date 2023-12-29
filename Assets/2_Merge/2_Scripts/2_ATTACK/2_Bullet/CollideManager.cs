@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class CollideManager : MonoBehaviour
 {
-    //弾を消す
-    public void BulletRemove(List<Bullet> ABIList, int number)
-    {
-        Destroy(ABIList[number].BulletGameObject());
-        ABIList.RemoveAt(number);
-    }
+    
 
     //ぶつかったオブジェクトを返す
     public Collider[] whatBulletCollide(Bullet bullet, LayerMask bulletHitLayer)

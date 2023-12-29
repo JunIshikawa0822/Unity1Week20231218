@@ -15,7 +15,6 @@ public class ShotInfoManager : MonoBehaviour
     [System.NonSerialized]
     public List<Bullet> AllBulletInfoList = new List<Bullet>();
 
-
     // 一つの弾を生成する
     //・弾のオブジェクト配列・弾情報Dic・生成場所・進むベクトル・消える距離
     public void BulletInfoInstantiate(GameObject[] bTObjArray, int damage, Vector3 instantPos, Vector3 moveDir, float destroyDist, bool isbPen)
@@ -46,4 +45,6 @@ public class ShotInfoManager : MonoBehaviour
             BulletInfoInstantiate(bTObjArray, damage, instantPos, vec, destroyDist, isbPen);
         }
     }
+
+    
 }

@@ -9,6 +9,8 @@ public class DamageManager : MonoBehaviour
     //float fireInterval;
     WaitForSeconds penetrateIntervalWait;
 
+    public List<Enemy> deadEnemiesList = new List<Enemy>();
+
     public void PenetrateIntervalInit(float interval)
     {
         penetrateIntervalWait = new WaitForSeconds(interval);
@@ -24,10 +26,10 @@ public class DamageManager : MonoBehaviour
     }
 
     //ダメージ処理
-    public int bulletDamegeProcess(List<Collider> ColOpList, List<Enemy> AEIList, List<GameObject> enemyObjList, Bullet bullet)
+    public void bulletDamegeProcess(List<Collider> ColOpList, List<Enemy> AEIList, List<GameObject> enemyObjList, Bullet bullet)
     {
         Debug.Log("ダメージ");
-        int addEXP = 0;
+        //int addEXP = 0;
 
         for(int i = 0; i < ColOpList.Count; i++)
         {
@@ -52,7 +54,8 @@ public class DamageManager : MonoBehaviour
                 //Debug.Log("加算前：" + totalPlayerEXP);
 
                 //経験値加算
-                addEXP += (int)enemy.EnemyEXP();
+                deadEnemiesList.Add(enemy);
+                //addEXP += (int)enemy.EnemyEXP();
 
                 //Debug.Log("加算後：" + totalPlayerEXP);
 
@@ -60,7 +63,7 @@ public class DamageManager : MonoBehaviour
                 EnemyRemove(AEIList, enemyObjList, enListIndex);
             }
         }
-        return addEXP;
+        //return addEXP;
     }
 
     void EnemyRemove(List<Enemy> AEIList, List<GameObject> enemyObjList, int number)
