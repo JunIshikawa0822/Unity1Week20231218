@@ -53,16 +53,13 @@ public class JunMainSystemS : MonoBehaviour
 
     List<GameObject> AEOList;
     List<EnemyS> AEIList;
-    List<GameObject> MOList;
-    List<EnemyS> MIList;
-
-
+    
     int gamePhase = 0;
 
     GameObject Player;
     GameObject Fannel;
     GameObject ShotOrigin;
-    //S_Edit
+    //追記：プレイヤー動かす用
     public GameObject player_s;
     private Animator Anim;
 
@@ -80,9 +77,7 @@ public class JunMainSystemS : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //S_Edit
-        //IsShot = true;
-
+        //プレイヤー動かす用
         Anim = player_s.transform.GetChild(3).gameObject.GetComponent<Animator>();
 
 
@@ -92,21 +87,16 @@ public class JunMainSystemS : MonoBehaviour
         AEIList = ENManager.AllEnemyInfoList;
         AEOList = ENManager.AllEnemyObjectList;
 
-        MIList = ENManager.MissileInfoList;
-        MOList = ENManager.MissileObjectList;
-
-
         PIManager.InputInterval(LVManager.fireIntervalLevelArray[LVManager.LevelofIndex(2)]);
 
         Player = PMManager.Player;
         Fannel = PMManager.Fannel;
         ShotOrigin = PMManager.shotOriginObject;
 
+        //追記：EnemyManagerSで敵関連の変数はほとんど管理しています
         ENManager.EnemyInit(
             Player,
-            //ENManager.enemySimultaniousNum,
             ENManager.enemySpawnRadius,
-            ENManager.spawnMaxTime,
             ENManager.enemySpawnInterval
             );
 
@@ -122,6 +112,14 @@ public class JunMainSystemS : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        {
+            Anim.SetBool("warpwaiting",true);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+        {
+            Anim.SetBool("warpwaiting",false);
+        }
         ENManager.TimerInit();
         switch (gamePhase)
         {
@@ -159,38 +157,25 @@ public class JunMainSystemS : MonoBehaviour
                 {
                     for (int i = 0; i < AEIList.Count; i++)
                     {
-                        EnemyProcess(AEIList, i, Player);
-
-                        if (AEIList[i].EnemyGameObject().transform.position.x < Player.transform.position.x)
+                        if(AEIList[i].isMissile)//追記：ミサイルならMissileProcessを実行
                         {
-                            AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                            MissileProcess(AEIList, i);
+                            
                         }
-                        else
-                        {
-                            AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                        else{
+                            EnemyProcess(AEIList, i, Player);
+                            if (AEIList[i].EnemyGameObject().transform.position.x < Player.transform.position.x)
+                            {
+                                AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                            }
+                            else
+                            {
+                                AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                            }
                         }
+                        
                     }
                 }
-                //ミサイルの処理
-                
-                    if (MIList.Count > 0)
-                    {
-                        for (int i = 0; i < MIList.Count; i++)
-                        {
-                            MissileProcess(MIList, i);
-
-                            // if (AEIList[i].EnemyGameObject().transform.position.x < Player.transform.position.x)
-                            // {
-                            //     AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = true;
-                            // }
-                            // else
-                            // {
-                            //     AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                            // }
-                        }
-                    }
-                
-                
 
                 if (Input.GetKey(KeyCode.Space))
                 {
@@ -230,11 +215,13 @@ public class JunMainSystemS : MonoBehaviour
                         //できる
                         LineDrawProcess(ShotOrigin, restVec, wallLayer, 16);
 
+                        //追記：プレイヤー動かす用、消したってかまわない
                         if (Input.GetMouseButtonDown(0))
                         {
-                            //PMManager.MoveAndRot(Player, hitInfo);
-                            StartCoroutine(AnimDelay(Player,hitInfo,0.8f)); //1.5fはdelay
-                            if(Input.GetMouseButton(0)) Anim.SetTrigger("warp_1");
+                            Anim.SetTrigger("translate");
+                            // //PMManager.MoveAndRot(Player, hitInfo);
+                            StartCoroutine(AnimDelay(Player,hitInfo,0.3f)); //1.5fはdelay
+                            // if(Input.GetMouseButton(0)) 
        
                         }
                     }
@@ -298,7 +285,6 @@ public class JunMainSystemS : MonoBehaviour
                     LevelUpUIProcess(false);
                     PIManager.InputInterval(LVManager.fireIntervalLevelArray[LVManager.LevelofIndex(2)]);
                     gamePhase = 1;
-                    Debug.Log("hogehoge");
                 }
 
                 break;
@@ -448,21 +434,20 @@ public class JunMainSystemS : MonoBehaviour
 
     }
 
-    void MissileProcess(List<EnemyS> MIList, int number)
+    //追記：ミサイルを発射、削除までの挙動
+    void MissileProcess(List<EnemyS> AEIList, int number)
     {
-        bool isFinish = MIList[number].IsMissileFinish();
+        bool isFinish = AEIList[number].IsMissileFinish();
         if(isFinish)
         {
-            Destroy(MIList[number].EnemyGameObject());
-            MIList.RemoveAt(number);
-            MOList.RemoveAt(number);
+            Destroy(AEIList[number].EnemyGameObject());
+            AEIList.RemoveAt(number);
+            AEOList.RemoveAt(number);
         }
         else
         {
-            MIList[number].MissileMove(MIList[number].enemyObject);
+            AEIList[number].MissileMove(AEIList[number].enemyObject);
         }
-            
-        
 
     }
 
@@ -492,13 +477,6 @@ public class JunMainSystemS : MonoBehaviour
                 AEIList[i].agent.isStopped = isStop;
             }
         }
-        // if (MIList.Count > 0)
-        // {
-        //     for (int i = 0; i < MIList.Count; i++)
-        //     {
-        //         MIList[i].
-        //     }
-        // }
     }
 
     void FannelProcess(bool isFannel, Vector3 fannelVec)
@@ -514,7 +492,7 @@ public class JunMainSystemS : MonoBehaviour
         }
     }
 
-    //S_Edit
+    //追記：消したってかまわない
     IEnumerator AnimDelay(GameObject Player,RaycastHit hitInfo,float delay)
     {
         yield return new WaitForSeconds(delay);

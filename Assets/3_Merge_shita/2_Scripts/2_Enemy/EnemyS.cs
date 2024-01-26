@@ -12,45 +12,43 @@ public class EnemyS : MonoBehaviour
     float enemyEXP;
     public GameObject enemyObject;
     public UnityEngine.AI.NavMeshAgent agent;
-    public LineRenderer orbitRenderer;//ミサイルの軌跡
-    Vector3 missileArrive;
-    private bool isFinish;
-    private bool isShot;
-    public Animator damageAnim;
-
     Collider enemyCollider;
     Vector3 enemyPos;
 
+    //追記
+    public bool isMissile;//ミサイルかどうか
+    public LineRenderer orbitRenderer;//ミサイルの軌跡描画用
+    Vector3 missileArrive;//ミサイルの目的地
+    private bool isFinish;//ミサイルの挙動が停止したか
+    private bool isShot;//ミサイルが発射したか
+    public Animator damageAnim;//エネミーのダメージ演出
 
-
-    public EnemyS(int enHP, float enSpeed, float enDamage, float enEXP, GameObject enemyObj, Vector3 misAr)
+    public EnemyS(int enHP, float enSpeed, float enDamage, float enEXP, GameObject enemyObj, Vector3 misAr, bool IsMissile)
     {
-        DOTween.SetTweensCapacity(1500, 50);
-        enemyHP = enHP;
         
+        enemyHP = enHP;
         enemyDamage = enDamage;
         enemyEXP = enEXP;
         enemyObject = enemyObj;
         enemyPos = enemyObject.transform.position;
         agent = enemyObject.GetComponent<UnityEngine.AI.NavMeshAgent>();
-        agent.speed  = enSpeed;
+        enemyCollider = enemyObject.GetComponent<SphereCollider>();
+
+        //追記：初期化
+        isMissile = IsMissile;
         missileArrive = misAr;
         damageAnim = enemyObject.GetComponentInChildren<Animator>();
-        enemyCollider = enemyObject.GetComponent<SphereCollider>();
         agent.updateRotation = false;
         isFinish = false;
         isShot = false;
-
-        //enemyMoveType = enMoveType;
-
-       // enemyAnim = enAnim;
+        DOTween.SetTweensCapacity(1500, 50);
+        agent.speed  = enSpeed;
     }
 
     public void GetDamage(int givenDamage)
     {
         enemyHP -= givenDamage;
-        damageAnim.SetTrigger("Damage");
-        //Debug.Log(enemyHP);
+        damageAnim.SetTrigger("Damage");//追記：ダメージ演出
     }
 
     public void EnemyMove(Transform playerPos,Vector3 enemyPos)
@@ -66,7 +64,7 @@ public class EnemyS : MonoBehaviour
     {
         return enemyObject.transform.position;
     }
-
+    
     public void EnemyNavMove(Transform playerPos,Vector3 enemyPos)
     {
         
@@ -74,13 +72,16 @@ public class EnemyS : MonoBehaviour
    
     }
 
+    //追記：ミサイルの挙動
     public void MissileMove(GameObject gameObject)
     {
+        //現在の位置を取得
         Vector3 currenteEnemyPos = gameObject.transform.position;
         orbitRenderer = enemyObject.GetComponent<LineRenderer>();
         orbitRenderer.startWidth = 0.1f; 
         orbitRenderer.endWidth = 0.1f;
         
+        //軌跡の描画
         isShot = true;
         OrbitDisplay(currenteEnemyPos);
         gameObject.transform.DOMove(missileArrive, 6f).SetEase(Ease.Linear)
@@ -91,6 +92,7 @@ public class EnemyS : MonoBehaviour
             });
    
     }
+    //追記：ミサイルの挙動が停止したかどうか
     public bool IsMissileFinish()
     {
         return isFinish;
@@ -99,6 +101,7 @@ public class EnemyS : MonoBehaviour
     {
         return isShot;
     }
+    //追記：軌跡の描画
     private void OrbitDisplay(Vector3 currentEnemyPos)
     {
         var positions = new Vector3[]{
@@ -106,20 +109,8 @@ public class EnemyS : MonoBehaviour
             missileArrive,               
         };
         orbitRenderer.SetPositions(positions);
-        // orbitRenderer.SetPosition(0, enemyPos);
-        // orbitRenderer.SetPosition(1, missileArrive);
     }
-    // public bool IsShot()
-    // {
-    //     return
-    // }
 
-    // public bool IsMissileFinish(GameObject gameObject, List<EnemyS> MIList, List<GameObject> missileObjList, int number)
-    // {
-    //     Destroy(gameObject);
-    //     MIList.RemoveAt(number);
-    //     missileObjList.RemoveAt(number);
-    // }
 
     public bool IsEnemyDestroy(Transform playerPos, Vector3 enemyPos)
     {

@@ -6,7 +6,7 @@ using TMPro;
 
 public class EnemyManagerS : MonoBehaviour
 {
-    //エネミー一覧
+    //追記：エネミー一覧
     [SerializeField]
     private GameObject enemyType0;
     [SerializeField]
@@ -19,7 +19,7 @@ public class EnemyManagerS : MonoBehaviour
     private GameObject enemyType4;
     [SerializeField]
     private GameObject enemyType5;
-    //エネミーのステータス、eSpeedはそれぞれが持つNavmeshのspeedに対応
+    //追記：エネミーのステータス、eSpeedはそれぞれが持つNavmeshのspeedに対応（EnemyS参照）
     Dictionary<string, float> Enemy0 = new Dictionary<string, float>() { { "eTypeNum", 0 }, {"eHP", 3}, { "eSpeed", 0.0f }, { "eDamage", 1 }, {"eEXP", 0}};
     Dictionary<string, float> Enemy1 = new Dictionary<string, float>() { { "eTypeNum", 1 }, {"eHP", 2}, { "eSpeed", 1.5f }, { "eDamage", 1 }, {"eEXP", 0}};
     Dictionary<string, float> Enemy2 = new Dictionary<string, float>() { { "eTypeNum", 2 }, {"eHP", 1}, { "eSpeed", 0.7f }, { "eDamage", 1 }, {"eEXP", 0}};
@@ -34,62 +34,47 @@ public class EnemyManagerS : MonoBehaviour
     [System.NonSerialized]
     public List<GameObject> AllEnemyObjectList = new List<GameObject>();
 
-    [System.NonSerialized]
-    public List<EnemyS> MissileInfoList = new List<EnemyS>();
-
-    [System.NonSerialized]
-    public List<GameObject> MissileObjectList = new List<GameObject>();
-
     [SerializeField]
     public GameObject CenterObject;
 
     [System.NonSerialized]
-    public float enemySpawnRadius = 30;//エネミーがスポーンするプレイヤーを中心とした外周の半径
+    public float enemySpawnRadius = 30;//追記：エネミーがスポーンするプレイヤーを中心とした外周の半径
     [SerializeField]
-    public float spawnMissileRadius = 70;//ミサイルがスポーンするプレイヤーを中心とした外周の半径
+    public float spawnMissileRadius = 70;//追記：ミサイルがスポーンするプレイヤーを中心とした外周の半径
 
-   // private float enemySpawnRadius2 = 40;
-
-    // [SerializeField]
-    // public int enemySimultaniousNum = 2;
-
-    //それぞれの敵のスポーン数(初期状態)
+    //追記：敵のスポーン数(初期状態)
+    private int missileNumbers = 3;
     private int Type1Num = 3;
     private int Type2Num = 5;
     private int Type3Num = 1;
     private int Type4Num = 1;
     private int Type5Num = 1;
 
+    //追記：ミサイル含む全てのエネミーのコルーチン待機時間
     [SerializeField]
     public int enemySpawnInterval = 15;
 
+    //追記：ミサイルの発射時インターバル
     [SerializeField]
-    public int spawnMaxTime = 240;
+    public float missileInterval = 20f;
 
-    //ミサイルのスポーン数(初期状態)
-    private int missileNumbers = 3;
-
-    //ミサイルのコルーチンにおけるインターバル
-    [SerializeField]
-    public float missileInterval = 0.2f;
-
-    //シーン右上のタイマー用
+    //追記：シーン右上のタイマー用
     [SerializeField]
     private TextMeshProUGUI timerText;
     private float seconds = 0f;
     private float oldseconds = 0f;
     private int minute = 0;
 
-    //プレイ時間
+    //追記：プレイ時間
     private int playTime = 4;
 
-    //フェーズごとにミサイルがスポーンされる地点（プレイヤーとの距離）
+    //追記：フェーズごとにミサイルがスポーンされる地点（プレイヤーとの距離）
     int firstOrbitGap = 10;
     int secondOrbitGap = 30;
     int thirdOrbitGap = 5;
     int fourthOrbitGap = 0;
 
-    //シーン右上のタイマー
+    //追記：シーン右上のタイマー
     public void TimerInit()
     {
         
@@ -105,22 +90,23 @@ public class EnemyManagerS : MonoBehaviour
         
     }
     
-    
-
+    //追記：敵（ミサイル以外）の生成
     private void EnemyGenerate(Vector3 enemyPos, float enHP, float enSpeed, float enDamage, float enEXP, float enType)
     {
         
         GameObject enemyObj = null;
-    
-        
+        float randomScale;
         switch(enType)
         {
-            
             case 1:
                 enemyObj = Instantiate(enemyType1,enemyPos,Quaternion.identity);
+                randomScale = Random.Range(0.4f,0.5f);
+                enemyObj.transform.localScale = new Vector3(randomScale,0,randomScale); 
                 break;
             case 2:
                 enemyObj = Instantiate(enemyType2,enemyPos,Quaternion.identity);
+                randomScale = Random.Range(0.4f,0.5f);
+                enemyObj.transform.localScale = new Vector3(randomScale,0,randomScale);
                 break;
             case 3:
                 enemyObj = Instantiate(enemyType3,enemyPos,Quaternion.identity);
@@ -131,14 +117,13 @@ public class EnemyManagerS : MonoBehaviour
             case 5:
                 enemyObj = Instantiate(enemyType5,enemyPos,Quaternion.identity);
                 break;
-
         }
-        EnemyS enemy = new EnemyS((int)enHP, enSpeed, enDamage,enEXP,enemyObj,Vector3.zero);
+        EnemyS enemy = new EnemyS((int)enHP, enSpeed, enDamage,enEXP,enemyObj,Vector3.zero,false);
         AllEnemyInfoList.Add(enemy);
         AllEnemyObjectList.Add(enemy.EnemyGameObject());
     }
 
-    //単体生成（場所はランダムに変更）
+    //追記：単体生成（場所はプレイヤーを中心とした円周上ランダム）
     private void spawnNormal(Transform player,int enemyNum, float spawnRadius, Dictionary<string, float> enemyDic)
     {
         
@@ -155,10 +140,9 @@ public class EnemyManagerS : MonoBehaviour
         }
     }
 
-    //群れ生成（最初のエネミーだけランダムで決めて、それ以外は同じ地点にスポーン）
+    //追記：群れ生成（最初のエネミーの生成位置だけランダムで決めて、それ以降は同じ地点にスポーン）
     private void spawnSwarm(Transform player,int enemyNum, float spawnRadius, Dictionary<string, float> enemyDic)
     {
-        //SpawnRadius = 30.0f;
         Vector3 center = player.transform.position;
         int leaderPos = Random.Range(0,enemyNum - 1);
         for(int i = 0; i < enemyNum ; i ++)
@@ -174,6 +158,7 @@ public class EnemyManagerS : MonoBehaviour
         }
     }
 
+    //追記：ミサイルを生成
     private void MissileGenerate(Vector3 enemyPos,float enHP, float enSpeed, float enDamage, float enEXP, Vector3 playerPos, float enemyRot, float orbitGap)
     {
         
@@ -181,7 +166,7 @@ public class EnemyManagerS : MonoBehaviour
         // missileArrive ベクトルを計算
         Vector3 missileArriveNormal = playerPos - (enemyPos - playerPos);
 
-        // ランダムな角度を生成（1から30度）
+        // ランダムな角度を生成（ミサイルの軌道に微妙なズレを起こしたい）
         float randomAngle = Random.Range(1f, orbitGap);
 
         // ランダムな角度をラジアンに変換
@@ -193,41 +178,33 @@ public class EnemyManagerS : MonoBehaviour
 
         GameObject enemyObj = Instantiate(enemyType0,enemyPos,Quaternion.Euler(90, 0, enemyRot)* rotation);
 
-        EnemyS enemy = new EnemyS((int)enHP, enSpeed, enDamage,enEXP,enemyObj,missileArrive);
-        MissileInfoList.Add(enemy);
-        MissileObjectList.Add(enemy.EnemyGameObject());
-
+        EnemyS enemy = new EnemyS((int)enHP, enSpeed, enDamage,enEXP,enemyObj,missileArrive,true);
+        AllEnemyInfoList.Add(enemy);
+        AllEnemyObjectList.Add(enemy.EnemyGameObject());
     }
 
+    //追記：ミサイルを投下（スポーン）
     private IEnumerator spawnMissile(Transform player, int missileNum, float spawnRadius, Dictionary<string, float> enemyDic, float missileInterval, float orbitGap)
     {
-        float timecount = 0;
         Vector3 center = player.transform.position;
-       
 
         for (int i = 0; i < missileNum - 1; i++)
         {
-        
-            timecount = 0;
             int angle = Random.Range(1,360);
             float x = Mathf.Cos(angle * Mathf.Deg2Rad) * spawnRadius;
             float z = Mathf.Sin(angle * Mathf.Deg2Rad) * spawnRadius;
             Vector3 enemyPos = center + new Vector3(x, 0, z);
             MissileGenerate(enemyPos, enemyDic["eHP"], enemyDic["eSpeed"], enemyDic["eDamage"], enemyDic["eEXP"], center, angle, orbitGap);
-            //yield return new WaitForSeconds(missileInterval);
-            for(int j = 0; j < 20; j++)
+            for(int j = 0; j < missileInterval; j++)
             {
                 yield return null;
-
             }
-            
-        
         }
     }
 
 
-
-    public IEnumerator Phase1Coroutine(Transform player, float spawnRadius, float maxTime, float spawnInterval,int missileNum)
+    //追記：4フェーズの敵生成コルーチン（minuteの値が変わるとフェーズが切り替わる）
+    public IEnumerator PhaseCoroutine(Transform player, float spawnRadius, float spawnInterval,int missileNum)
     {
         //float timer = 0f;
         
@@ -242,6 +219,7 @@ public class EnemyManagerS : MonoBehaviour
             }
             else if(minute == 1)
             {
+                //３０秒経過したらミサイルを放つ
                 if(seconds > 29) StartCoroutine(spawnMissile(player,missileNum + 1, spawnMissileRadius, Enemy0,missileInterval, secondOrbitGap));
                 spawnNormal(player,Type1Num, spawnRadius, Enemy1);
                 spawnSwarm(player,Type2Num, spawnRadius, Enemy2);
@@ -250,6 +228,7 @@ public class EnemyManagerS : MonoBehaviour
             }
             else if(minute == 2)
             {
+                //３０秒経過したらミサイルを放つ
                 if(seconds > 29) StartCoroutine(spawnMissile(player,missileNum + 2, spawnMissileRadius, Enemy0,missileInterval, thirdOrbitGap));
                 spawnNormal(player,Type1Num - 2, spawnRadius, Enemy1);
                 spawnSwarm(player,Type2Num, spawnRadius, Enemy2);
@@ -260,6 +239,7 @@ public class EnemyManagerS : MonoBehaviour
             }
             else if(minute == 3)
             {
+                //３０秒経過したらミサイルを放つ
                 if(seconds > 29) StartCoroutine(spawnMissile(player,missileNum + 2, spawnMissileRadius, Enemy0,missileInterval, fourthOrbitGap));
                 spawnNormal(player,Type1Num - 1, spawnRadius, Enemy1);
                 spawnSwarm(player,Type2Num, spawnRadius, Enemy2);
@@ -270,16 +250,15 @@ public class EnemyManagerS : MonoBehaviour
                 yield return new WaitForSeconds(spawnInterval);
             }
             else yield break;
-            //spawnSwarm(player,enemyNum, spawnRadius, Enemy2);
         }   
     }
 
     //enemySimultaniousNumは削除
-    public void EnemyInit(GameObject player, float enSpawnRadius, float maxTime, float spawnInterval)
+    public void EnemyInit(GameObject player, float enSpawnRadius, float spawnInterval)
     {
         Vector3 enemyPos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 1.1f, Camera.main.nearClipPlane));
         enemyPos.z = enemyPos.y;
         enemyPos.y = 0;
-        StartCoroutine(Phase1Coroutine(player.transform, enSpawnRadius, maxTime, spawnInterval,missileNumbers));
+        StartCoroutine(PhaseCoroutine(player.transform, enSpawnRadius, spawnInterval,missileNumbers));
     }
 }
