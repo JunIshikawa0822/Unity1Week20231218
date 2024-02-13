@@ -9,7 +9,7 @@ using static UnityEditor.PlayerSettings;
 public class JunMainSystemS : MonoBehaviour
 {
     [SerializeField]
-    PlayerInputManager PIManager;
+    PlayerInputManagerS PIManager;
 
     [SerializeField]
     PlayerMoveManager PMManager;
@@ -18,10 +18,10 @@ public class JunMainSystemS : MonoBehaviour
     //DebugManager DBManager;
 
     [SerializeField]
-    ShotInfoManager SIManager;
+    ShotInfoManage SIManager;
 
     [SerializeField]
-    CollideManager CLManager;
+    CollideManagerS CLManager;
 
     [SerializeField]
     DamageManagerS DMManager;

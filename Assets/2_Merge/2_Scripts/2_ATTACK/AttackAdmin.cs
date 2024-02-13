@@ -6,7 +6,7 @@ public class AttackAdmin : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
-    public ShotInfoManager SIManager;
+    public ShotInfoManage SIManager;
 
     [SerializeField]
     public LevelManager LVManager;

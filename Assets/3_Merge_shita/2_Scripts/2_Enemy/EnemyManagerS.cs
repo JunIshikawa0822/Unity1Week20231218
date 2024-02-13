@@ -201,14 +201,14 @@ public class EnemyManagerS : MonoBehaviour
 
     private IEnumerator spawnMissile(Transform player, int missileNum, float spawnRadius, Dictionary<string, float> enemyDic, float missileInterval, float orbitGap)
     {
-        float timecount = 0;
+        //float timecount = 0;
         Vector3 center = player.transform.position;
        
 
         for (int i = 0; i < missileNum - 1; i++)
         {
         
-            timecount = 0;
+            //timecount = 0;
             int angle = Random.Range(1,360);
             float x = Mathf.Cos(angle * Mathf.Deg2Rad) * spawnRadius;
             float z = Mathf.Sin(angle * Mathf.Deg2Rad) * spawnRadius;

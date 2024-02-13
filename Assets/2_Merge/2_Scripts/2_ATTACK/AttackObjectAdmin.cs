@@ -6,7 +6,7 @@ using UnityEngine;
 public class AttackObjectAdmin : MonoBehaviour
 {
     [SerializeField]
-    public CollideManager CLManager;
+    public CollideManage CLManager;
 
     [SerializeField]
     public DamageManager DMManager;

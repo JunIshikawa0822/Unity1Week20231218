@@ -17,7 +17,7 @@ public class UserInterfaceManagerS : MonoBehaviour
     public GameObject LevelUpUIParent;
 
     float EXPsliderMaxValuePersent = 1000;
-    float HPsliderMaxValuePersent = 100;
+    //float HPsliderMaxValuePersent = 100;
 
     [System.NonSerialized]
     public int selectedPanelnum = 0;

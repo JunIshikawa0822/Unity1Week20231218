@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using System;
 
-public class ShotInfoManager : MonoBehaviour
+public class ShotInfoManage : MonoBehaviour
 {
     //[System.NonSerialized]
 
