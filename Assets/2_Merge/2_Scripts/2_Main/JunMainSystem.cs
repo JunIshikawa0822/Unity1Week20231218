@@ -71,6 +71,8 @@ public class JunMainSystem : MonoBehaviour
 
     int gamePhase = 0;
 
+    public float warpdelay;
+
     GameObject Player;
     GameObject Fannel;
     GameObject ShotOrigin;
@@ -189,6 +191,7 @@ public class JunMainSystem : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.Space))
                 {
+                    PlayerAnimator.SetBool("WarpStart", true);
                     Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
                     Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
 
@@ -211,10 +214,13 @@ public class JunMainSystem : MonoBehaviour
                         {
                             //Invokeここに書けるよ
                             //PMManager.MoveAndRot(Player, hitInfo);
-                            StartCoroutine(Move(Player, hitInfo, 0.4f));
-                            PlayerAnimator.SetTrigger("WarpStart");   
+                            StartCoroutine(Move(Player, hitInfo, warpdelay));
+
                         }
                     }
+                }else if(Input.GetKeyUp(KeyCode.Space))
+                {
+                    PlayerAnimator.SetBool("WarpStart", false);
                 }
                 else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
@@ -510,10 +516,11 @@ public class JunMainSystem : MonoBehaviour
 
     IEnumerator Move(GameObject playerObj, RaycastHit hitInfo, float time)
     {
+        PlayerAnimator.SetTrigger("WarpEnd");
         yield return new WaitForSeconds(time);
 
         PMManager.MoveAndRot(playerObj, hitInfo);
 
-        PlayerAnimator.SetTrigger("WarpEnd");
+        
     }
 }
