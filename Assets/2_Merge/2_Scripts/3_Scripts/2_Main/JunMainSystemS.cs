@@ -265,8 +265,9 @@ public class JunMainSystemS : MonoBehaviour
                 {
                     PlayerAnimator.SetBool("WarpStart", false);
                 }
-                else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                else if (Input.GetMouseButton(1))
                 {
+                    //Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)
                     Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
                     Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
 

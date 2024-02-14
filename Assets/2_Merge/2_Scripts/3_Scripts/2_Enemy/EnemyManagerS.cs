@@ -239,16 +239,16 @@ public class EnemyManagerS : MonoBehaviour
             if(minute == 0)
             {
                 //３０秒経過したらミサイルを放つ
-                StartCoroutine(spawnMissile(player, missileNum, spawnMissileRadius, Enemy0, missileInterval, firstOrbitGap));
-                //if (seconds > 29) StartCoroutine(spawnMissile(player, missileNum, spawnMissileRadius, Enemy0, missileInterval, firstOrbitGap));
-                //spawnNormal(player, Type1Num, spawnRadius, Enemy1);
+                //StartCoroutine(spawnMissile(player, missileNum, spawnMissileRadius, Enemy0, missileInterval, firstOrbitGap));
+                if (seconds > 29) StartCoroutine(spawnMissile(player, missileNum, spawnMissileRadius, Enemy0, missileInterval, firstOrbitGap));
+                spawnNormal(player, Type1Num, spawnRadius, Enemy1);
                 yield return new WaitForSeconds(spawnInterval);
             }
             else if(minute == 1)
             {
                 if(seconds > 29) StartCoroutine(spawnMissile(player,missileNum + 1, spawnMissileRadius, Enemy0,missileInterval, secondOrbitGap));
-                //spawnNormal(player,Type1Num, spawnRadius, Enemy1);
-                //spawnSwarm(player,Type2Num, spawnRadius, Enemy2);
+                spawnNormal(player, Type1Num, spawnRadius, Enemy1);
+                spawnSwarm(player, Type2Num, spawnRadius, Enemy2);
 
                 yield return new WaitForSeconds(spawnInterval);
             }
