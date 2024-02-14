@@ -7,6 +7,15 @@ using TMPro;
 
 public class UserInterfaceManager : MonoBehaviour
 {
+    public AudioClip checksound;
+
+    public AudioClip entersound;
+
+    public AudioClip rewardsound;
+
+    [SerializeField]
+    SoundManager soundManager;
+
     [SerializeField]
     public Slider EXPSlider;
 
@@ -15,6 +24,8 @@ public class UserInterfaceManager : MonoBehaviour
 
     [SerializeField]
     public GameObject LevelUpUIParent;
+
+    Animator UIAnim;
 
     float EXPsliderMaxValuePersent = 1000;
     float HPsliderMaxValuePersent = 100;
@@ -41,6 +52,7 @@ public class UserInterfaceManager : MonoBehaviour
 
     public void LevelUpUIInit()
     {
+        UIAnim = LevelUpUIParent.GetComponent<Animator>();
         LevelUpUIParent.SetActive(false);
     }
 
@@ -51,18 +63,21 @@ public class UserInterfaceManager : MonoBehaviour
 
     public void select1stPanel()
     {
+        soundManager.MakeSound(checksound,0.5f);
         selectedPanelnum = 0;
         Debug.Log("押したよ");
     }
 
     public void select2ndPanel()
     {
+        soundManager.MakeSound(checksound, 0.5f);
         selectedPanelnum = 1;
         Debug.Log("押したよ");
     }
 
     public void select3rdPanel()
     {
+        soundManager.MakeSound(checksound, 0.5f);
         selectedPanelnum = 2;
         Debug.Log("押したよ");
     }
@@ -74,13 +89,17 @@ public class UserInterfaceManager : MonoBehaviour
 
     public void SelectEnterPanel()
     {
+        soundManager.MakeSound(entersound,0.3f);
         onClick = true;
     }
 
     public void RewardUISet(int[] infotoPanel, int[] levelArray)
     {
+        soundManager.MakeSound(rewardsound,0.8f);
+        UIAnim.SetTrigger("RewardUI");
+       // Time.timeScale = 0;
         //Debug.Log(string.Join(",", infotoPanel));
-        for(int i = 0; i < infotoPanel.Length; i++)
+        for (int i = 0; i < infotoPanel.Length; i++)
         {
             int indexOfRewards = infotoPanel[i];
             int level = levelArray[indexOfRewards];

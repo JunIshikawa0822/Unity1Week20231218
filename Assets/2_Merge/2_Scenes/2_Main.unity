@@ -4716,6 +4716,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d4d0a44898ca44278a4ba0394abb6bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checksound: {fileID: 8300000, guid: b15f77c85fd0fa34fb7ad486711bdd97, type: 3}
+  entersound: {fileID: 8300000, guid: 4df7824d73987ce489652d07baa54a17, type: 3}
+  rewardsound: {fileID: 8300000, guid: bf8683223c488f044af3b3199af78a1b, type: 3}
+  soundManager: {fileID: 1215702169}
   EXPSlider: {fileID: 2139250574}
   HPSlider: {fileID: 1811809974}
   LevelUpUIParent: {fileID: 1252516884}
@@ -6669,6 +6673,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fc364e4ee8746642ad0b91f560cf439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundManager: {fileID: 1215702169}
+  missilesound: {fileID: 8300000, guid: 3b189ef73d4740348a9b0a5abc8af0d4, type: 3}
   enemyType0: {fileID: 1307042413375208562, guid: e0c8dba3f0eb3314c81694541075561f, type: 3}
   enemyType1: {fileID: 2020867270478686373, guid: 3233f791fbf7cec43ba2833f27a66a95, type: 3}
   enemyType2: {fileID: 3362602763246391712, guid: e0c64e6d3736d5540b63e07575f9a39f, type: 3}
@@ -10288,7 +10294,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.701
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -10912,6 +10918,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1252516885}
+  - component: {fileID: 1252516886}
+  - component: {fileID: 1252516887}
   m_Layer: 5
   m_Name: LevelUpUIParent
   m_TagString: Untagged
@@ -10943,6 +10951,39 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -700, y: -350}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &1252516886
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252516884}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fcf7746605ec30f469489d874c838c72, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1252516887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252516884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e284aba47ec46209d5b34a8bbf11f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1286760308
 GameObject:
   m_ObjectHideFlags: 0

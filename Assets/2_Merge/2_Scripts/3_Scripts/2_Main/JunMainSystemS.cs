@@ -89,6 +89,8 @@ public class JunMainSystemS : MonoBehaviour
 
     public float warpdelay;
 
+    //bool inputgetmouse;
+
     //bool IsShot;
 
     private void Awake()
@@ -234,6 +236,8 @@ public class JunMainSystemS : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.Space))
                 {
+
+                    
                     PlayerAnimator.SetBool("WarpStart", true);
                     Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
                     Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 150);
@@ -265,7 +269,7 @@ public class JunMainSystemS : MonoBehaviour
                 {
                     PlayerAnimator.SetBool("WarpStart", false);
                 }
-                else if (Input.GetMouseButton(1))
+                else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
                     //Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)
                     Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
@@ -294,18 +298,20 @@ public class JunMainSystemS : MonoBehaviour
                     LineDrawProcess(Fannel, restVec1, wallLayer, 3);
 
                     PMManager.predictObject.SetActive(false);
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        PlayerAnimator.SetBool("Attack", true);
-                    }
+                    
 
                     if (Input.GetMouseButtonUp(0))
                     {
+                        //inputgetmouse = false;
+                        //if (Input.GetKey(KeyCode.Space)) return;
                         PlayerAnimator.SetBool("Attack", false);
                     }
 
-                    if (Input.GetMouseButton(0))
+                    else if (Input.GetMouseButton(0))
                     {
+                        //inputgetmouse = true;
+                        //if (Input.GetKey(KeyCode.Space)) return;
+                        PlayerAnimator.SetBool("Attack", true);
                         Vector3 mouseVec2 = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
                         Vector3 restVec2 = PIManager.RestrictVector(Player, mouseVec2, 150);
 
@@ -327,9 +333,9 @@ public class JunMainSystemS : MonoBehaviour
                 break;
 
             case 2:
-                
-                
 
+
+                
                 if (UIManager.selectedPanelnum > -1 && UIManager.onClick)
                 {
                     Time.timeScale = 1;
@@ -480,9 +486,9 @@ public class JunMainSystemS : MonoBehaviour
 
             AgentStopProcess(true);
             LevelUpUIProcess(true);
-            Time.timeScale = 0;
+            
             UIManager.RewardUISet(attackAdmin.LVManager.infotoPanel, attackAdmin.LVManager.rewardsLevelsArray);
-
+            
             gamePhase = 2;
         }
     }

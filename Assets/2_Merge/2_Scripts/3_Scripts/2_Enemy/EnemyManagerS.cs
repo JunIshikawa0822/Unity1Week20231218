@@ -6,6 +6,11 @@ using TMPro;
 
 public class EnemyManagerS : MonoBehaviour
 {
+    [SerializeField]
+    SoundManager soundManager;
+
+    public AudioClip missilesound;
+
     //エネミー一覧
     [SerializeField]
     private GameObject enemyType0;
@@ -210,8 +215,9 @@ public class EnemyManagerS : MonoBehaviour
 
         for (int i = 0; i < missileNum - 1; i++)
         {
-        
+
             //timecount = 0;
+            soundManager.MakeSound(missilesound, 0.1f);
             int angle = Random.Range(1,360);
             float x = Mathf.Cos(angle * Mathf.Deg2Rad) * spawnRadius;
             float z = Mathf.Sin(angle * Mathf.Deg2Rad) * spawnRadius;
