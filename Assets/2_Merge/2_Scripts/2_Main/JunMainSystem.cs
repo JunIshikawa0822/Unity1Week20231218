@@ -38,6 +38,8 @@ public class JunMainSystem : MonoBehaviour
     [SerializeField]
     EnemyManager ENManager;
 
+   
+
     //[SerializeField]
     //LevelManager LVManager;
 
@@ -154,9 +156,9 @@ public class JunMainSystem : MonoBehaviour
                         {
                             int beforeLevel = PEXPManager.EXPtoLevel();
                             //そのまま飛ばす
-                            attackObjectAdmin.BulletProcess(ABIList, AEIList, AEOList, i, bulletHitLayer, "Wall", attackAdmin.LVManager.penetrateLevelArray[attackAdmin.LVManager.LevelofIndex(4)]);
+                            //attackObjectAdmin.BulletProcess(ABIList, AEIList, AEOList, i, bulletHitLayer, "Wall", attackAdmin.LVManager.penetrateLevelArray[attackAdmin.LVManager.LevelofIndex(4)]);
 
-                            GetEXP(attackObjectAdmin.DMManager.deadEnemiesList);
+                            //GetEXP(attackObjectAdmin.DMManager.deadEnemiesList);
                             LevelUpCheckProcess(beforeLevel);
                         }
                     }
@@ -180,7 +182,7 @@ public class JunMainSystem : MonoBehaviour
                     }
                 }
 
-                HPManager.PlayerHPCheck(Player, 2, enemyLayer, AEOList, AEIList);
+                //HPManager.PlayerHPCheck(Player, 2, enemyLayer, AEOList, AEIList);
                 UIManager.SliderValueChange(UIManager.HPSlider, HPManager.playerHP);
 
                 if (HPManager.playerHP < 1)

@@ -22,7 +22,7 @@ public class PlayerHPManager : MonoBehaviour
         invincibleTimeWait = new WaitForSeconds(interval);
     }
 
-    void PlayerDamage(Enemy enemy)
+    void PlayerDamage(EnemyS enemy)
     {
         //弾からダメージ値を取得
         int damage = (int)enemy.GiveDamage();
@@ -31,7 +31,7 @@ public class PlayerHPManager : MonoBehaviour
         playerHP -= damage;
     }
 
-    public void PlayerHPCheck(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<Enemy> AEIList)
+    public void PlayerHPCheck(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<EnemyS> AEIList)
     {
         if (isInvincibleActive)
         {
@@ -54,7 +54,7 @@ public class PlayerHPManager : MonoBehaviour
                 continue;
             }
 
-            Enemy enemy = AEIList[enListIndex];
+            EnemyS enemy = AEIList[enListIndex];
 
             PlayerDamage(enemy);
 

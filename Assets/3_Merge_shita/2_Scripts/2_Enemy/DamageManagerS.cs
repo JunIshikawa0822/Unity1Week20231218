@@ -4,6 +4,22 @@ using UnityEngine;
 
 public class DamageManagerS : MonoBehaviour
 {
+    public AudioClip damagesound;
+    public AudioClip destroysound;
+    [SerializeField]
+    SoundManager SManager;
+
+    [System.NonSerialized]
+    public bool isPenetrateActive = false;
+    //float fireInterval;
+    WaitForSeconds penetrateIntervalWait;
+
+    public void PenetrateIntervalInit(float interval)
+    {
+        penetrateIntervalWait = new WaitForSeconds(interval);
+    }
+
+    public List<EnemyS> deadEnemiesList = new List<EnemyS>();
     void GiveDamage(Bullet bullet, EnemyS enemy)
     {
         //弾からダメージ値を取得
@@ -11,20 +27,22 @@ public class DamageManagerS : MonoBehaviour
 
         //敵にダメージを与える
         enemy.GetDamage(damage);
+
+        SManager.MakeSound(damagesound, 0.2f);
     }
 
     //ダメージ処理
-    public int bulletDamegeProcess(List<Collider> ColOpList, List<EnemyS> AEIList, List<GameObject> enemyObjList, Bullet bullet)
+    public void bulletDamegeProcess(List<Collider> ColOpList, List<EnemyS> AEIList, List<GameObject> enemyObjList, Bullet bullet)
     {
-        int addEXP = 0;
+        //int addEXP = 0;
 
-        for(int i = 0; i < ColOpList.Count; i++)
+        for (int i = 0; i < ColOpList.Count; i++)
         {
             int enListIndex = enemyObjList.IndexOf(ColOpList[i].gameObject);
 
             //Debug.Log("Index" + enListIndex);
 
-            if(enListIndex < 0)
+            if (enListIndex < 0)
             {
                 continue;
             }
@@ -41,7 +59,8 @@ public class DamageManagerS : MonoBehaviour
                 //Debug.Log("加算前：" + totalPlayerEXP);
 
                 //経験値加算
-                addEXP += (int)enemy.EnemyEXP();
+                deadEnemiesList.Add(enemy);
+                //addEXP += (int)enemy.EnemyEXP();
 
                 //Debug.Log("加算後：" + totalPlayerEXP);
 
@@ -49,7 +68,7 @@ public class DamageManagerS : MonoBehaviour
                 EnemyRemove(AEIList, enemyObjList, enListIndex);
             }
         }
-        return addEXP;
+        //return addEXP;
     }
 
     void EnemyRemove(List<EnemyS> AEIList, List<GameObject> enemyObjList, int number)
@@ -57,5 +76,13 @@ public class DamageManagerS : MonoBehaviour
         Destroy(AEIList[number].EnemyGameObject());
         AEIList.RemoveAt(number);
         enemyObjList.RemoveAt(number);
+    }
+    public IEnumerator PenetrateIntervalTimer()
+    {
+        isPenetrateActive = true;
+
+        yield return penetrateIntervalWait;
+
+        isPenetrateActive = false;
     }
 }

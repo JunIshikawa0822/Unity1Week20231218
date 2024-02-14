@@ -6,10 +6,10 @@ using UnityEngine;
 public class AttackObjectAdmin : MonoBehaviour
 {
     [SerializeField]
-    public CollideManage CLManager;
+    public CollideManager CLManager;
 
     [SerializeField]
-    public DamageManager DMManager;
+    public DamageManagerS DMManager;
 
     //弾を消す
     public void BulletRemove(List<Bullet> ABIList, int number)
@@ -18,7 +18,7 @@ public class AttackObjectAdmin : MonoBehaviour
         ABIList.RemoveAt(number);
     }
 
-    public void BulletProcess(List<Bullet> ABIList, List<Enemy> AEIList, List<GameObject> AEOList, int number, LayerMask bHitLayer, string tagName, bool isPen)
+    public void BulletProcess(List<Bullet> ABIList, List<EnemyS> AEIList, List<GameObject> AEOList, int number, LayerMask bHitLayer, string tagName, bool isPen)
     {
         Bullet bullet = ABIList[number];
         Collider[] cols = CLManager.whatBulletCollide(bullet, bHitLayer);

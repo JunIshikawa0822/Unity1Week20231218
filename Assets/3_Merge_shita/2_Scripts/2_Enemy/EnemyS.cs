@@ -21,6 +21,10 @@ public class EnemyS : MonoBehaviour
     Collider enemyCollider;
     Vector3 enemyPos;
 
+    public float GiveDamage()
+    {
+        return enemyDamage;
+    }
 
 
     public EnemyS(int enHP, float enSpeed, float enDamage, float enEXP, GameObject enemyObj, Vector3 misAr)
