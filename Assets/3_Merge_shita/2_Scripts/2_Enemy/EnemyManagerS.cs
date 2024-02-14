@@ -20,7 +20,7 @@ public class EnemyManagerS : MonoBehaviour
     [SerializeField]
     private GameObject enemyType5;
     //エネミーのステータス、eSpeedはそれぞれが持つNavmeshのspeedに対応
-    Dictionary<string, float> Enemy0 = new Dictionary<string, float>() { { "eTypeNum", 0 }, {"eHP", 3}, { "eSpeed", 0.0f }, { "eDamage", 1 }, {"eEXP", 0}};
+    Dictionary<string, float> Enemy0 = new Dictionary<string, float>() { { "eTypeNum", 0 }, {"eHP", 3}, { "eSpeed", 0.0f }, { "eDamage", 10 }, {"eEXP", 0}};
     Dictionary<string, float> Enemy1 = new Dictionary<string, float>() { { "eTypeNum", 1 }, {"eHP", 2}, { "eSpeed", 1.5f }, { "eDamage", 1 }, {"eEXP", 2}};
     Dictionary<string, float> Enemy2 = new Dictionary<string, float>() { { "eTypeNum", 2 }, {"eHP", 1}, { "eSpeed", 0.7f }, { "eDamage", 1 }, {"eEXP", 3}};
     Dictionary<string, float> Enemy3 = new Dictionary<string, float>() { { "eTypeNum", 3 }, {"eHP", 2}, { "eSpeed", 1.0f }, { "eDamage", 1 }, {"eEXP", 4}};
@@ -196,6 +196,9 @@ public class EnemyManagerS : MonoBehaviour
         EnemyS enemy = new EnemyS((int)enHP, enSpeed, enDamage,enEXP,enemyObj,missileArrive);
         MissileInfoList.Add(enemy);
         MissileObjectList.Add(enemy.EnemyGameObject());
+        //Debug.Log(MissileObjectList.Count);
+        //AllEnemyInfoList.Add(enemy);
+        //AllEnemyObjectList.Add(enemy.EnemyGameObject());
 
     }
 
@@ -236,15 +239,16 @@ public class EnemyManagerS : MonoBehaviour
             if(minute == 0)
             {
                 //３０秒経過したらミサイルを放つ
-                if(seconds > 29) StartCoroutine(spawnMissile(player,missileNum, spawnMissileRadius, Enemy0,missileInterval, firstOrbitGap));
-                spawnNormal(player,Type1Num, spawnRadius, Enemy1);
+                StartCoroutine(spawnMissile(player, missileNum, spawnMissileRadius, Enemy0, missileInterval, firstOrbitGap));
+                //if (seconds > 29) StartCoroutine(spawnMissile(player, missileNum, spawnMissileRadius, Enemy0, missileInterval, firstOrbitGap));
+                //spawnNormal(player, Type1Num, spawnRadius, Enemy1);
                 yield return new WaitForSeconds(spawnInterval);
             }
             else if(minute == 1)
             {
                 if(seconds > 29) StartCoroutine(spawnMissile(player,missileNum + 1, spawnMissileRadius, Enemy0,missileInterval, secondOrbitGap));
-                spawnNormal(player,Type1Num, spawnRadius, Enemy1);
-                spawnSwarm(player,Type2Num, spawnRadius, Enemy2);
+                //spawnNormal(player,Type1Num, spawnRadius, Enemy1);
+                //spawnSwarm(player,Type2Num, spawnRadius, Enemy2);
 
                 yield return new WaitForSeconds(spawnInterval);
             }

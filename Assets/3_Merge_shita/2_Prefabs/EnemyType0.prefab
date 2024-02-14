@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8719202930647717131}
   - component: {fileID: 6411878614751235216}
   - component: {fileID: 1761561178640759175}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: EnemySprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 3270978132349065374}
   - component: {fileID: 3028962657752590599}
   - component: {fileID: 1961925416796057367}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: EnemyType0
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -213,10 +213,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Radius: 0.33511436
+  m_Height: 3.4221404
+  m_Direction: 0
+  m_Center: {x: -0.072137974, y: 0.082442425, z: -0.000000085149495}
 --- !u!195 &3028962657752590599
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -354,7 +354,7 @@ GameObject:
   - component: {fileID: 3497994749151203258}
   - component: {fileID: 7613695009556866182}
   - component: {fileID: 2140359043032267668}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: ParticleSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}

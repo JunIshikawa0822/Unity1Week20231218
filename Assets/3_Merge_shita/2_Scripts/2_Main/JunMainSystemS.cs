@@ -67,6 +67,8 @@ public class JunMainSystemS : MonoBehaviour
 
     LayerMask enemyLayer = 1 << 7;
 
+    LayerMask missileLayer = 1 << 9;
+
     List<Bullet> ABIList;
 
     List<GameObject> AEOList;
@@ -219,8 +221,9 @@ public class JunMainSystemS : MonoBehaviour
                             // }
                         }
                     }
-
+                //Debug.Log(MOList.Count);
                 HPManager.PlayerHPCheck(Player, 2, enemyLayer, AEOList, AEIList);
+                HPManager.PlayerHPCheckMissile(Player, 2, missileLayer, MOList, MIList);
                 UIManager.SliderValueChange(UIManager.HPSlider, HPManager.playerHP);
 
                 if (HPManager.playerHP < 1)
@@ -495,8 +498,8 @@ public class JunMainSystemS : MonoBehaviour
         if(isFinish)
         {
             Destroy(MIList[number].EnemyGameObject());
-            MIList.RemoveAt(number);
-            MOList.RemoveAt(number);
+            //MIList.RemoveAt(number);
+            //MOList.RemoveAt(number);
         }
         else
         {

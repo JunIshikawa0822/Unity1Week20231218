@@ -16,7 +16,7 @@ TagManager:
   - WallLayer
   - EnemyLayer
   - PlayerLayer
-  - 
+  - MissileLayer
   - 
   - 
   - 

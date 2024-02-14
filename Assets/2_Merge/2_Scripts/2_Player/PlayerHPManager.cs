@@ -26,13 +26,55 @@ public class PlayerHPManager : MonoBehaviour
     {
         //弾からダメージ値を取得
         int damage = (int)enemy.GiveDamage();
-
+        
         //敵にダメージを与える
         playerHP -= damage;
     }
 
     public void PlayerHPCheck(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<EnemyS> AEIList)
     {
+       // Debug.Log(enemyObjList.Count);
+        if (isInvincibleActive)
+        {
+            return;
+        }
+        
+        Collider[] damagingEnemiesArray = Physics.OverlapSphere(playerObj.transform.position, hitRadius, enemyLayer);
+
+        if(damagingEnemiesArray.Length < 1)
+        {
+            
+            return;
+        }
+        
+        for (int i = 0; i < damagingEnemiesArray.Length; i++)
+        {
+            
+            int enListIndex = enemyObjList.IndexOf(damagingEnemiesArray[i].gameObject);
+            
+            if (enListIndex < 0)
+            {
+                
+                //Debug.Log(enemyObjList.Count);
+                continue;
+            }
+            
+            EnemyS enemy = AEIList[enListIndex];
+            //Debug.Log(type);
+            PlayerDamage(enemy);
+            
+            if (playerHP < 1)
+            {
+                break;
+            }
+        }
+
+        StartCoroutine("InvincibleTimer");
+    }
+
+    public void PlayerHPCheckMissile(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<EnemyS> MIList)
+    {
+        // Debug.Log(enemyObjList.Count);
         if (isInvincibleActive)
         {
             return;
@@ -40,25 +82,29 @@ public class PlayerHPManager : MonoBehaviour
 
         Collider[] damagingEnemiesArray = Physics.OverlapSphere(playerObj.transform.position, hitRadius, enemyLayer);
 
-        if(damagingEnemiesArray.Length < 1)
+        if (damagingEnemiesArray.Length < 1)
         {
+
             return;
         }
 
         for (int i = 0; i < damagingEnemiesArray.Length; i++)
         {
+
             int enListIndex = enemyObjList.IndexOf(damagingEnemiesArray[i].gameObject);
 
             if (enListIndex < 0)
             {
+
+                //Debug.Log(enemyObjList.Count);
                 continue;
             }
 
-            EnemyS enemy = AEIList[enListIndex];
-
+            EnemyS enemy = MIList[enListIndex];
+            //Debug.Log(type);
             PlayerDamage(enemy);
 
-            if(playerHP < 1)
+            if (playerHP < 1)
             {
                 break;
             }
