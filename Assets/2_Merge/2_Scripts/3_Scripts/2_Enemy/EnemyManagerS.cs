@@ -26,11 +26,11 @@ public class EnemyManagerS : MonoBehaviour
     private GameObject enemyType5;
     //エネミーのステータス、eSpeedはそれぞれが持つNavmeshのspeedに対応
     Dictionary<string, float> Enemy0 = new Dictionary<string, float>() { { "eTypeNum", 0 }, {"eHP", 3}, { "eSpeed", 0.0f }, { "eDamage", 10 }, {"eEXP", 0}};
-    Dictionary<string, float> Enemy1 = new Dictionary<string, float>() { { "eTypeNum", 1 }, {"eHP", 2}, { "eSpeed", 1.5f }, { "eDamage", 1 }, {"eEXP", 2}};
-    Dictionary<string, float> Enemy2 = new Dictionary<string, float>() { { "eTypeNum", 2 }, {"eHP", 1}, { "eSpeed", 0.7f }, { "eDamage", 1 }, {"eEXP", 3}};
-    Dictionary<string, float> Enemy3 = new Dictionary<string, float>() { { "eTypeNum", 3 }, {"eHP", 2}, { "eSpeed", 1.0f }, { "eDamage", 1 }, {"eEXP", 4}};
-    Dictionary<string, float> Enemy4 = new Dictionary<string, float>() { { "eTypeNum", 4 }, {"eHP", 2}, { "eSpeed", 0.5f }, { "eDamage", 1 }, {"eEXP", 5}};
-    Dictionary<string, float> Enemy5 = new Dictionary<string, float>() { { "eTypeNum", 5 }, {"eHP", 2}, { "eSpeed", 0.8f }, { "eDamage", 1 }, {"eEXP", 6}};
+    Dictionary<string, float> Enemy1 = new Dictionary<string, float>() { { "eTypeNum", 1 }, {"eHP", 1}, { "eSpeed", 1.5f }, { "eDamage", 2 }, {"eEXP", 2}};
+    Dictionary<string, float> Enemy2 = new Dictionary<string, float>() { { "eTypeNum", 2 }, {"eHP", 2}, { "eSpeed", 0.7f }, { "eDamage", 1 }, {"eEXP", 3}};
+    Dictionary<string, float> Enemy3 = new Dictionary<string, float>() { { "eTypeNum", 3 }, {"eHP", 3}, { "eSpeed", 1.0f }, { "eDamage", 3 }, {"eEXP", 4}};
+    Dictionary<string, float> Enemy4 = new Dictionary<string, float>() { { "eTypeNum", 4 }, {"eHP", 4}, { "eSpeed", 0.5f }, { "eDamage", 3 }, {"eEXP", 5}};
+    Dictionary<string, float> Enemy5 = new Dictionary<string, float>() { { "eTypeNum", 5 }, {"eHP", 8}, { "eSpeed", 0.8f }, { "eDamage", 20 }, {"eEXP", 6}};
 
 
     [System.NonSerialized]
@@ -83,7 +83,8 @@ public class EnemyManagerS : MonoBehaviour
     private TextMeshProUGUI timerText;
     private float seconds = 0f;
     private float oldseconds = 0f;
-    private int minute = 0;
+    [System.NonSerialized]
+    public int minute = 0;
 
     //プレイ時間
     private int playTime = 4;

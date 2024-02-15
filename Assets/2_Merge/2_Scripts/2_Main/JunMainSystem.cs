@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using static Cinemachine.DocumentationSortingAttribute;
-using static UnityEditor.PlayerSettings;
+//using static Cinemachine.DocumentationSortingAttribute;
+//using static UnityEditor.PlayerSettings;
 
 public class JunMainSystem : MonoBehaviour
 {

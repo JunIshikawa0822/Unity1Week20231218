@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using static Cinemachine.DocumentationSortingAttribute;
-using static UnityEditor.PlayerSettings;
+//using static Cinemachine.DocumentationSortingAttribute;
+//using static UnityEditor.PlayerSettings;
 
 public class JunMainSystemS : MonoBehaviour
 {
+    public AudioClip warpsound;
+
+    public AudioClip fire;
+
     [SerializeField]
     PlayerInputManagerS PIManager;
 
@@ -162,7 +166,7 @@ public class JunMainSystemS : MonoBehaviour
             case 1:
 
                 UIManager.TextSet(UIManager.levelText, "Lv : ", PEXPManager.EXPtoLevel());
-
+                if (ENManager.minute == 4) gamePhase = 3;
 
                 //弾の処理
                 if (ABIList.Count > 0)
@@ -224,8 +228,8 @@ public class JunMainSystemS : MonoBehaviour
                         }
                     }
                 //Debug.Log(MOList.Count);
-                HPManager.PlayerHPCheck(Player, 2, enemyLayer, AEOList, AEIList);
-                HPManager.PlayerHPCheckMissile(Player, 2, missileLayer, MOList, MIList);
+                HPManager.PlayerHPCheck(Player, 2, enemyLayer, AEOList, AEIList, PlayerAnimator);
+                HPManager.PlayerHPCheckMissile(Player, 2, missileLayer, MOList, MIList, PlayerAnimator);
                 UIManager.SliderValueChange(UIManager.HPSlider, HPManager.playerHP);
 
                 if (HPManager.playerHP < 1)
@@ -261,6 +265,7 @@ public class JunMainSystemS : MonoBehaviour
                             //Invokeここに書けるよ
                             //PMManager.MoveAndRot(Player, hitInfo);
                             StartCoroutine(Move(Player, hitInfo, warpdelay));
+                            SManager.MakeSound(warpsound, 0.3f);
 
                         }
                     }
@@ -288,6 +293,15 @@ public class JunMainSystemS : MonoBehaviour
                         playerLayer,
                         9
                         );
+                }
+                else if(Input.GetKey(KeyCode.P))
+                {
+                    PauseUIProcess(true);
+                    UIManager.onClickRestart = false;
+                    
+                    gamePhase = 2;
+                    Time.timeScale = 0;
+
                 }
                 else
                 {
@@ -338,22 +352,36 @@ public class JunMainSystemS : MonoBehaviour
                 
                 if (UIManager.selectedPanelnum > -1 && UIManager.onClick)
                 {
+                    //Debug.Log(1);
                     Time.timeScale = 1;
                     attackAdmin.LVManager.RewardSelectAndlevelUp(UIManager.selectedPanelnum);
 
                     AgentStopProcess(false);
                     LevelUpUIProcess(false);
-
+                    UIManager.onClick = false;
                     attackAdmin.AttackIntervalInit();
 
                     gamePhase = 1;
                     //Debug.Log(LVManager.rewardsLevelsArray[4]);
+                }
+                else if (UIManager.onClickRestart)
+                {
+                    //Debug.Log(2);
+                    Time.timeScale = 1;
+                    AgentStopProcess(false);
+                    PauseUIProcess(false);
+                    UIManager.onClickRestart = false;
+                    attackAdmin.AttackIntervalInit();
+
+                    gamePhase = 1;
                 }
 
                 break;
 
             case 3:
 
+                UIManager.ResultUISet();
+                Time.timeScale = 0;
                 break;
         }
     }
@@ -457,6 +485,7 @@ public class JunMainSystemS : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            SManager.MakeSound(fire, 0.6f);
             //オブジェクトの位置を決定
             predictObj.SetActive(false);
 
@@ -532,6 +561,17 @@ public class JunMainSystemS : MonoBehaviour
     {
         AgentStopProcess(isGameStop);
         UIManager.LevelUpUIParent.SetActive(isGameStop);
+    }
+
+    void PauseUIProcess(bool isGameStop)
+    {
+        
+        
+        
+        AgentStopProcess(isGameStop);
+        UIManager.PauseParent.SetActive(isGameStop);
+        
+
     }
 
     void AgentStopProcess(bool isStop)

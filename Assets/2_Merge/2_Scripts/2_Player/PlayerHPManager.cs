@@ -31,7 +31,7 @@ public class PlayerHPManager : MonoBehaviour
         playerHP -= damage;
     }
 
-    public void PlayerHPCheck(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<EnemyS> AEIList)
+    public void PlayerHPCheck(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<EnemyS> AEIList,Animator anim)
     {
        // Debug.Log(enemyObjList.Count);
         if (isInvincibleActive)
@@ -69,10 +69,11 @@ public class PlayerHPManager : MonoBehaviour
             }
         }
 
+        anim.SetTrigger("PlayerDamage");
         StartCoroutine("InvincibleTimer");
     }
 
-    public void PlayerHPCheckMissile(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<EnemyS> MIList)
+    public void PlayerHPCheckMissile(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<EnemyS> MIList, Animator anim)
     {
         // Debug.Log(enemyObjList.Count);
         if (isInvincibleActive)
@@ -109,7 +110,7 @@ public class PlayerHPManager : MonoBehaviour
                 break;
             }
         }
-
+        anim.SetTrigger("PlayerDamage");
         StartCoroutine("InvincibleTimer");
     }
 
