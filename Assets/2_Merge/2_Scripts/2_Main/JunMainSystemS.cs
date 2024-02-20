@@ -6,10 +6,14 @@ using UnityEngine.AI;
 //using static Cinemachine.DocumentationSortingAttribute;
 //using static UnityEditor.PlayerSettings;
 
-public class JunMainSystem : MonoBehaviour
+public class JunMainSystemS : MonoBehaviour
 {
+    public AudioClip warpsound;
+
+    public AudioClip fire;
+
     [SerializeField]
-    PlayerInputManager PIManager;
+    PlayerInputManagerS PIManager;
 
     [SerializeField]
     PlayerMoveManager PMManager;
@@ -18,33 +22,34 @@ public class JunMainSystem : MonoBehaviour
     //DebugManager DBManager;
 
     //[SerializeField]
-    //ShotInfoManager SIManager;
+    //ShotInfoManage SIManager;
 
     //[SerializeField]
-    //CollideManager CLManager;
+    //CollideManagerS CLManager;
 
     //[SerializeField]
-    //DamageManager DMManager;
+    //DamageManagerS DMManager;
 
     [SerializeField]
     EnemyInfoManager EIManager;
 
     [SerializeField]
-    PlayerEXPManager PEXPManager;
+    PlayerEXPManagerS PEXPManager;
 
     [SerializeField]
     UserInterfaceManager UIManager;
 
     [SerializeField]
-    EnemyManager ENManager;
-
-   
+    EnemyManagerS ENManager;
 
     //[SerializeField]
     //LevelManager LVManager;
 
     [SerializeField]
     PlayerHPManager HPManager;
+
+    [SerializeField]
+    SoundManager SManager;
 
     [SerializeField]
     PlayerAnimationManager PAManager;
@@ -66,19 +71,30 @@ public class JunMainSystem : MonoBehaviour
 
     LayerMask enemyLayer = 1 << 7;
 
-    List<Bullet> ABIList;
-    List<GameObject> AEOList;
+    LayerMask missileLayer = 1 << 9;
 
-    List<Enemy> AEIList;
+    List<Bullet> ABIList;
+
+    List<GameObject> AEOList;
+    List<EnemyS> AEIList;
+    List<GameObject> MOList;
+    List<EnemyS> MIList;
 
     int gamePhase = 0;
-
-    public float warpdelay;
 
     GameObject Player;
     GameObject Fannel;
     GameObject ShotOrigin;
     GameObject ShotOrigin2;
+    //S_Edit
+    public GameObject player_s;
+    private Animator Anim;
+
+    public float warpdelay;
+
+    //bool inputgetmouse;
+
+    //bool IsShot;
 
     private void Awake()
     {
@@ -86,6 +102,7 @@ public class JunMainSystem : MonoBehaviour
         UIManager.SliderMaxInit();
         PIManager.LineRendererInit();
         PEXPManager.EXPdebugTextInit();
+        //LVManager.LevelInit();
         attackAdmin.LVManager.LevelInit();
 
         attackObjectAdmin.DMManager.PenetrateIntervalInit(0.03f);
@@ -96,11 +113,19 @@ public class JunMainSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //S_Edit
+        //IsShot = true;
+        SManager.AudioInit();
+        PlayerAnimator = PAManager.AnimationObject.GetComponent<Animator>();
+
         PlayerCamera = Camera.main;
 
         ABIList = attackAdmin.SIManager.AllBulletInfoList;
         AEIList = ENManager.AllEnemyInfoList;
         AEOList = ENManager.AllEnemyObjectList;
+
+        MIList = ENManager.MissileInfoList;
+        MOList = ENManager.MissileObjectList;
 
         attackAdmin.AttackIntervalInit();
 
@@ -109,25 +134,27 @@ public class JunMainSystem : MonoBehaviour
         ShotOrigin = PMManager.shotOriginObject;
         ShotOrigin2 = PMManager.shotOriginObject2;
 
-        PlayerAnimator = PAManager.AnimationObject.GetComponent<Animator>();
-
         ENManager.EnemyInit(
             Player,
-            ENManager.enemySimultaniousNum,
+            //ENManager.enemySimultaniousNum,
             ENManager.enemySpawnRadius,
             ENManager.spawnMaxTime,
             ENManager.enemySpawnInterval
             );
 
+        //LVManager.nowBullet = LVManager.bullet1;
 
         gamePhase = 0;
 
         PEXPManager.AccumulationEXP(2);
+
+   
     }
 
     // Update is called once per frame
     void Update()
     {
+        ENManager.TimerInit();
         switch (gamePhase)
         {
             //移動フェーズ
@@ -137,8 +164,8 @@ public class JunMainSystem : MonoBehaviour
 
             case 1:
 
-                //PEXPManager.EXPdebugText();
                 UIManager.TextSet(UIManager.levelText, "Lv : ", PEXPManager.EXPtoLevel());
+                if (ENManager.minute == 4) gamePhase = 3;
 
                 //弾の処理
                 if (ABIList.Count > 0)
@@ -156,9 +183,9 @@ public class JunMainSystem : MonoBehaviour
                         {
                             int beforeLevel = PEXPManager.EXPtoLevel();
                             //そのまま飛ばす
-                            //attackObjectAdmin.BulletProcess(ABIList, AEIList, AEOList, i, bulletHitLayer, "Wall", attackAdmin.LVManager.penetrateLevelArray[attackAdmin.LVManager.LevelofIndex(4)]);
+                            attackObjectAdmin.BulletProcess(ABIList, AEIList, AEOList, i, bulletHitLayer, "Wall", attackAdmin.LVManager.penetrateLevelArray[attackAdmin.LVManager.LevelofIndex(4)]);
 
-                            //GetEXP(attackObjectAdmin.DMManager.deadEnemiesList);
+                            GetEXP(attackObjectAdmin.DMManager.deadEnemiesList);
                             LevelUpCheckProcess(beforeLevel);
                         }
                     }
@@ -181,8 +208,27 @@ public class JunMainSystem : MonoBehaviour
                         }
                     }
                 }
+                //ミサイルの処理
+                
+                    if (MIList.Count > 0)
+                    {
+                        for (int i = 0; i < MIList.Count; i++)
+                        {
+                            MissileProcess(MIList, i);
 
-                //HPManager.PlayerHPCheck(Player, 2, enemyLayer, AEOList, AEIList);
+                            // if (AEIList[i].EnemyGameObject().transform.position.x < Player.transform.position.x)
+                            // {
+                            //     AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                            // }
+                            // else
+                            // {
+                            //     AEIList[i].EnemyGameObject().transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                            // }
+                        }
+                    }
+                //Debug.Log(MOList.Count);
+                HPManager.PlayerHPCheck(Player, 2, enemyLayer, AEOList, AEIList, PlayerAnimator);
+                HPManager.PlayerHPCheckMissile(Player, 2, missileLayer, MOList, MIList, PlayerAnimator);
                 UIManager.SliderValueChange(UIManager.HPSlider, HPManager.playerHP);
 
                 if (HPManager.playerHP < 1)
@@ -193,12 +239,13 @@ public class JunMainSystem : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.Space))
                 {
+
+                    
                     PlayerAnimator.SetBool("WarpStart", true);
                     Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
-                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 150);
 
                     FannelProcess(false, restVec, ShotOrigin, 2);
-
                     PMManager.predictObject.SetActive(false);
 
                     if (!Physics.Raycast(ShotOrigin.transform.position, restVec, out RaycastHit hitInfo, 16, wallLayer))
@@ -217,19 +264,23 @@ public class JunMainSystem : MonoBehaviour
                             //Invokeここに書けるよ
                             //PMManager.MoveAndRot(Player, hitInfo);
                             StartCoroutine(Move(Player, hitInfo, warpdelay));
+                            SManager.MakeSound(warpsound, 0.3f);
 
                         }
                     }
-                }else if(Input.GetKeyUp(KeyCode.Space))
+                
+                }else if (Input.GetKeyUp(KeyCode.Space))
                 {
                     PlayerAnimator.SetBool("WarpStart", false);
                 }
                 else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
+                    //Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)
                     Vector3 mouseVec = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
-                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 150);
+                    Vector3 restVec = PIManager.RestrictVector(Player, mouseVec, 180);
 
                     FannelProcess(false, restVec, ShotOrigin, 2);
+
                     LineDrawProcess(Fannel, restVec, wallLayer, 7);
 
                     BaseObjShotProcess(
@@ -242,29 +293,38 @@ public class JunMainSystem : MonoBehaviour
                         9
                         );
                 }
+                else if(Input.GetKey(KeyCode.P))
+                {
+                    PauseUIProcess(true);
+                    UIManager.onClickRestart = false;
+                    
+                    gamePhase = 2;
+                    Time.timeScale = 0;
+
+                }
                 else
                 {
-                    
                     Vector3 mouseVec1 = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
                     Vector3 restVec1 = PIManager.RestrictVector(Player, mouseVec1, 150);
 
                     FannelProcess(false, restVec1, ShotOrigin2, 2);
-                    LineDrawProcess(Fannel, restVec1, wallLayer, 4);
+                    LineDrawProcess(Fannel, restVec1, wallLayer, 3);
 
                     PMManager.predictObject.SetActive(false);
-
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        PlayerAnimator.SetBool("Attack", true);
-                    }
+                    
 
                     if (Input.GetMouseButtonUp(0))
                     {
+                        //inputgetmouse = false;
+                        //if (Input.GetKey(KeyCode.Space)) return;
                         PlayerAnimator.SetBool("Attack", false);
                     }
 
-                    if (Input.GetMouseButton(0))
+                    else if (Input.GetMouseButton(0))
                     {
+                        //inputgetmouse = true;
+                        //if (Input.GetKey(KeyCode.Space)) return;
+                        PlayerAnimator.SetBool("Attack", true);
                         Vector3 mouseVec2 = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
                         Vector3 restVec2 = PIManager.RestrictVector(Player, mouseVec2, 150);
 
@@ -280,42 +340,58 @@ public class JunMainSystem : MonoBehaviour
                         attackAdmin.Attack(restVec2, Fannel);
 
                         attackAdmin.StartCoroutine("AttackIntervalTimer");
-                    }  
+                    }
                 }
 
                 break;
 
             case 2:
 
+
+                
                 if (UIManager.selectedPanelnum > -1 && UIManager.onClick)
                 {
+                    //Debug.Log(1);
+                    Time.timeScale = 1;
                     attackAdmin.LVManager.RewardSelectAndlevelUp(UIManager.selectedPanelnum);
 
                     AgentStopProcess(false);
                     LevelUpUIProcess(false);
-
+                    UIManager.onClick = false;
                     attackAdmin.AttackIntervalInit();
 
                     gamePhase = 1;
                     //Debug.Log(LVManager.rewardsLevelsArray[4]);
                 }
+                else if (UIManager.onClickRestart)
+                {
+                    //Debug.Log(2);
+                    Time.timeScale = 1;
+                    AgentStopProcess(false);
+                    PauseUIProcess(false);
+                    UIManager.onClickRestart = false;
+                    attackAdmin.AttackIntervalInit();
+
+                    gamePhase = 1;
+                }
 
                 break;
 
             case 3:
-                //死んだ時の処理を書く
-                Debug.Log("ゲームオーバー");
+
+                UIManager.ResultUISet();
+                Time.timeScale = 0;
                 break;
         }
     }
 
-    //弾が一回で行う処理　壁に衝突するか　敵に衝突するか　+移動
+    ////弾が一回で行う処理　壁に衝突するか　敵に衝突するか　+移動
     //void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, string tagName, bool isPen)
     //{
     //    Bullet bullet = ABIList[number];
     //    Collider[] cols = CLManager.whatBulletCollide(bullet, bHitLayer);
 
-        
+    //    int beforeLevel = PEXPManager.EXPtoLevel();
     //    //Debug.Log("加算前レベル" + beforeLevel);
 
     //    //Debug.Log("加算前" + PEXPManager.totalPlayerEXP);
@@ -341,11 +417,10 @@ public class JunMainSystem : MonoBehaviour
     //        if(colOponentList.Count < cols.Length)
     //        {
     //            //敵にダメージ判定
-    //            DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
-    //            //GetEXP(DMManager.deadEnemiesList);
+    //            PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
 
     //            //レベルアップするかどうか
-    //            //LevelUpCheckProcess(beforeLevel);
+    //            LevelUpCheckProcess(beforeLevel);
 
     //            //弾を破壊
     //            CLManager.BulletRemove(ABIList, number);
@@ -362,10 +437,9 @@ public class JunMainSystem : MonoBehaviour
     //            //貫通でない
     //            if (!isPen)
     //            {
-    //                DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
-    //                //GetEXP(DMManager.deadEnemiesList);
+    //                PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
     //                //レベルアップするかどうか
-    //                //LevelUpCheckProcess(beforeLevel);
+    //                LevelUpCheckProcess(beforeLevel);
 
     //                //弾を破壊
     //                CLManager.BulletRemove(ABIList, number);
@@ -377,22 +451,13 @@ public class JunMainSystem : MonoBehaviour
     //            //貫通なら
     //            else
     //            {
-    //                if (DMManager.isPenetrateActive)
-    //                {
-    //                    ABIList[number].BulletGetMove();
-    //                    return;
-    //                }
-
-    //                DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
-    //                //GetEXP(DMManager.deadEnemiesList);
+    //                PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
 
     //                //レベルアップするかどうか
-    //                //LevelUpCheckProcess(beforeLevel);
+    //                LevelUpCheckProcess(beforeLevel);
 
     //                //判定を行ったのでColOpListの中身を削除
     //                colOponentList.Clear();
-
-    //                DMManager.StartCoroutine("PenetrateIntervalTimer");
     //            }
     //        }
     //    }
@@ -419,6 +484,7 @@ public class JunMainSystem : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            SManager.MakeSound(fire, 0.6f);
             //オブジェクトの位置を決定
             predictObj.SetActive(false);
 
@@ -440,7 +506,7 @@ public class JunMainSystem : MonoBehaviour
         if (afterLevel > beforeLevel)
         {
             UIManager.SliderValueChange(UIManager.EXPSlider, 0);
-            
+
             UIManager.selectedPanelnum = 0;
             UIManager.onClick = false;
 
@@ -448,15 +514,35 @@ public class JunMainSystem : MonoBehaviour
 
             AgentStopProcess(true);
             LevelUpUIProcess(true);
+            
             UIManager.RewardUISet(attackAdmin.LVManager.infotoPanel, attackAdmin.LVManager.rewardsLevelsArray);
-
+            
             gamePhase = 2;
         }
     }
 
-    void EnemyProcess(List<Enemy> AEIList, int number, GameObject target)
+    void EnemyProcess(List<EnemyS> AEIList, int number, GameObject target)
     {
-        AEIList[number].EnemyNavMove(target.transform, AEIList[number].enemyObject.transform.position);   
+        AEIList[number].EnemyNavMove(target.transform, AEIList[number].enemyObject.transform.position);
+
+    }
+
+    void MissileProcess(List<EnemyS> MIList, int number)
+    {
+        bool isFinish = MIList[number].IsMissileFinish();
+        if(isFinish)
+        {
+            Destroy(MIList[number].EnemyGameObject());
+            //MIList.RemoveAt(number);
+            //MOList.RemoveAt(number);
+        }
+        else
+        {
+            MIList[number].MissileMove(MIList[number].enemyObject);
+        }
+            
+        
+
     }
 
     void LineDrawProcess(GameObject originObj, Vector3 direction, LayerMask rayHitLayer, float dist)
@@ -472,7 +558,19 @@ public class JunMainSystem : MonoBehaviour
 
     void LevelUpUIProcess(bool isGameStop)
     {
+        AgentStopProcess(isGameStop);
         UIManager.LevelUpUIParent.SetActive(isGameStop);
+    }
+
+    void PauseUIProcess(bool isGameStop)
+    {
+        
+        
+        
+        AgentStopProcess(isGameStop);
+        UIManager.PauseParent.SetActive(isGameStop);
+        
+
     }
 
     void AgentStopProcess(bool isStop)
@@ -484,6 +582,13 @@ public class JunMainSystem : MonoBehaviour
                 AEIList[i].agent.isStopped = isStop;
             }
         }
+        // if (MIList.Count > 0)
+        // {
+        //     for (int i = 0; i < MIList.Count; i++)
+        //     {
+        //         MIList[i].
+        //     }
+        // }
     }
 
     void FannelProcess(bool isFannel, Vector3 fannelVec, GameObject originObj, float fannelDist)
@@ -500,14 +605,21 @@ public class JunMainSystem : MonoBehaviour
         }
     }
 
-    void GetEXP(List<Enemy> deadEnemiesList)
+    //S_Edit
+    IEnumerator AnimDelay(GameObject Player,RaycastHit hitInfo,float delay)
     {
-        if(deadEnemiesList.Count < 1)
+        yield return new WaitForSeconds(delay);
+        PMManager.MoveAndRot(Player, hitInfo);
+        
+    }
+    void GetEXP(List<EnemyS> deadEnemiesList)
+    {
+        if (deadEnemiesList.Count < 1)
         {
             return;
         }
 
-        for(int i = 0; i < deadEnemiesList.Count; i++)
+        for (int i = 0; i < deadEnemiesList.Count; i++)
         {
             int exp = (int)deadEnemiesList[i].EnemyEXP();
             PEXPManager.totalPlayerEXP += exp;
@@ -515,7 +627,6 @@ public class JunMainSystem : MonoBehaviour
 
         deadEnemiesList.Clear();
     }
-
     IEnumerator Move(GameObject playerObj, RaycastHit hitInfo, float time)
     {
         PlayerAnimator.SetTrigger("WarpEnd");
@@ -523,6 +634,6 @@ public class JunMainSystem : MonoBehaviour
 
         PMManager.MoveAndRot(playerObj, hitInfo);
 
-        
+
     }
 }

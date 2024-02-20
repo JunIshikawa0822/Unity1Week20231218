@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using System;
 
-public class ShotInfoManagerS : MonoBehaviour
+public class ShotInfoManager : MonoBehaviour
 {
     //[System.NonSerialized]
 
@@ -14,7 +14,6 @@ public class ShotInfoManagerS : MonoBehaviour
     //全ての弾
     [System.NonSerialized]
     public List<Bullet> AllBulletInfoList = new List<Bullet>();
-
 
     // 一つの弾を生成する
     //・弾のオブジェクト配列・弾情報Dic・生成場所・進むベクトル・消える距離
@@ -46,4 +45,6 @@ public class ShotInfoManagerS : MonoBehaviour
             BulletInfoInstantiate(bTObjArray, damage, instantPos, vec, destroyDist, isbPen);
         }
     }
+
+    
 }

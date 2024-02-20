@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -682,7 +682,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30C6\u30AD\u30B9\u30C8"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b1d8dc0d7dace6348ac5cf822c680a38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7426db9f6524c40e88ac9cc57fb919f6, type: 2}
   m_sharedMaterial: {fileID: -4076020409904348388, guid: b1d8dc0d7dace6348ac5cf822c680a38, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -746,7 +746,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 92.127144}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &67067499
@@ -2314,6 +2314,7 @@ Transform:
   - {fileID: 2031261953}
   - {fileID: 1125188537}
   - {fileID: 165156906}
+  - {fileID: 1826796124}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &225893682
@@ -3235,7 +3236,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30C6\u30AD\u30B9\u30C8"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b1d8dc0d7dace6348ac5cf822c680a38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7426db9f6524c40e88ac9cc57fb919f6, type: 2}
   m_sharedMaterial: {fileID: -4076020409904348388, guid: b1d8dc0d7dace6348ac5cf822c680a38, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3299,7 +3300,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &296061359
@@ -7583,7 +7584,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30C6\u30AD\u30B9\u30C8"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b1d8dc0d7dace6348ac5cf822c680a38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7426db9f6524c40e88ac9cc57fb919f6, type: 2}
   m_sharedMaterial: {fileID: -4076020409904348388, guid: b1d8dc0d7dace6348ac5cf822c680a38, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -7647,7 +7648,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &750144297
@@ -12011,7 +12012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1310730834
 Transform:
   m_ObjectHideFlags: 0
@@ -15452,7 +15453,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1826796124}
   m_Layer: 0
-  m_Name: Audios
+  m_Name: AudiosManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15466,14 +15467,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1826796123}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 447, y: 74.872505, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 446.97217, y: 73.5548, z: 10.255155}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1215702171}
   - {fileID: 1524238751}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 185606063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1868197675
 GameObject:
@@ -18267,4 +18268,3 @@ SceneRoots:
   - {fileID: 1946131472}
   - {fileID: 1424242183}
   - {fileID: 225893685}
-  - {fileID: 1826796124}
