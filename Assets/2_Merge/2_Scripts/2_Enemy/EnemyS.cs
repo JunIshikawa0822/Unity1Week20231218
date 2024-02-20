@@ -51,9 +51,9 @@ public class EnemyS : MonoBehaviour
     }
 
     public void GetDamage(int givenDamage)
-    {
-        enemyHP -= givenDamage;
+    {     
         damageAnim.SetTrigger("Damage");
+        enemyHP -= givenDamage;
         //Debug.Log(enemyHP);
     }
 

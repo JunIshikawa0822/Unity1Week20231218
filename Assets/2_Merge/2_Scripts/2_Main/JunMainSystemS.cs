@@ -80,7 +80,6 @@ public class JunMainSystemS : MonoBehaviour
     List<GameObject> MOList;
     List<EnemyS> MIList;
 
-
     int gamePhase = 0;
 
     GameObject Player;
