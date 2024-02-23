@@ -20,19 +20,18 @@ public class DamageManagerS : MonoBehaviour
     }
 
     public List<EnemyS> deadEnemiesList = new List<EnemyS>();
-    void GiveDamage(Bullet bullet, EnemyS enemy)
+
+    void GiveDamage(int damageValue, EnemyS enemy)
     {
-        //弾からダメージ値を取得
-        int damage = bullet.BulletDamage();
 
         //敵にダメージを与える
-        enemy.GetDamage(damage);
+        enemy.GetDamage(damageValue);
 
         SManager.MakeSound(damagesound, 0.2f);
     }
 
     //ダメージ処理
-    public void bulletDamegeProcess(List<Collider> ColOpList, List<EnemyS> AEIList, List<GameObject> enemyObjList, Bullet bullet)
+    public void DamegeProcess(List<Collider> ColOpList, List<EnemyS> AEIList, List<GameObject> enemyObjList, int damageValue)
     {
         //int addEXP = 0;
 
@@ -49,7 +48,7 @@ public class DamageManagerS : MonoBehaviour
 
             EnemyS enemy = AEIList[enListIndex];
 
-            GiveDamage(bullet, enemy);
+            GiveDamage(damageValue, enemy);
 
             //addEXP += (int)enemy.EnemyEXP();
 
@@ -77,6 +76,7 @@ public class DamageManagerS : MonoBehaviour
         AEIList.RemoveAt(number);
         enemyObjList.RemoveAt(number);
     }
+
     public IEnumerator PenetrateIntervalTimer()
     {
         isPenetrateActive = true;

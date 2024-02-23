@@ -5,7 +5,6 @@ using UnityEngine;
 public class CollideManager : MonoBehaviour
 {
     
-
     //ぶつかったオブジェクトを返す
     public Collider[] whatBulletCollide(Bullet bullet, LayerMask bulletHitLayer)
     {

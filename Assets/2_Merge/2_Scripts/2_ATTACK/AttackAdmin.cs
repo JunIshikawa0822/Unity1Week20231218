@@ -31,7 +31,8 @@ public class AttackAdmin : MonoBehaviour
             LVManager.bulletDamageLevelArray[LVManager.LevelofIndex(3)],
             attackInstaPos.transform.position,
             LVManager.destroyDistLevelArray[LVManager.LevelofIndex(1)],
-            LVManager.bulletAngleLevelArray[LVManager.LevelofIndex(5)],
+            //LVManager.bulletAngleLevelArray[LVManager.LevelofIndex(5)],
+            15,
             LVManager.penetrateLevelArray[LVManager.LevelofIndex(4)]
             );
     }

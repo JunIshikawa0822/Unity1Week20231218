@@ -22,7 +22,7 @@ public class AttackObjectAdmin : MonoBehaviour
     {
         Bullet bullet = ABIList[number];
         Collider[] cols = CLManager.whatBulletCollide(bullet, bHitLayer);
-
+        int bulletDamageValue = bullet.BulletDamage();
 
         //Debug.Log("加算前レベル" + beforeLevel);
 
@@ -49,7 +49,7 @@ public class AttackObjectAdmin : MonoBehaviour
             if (colOponentList.Count < cols.Length)
             {
                 //敵にダメージ判定
-                DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
+                DMManager.DamegeProcess(colOponentList, AEIList, AEOList, bulletDamageValue);
                 //GetEXP(DMManager.deadEnemiesList);
 
                 //レベルアップするかどうか
@@ -70,7 +70,7 @@ public class AttackObjectAdmin : MonoBehaviour
                 //貫通でない
                 if (!isPen)
                 {
-                    DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
+                    DMManager.DamegeProcess(colOponentList, AEIList, AEOList, bulletDamageValue);
                     //GetEXP(DMManager.deadEnemiesList);
                     //レベルアップするかどうか
                     //LevelUpCheckProcess(beforeLevel);
@@ -91,7 +91,7 @@ public class AttackObjectAdmin : MonoBehaviour
                         return;
                     }
 
-                    DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
+                    DMManager.DamegeProcess(colOponentList, AEIList, AEOList, bulletDamageValue);
                     //GetEXP(DMManager.deadEnemiesList);
 
                     //レベルアップするかどうか
