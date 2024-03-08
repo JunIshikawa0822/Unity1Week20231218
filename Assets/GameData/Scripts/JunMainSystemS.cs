@@ -115,7 +115,7 @@ public class JunMainSystemS : MonoBehaviour
     {
         //S_Edit
         //IsShot = true;
-        SManager.AudioInit();
+        
         PlayerAnimator = PAManager.AnimationObject.GetComponent<Animator>();
 
         PlayerCamera = Camera.main;
@@ -293,15 +293,7 @@ public class JunMainSystemS : MonoBehaviour
                         9
                         );
                 }
-                else if(Input.GetKey(KeyCode.P))
-                {
-                    PauseUIProcess(true);
-                    UIManager.onClickRestart = false;
-                    
-                    gamePhase = 2;
-                    Time.timeScale = 0;
-
-                }
+                
                 else
                 {
                     Vector3 mouseVec1 = PIManager.MouseVector(ShotOrigin, PlayerCamera, PIManager.zAdjust);
@@ -635,5 +627,14 @@ public class JunMainSystemS : MonoBehaviour
         PMManager.MoveAndRot(playerObj, hitInfo);
 
 
+    }
+
+    public void PausePanel()
+    {
+        PauseUIProcess(true);
+        UIManager.onClickRestart = false;
+
+        gamePhase = 2;
+        Time.timeScale = 0;
     }
 }

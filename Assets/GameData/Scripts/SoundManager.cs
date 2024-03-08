@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    new AudioSource audio;
+    public AudioSource bgm;
+    public AudioSource se;
     
     
-    public void AudioInit()
-    {
-        audio = GetComponent<AudioSource>();
-    }
+    
     public void MakeSound(AudioClip sound,float volume)
     {
-        audio.PlayOneShot(sound,volume);
+        se.PlayOneShot(sound,volume);
+    }
+
+    public void BGMSliderOnValueChange(float value)
+    {
+        bgm.volume = value;
+    }
+
+    public void SESliderOnValueChange(float value)
+    {
+        se.volume = value;
     }
 }
