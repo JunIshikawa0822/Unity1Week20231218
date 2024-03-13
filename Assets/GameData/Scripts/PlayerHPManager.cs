@@ -12,6 +12,8 @@ public class PlayerHPManager : MonoBehaviour
 
     WaitForSeconds invincibleTimeWait;
 
+    
+
     public void PlayerHPInit(int HP)
     {
         playerHP = HP;
@@ -22,7 +24,7 @@ public class PlayerHPManager : MonoBehaviour
         invincibleTimeWait = new WaitForSeconds(interval);
     }
 
-    void PlayerDamage(EnemyS enemy)
+    void PlayerDamage(Enemy enemy)
     {
         //弾からダメージ値を取得
         int damage = (int)enemy.GiveDamage();
@@ -31,7 +33,7 @@ public class PlayerHPManager : MonoBehaviour
         playerHP -= damage;
     }
 
-    public void PlayerHPCheck(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<EnemyS> AEIList,Animator anim)
+    public void PlayerHPCheck(GameObject playerObj, float hitRadius, LayerMask enemyLayer, Animator anim)
     {
        // Debug.Log(enemyObjList.Count);
         if (isInvincibleActive)
@@ -50,16 +52,16 @@ public class PlayerHPManager : MonoBehaviour
         for (int i = 0; i < damagingEnemiesArray.Length; i++)
         {
             
-            int enListIndex = enemyObjList.IndexOf(damagingEnemiesArray[i].gameObject);
+            //int enListIndex = enemyObjList.IndexOf(damagingEnemiesArray[i].gameObject);
             
-            if (enListIndex < 0)
-            {
+            //if (enListIndex < 0)
+            //{
                 
-                //Debug.Log(enemyObjList.Count);
-                continue;
-            }
+            //    //Debug.Log(enemyObjList.Count);
+            //    continue;
+            //}
             
-            EnemyS enemy = AEIList[enListIndex];
+            Enemy enemy = damagingEnemiesArray[i].GetComponent<Enemy>();
             //Debug.Log(type);
             PlayerDamage(enemy);
             
@@ -73,7 +75,7 @@ public class PlayerHPManager : MonoBehaviour
         StartCoroutine("InvincibleTimer");
     }
 
-    public void PlayerHPCheckMissile(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<EnemyS> MIList, Animator anim)
+    public void PlayerHPCheckMissile(GameObject playerObj, float hitRadius, LayerMask enemyLayer, List<GameObject> enemyObjList, List<Enemy> MIList, Animator anim)
     {
         // Debug.Log(enemyObjList.Count);
         if (isInvincibleActive)
@@ -101,7 +103,7 @@ public class PlayerHPManager : MonoBehaviour
                 continue;
             }
 
-            EnemyS enemy = MIList[enListIndex];
+            Enemy enemy = MIList[enListIndex];
             //Debug.Log(type);
             PlayerDamage(enemy);
 

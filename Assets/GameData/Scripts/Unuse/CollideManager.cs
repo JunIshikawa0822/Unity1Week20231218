@@ -7,6 +7,7 @@ public class CollideManager : MonoBehaviour
     
 
     //ぶつかったオブジェクトを返す
+    //使わない
     public Collider[] whatBulletCollide(Bullet bullet, LayerMask bulletHitLayer)
     {
         //すべてのオブジェクトを取得
@@ -18,6 +19,7 @@ public class CollideManager : MonoBehaviour
         return colArray;
     }
 
+    //使わない
     //tagNameがみつかるまで探索
     public List<Collider> FindWhatYouWant(Collider[] cols, string tagName)
     {

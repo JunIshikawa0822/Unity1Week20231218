@@ -4,30 +4,27 @@ using UnityEngine;
 using UnityEngine.AI;
 using DG.Tweening;
 
-public class EnemyS : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
-    int enemyHP;
-    float enemySpeed;
-    float enemyDamage;
-    float enemyEXP;
+    private int enemyHP;
+    //private float enemySpeed;
+    private float enemyDamage;
+    private float enemyEXP;
+    
+    private Vector3 missileArrive;
+    private bool isFinish;
+    private bool isShot;
+
+    public Animator damageAnim;
     public GameObject enemyObject;
     public UnityEngine.AI.NavMeshAgent agent;
     public LineRenderer orbitRenderer;//ミサイルの軌跡
-    Vector3 missileArrive;
-    private bool isFinish;
-    private bool isShot;
-    public Animator damageAnim;
 
-    Collider enemyCollider;
-    Vector3 enemyPos;
-
-    public float GiveDamage()
-    {
-        return enemyDamage;
-    }
+    private Collider enemyCollider;
+    private Vector3 enemyPos;
 
 
-    public EnemyS(int enHP, float enSpeed, float enDamage, float enEXP, GameObject enemyObj, Vector3 misAr)
+    public Enemy(int enHP, float enSpeed, float enDamage, float enEXP, GameObject enemyObj, Vector3 misAr)
     {
         DOTween.SetTweensCapacity(1500, 50);
         enemyHP = enHP;
@@ -48,6 +45,11 @@ public class EnemyS : MonoBehaviour
         //enemyMoveType = enMoveType;
 
        // enemyAnim = enAnim;
+    }
+
+    public void EnemyInit()
+    {
+
     }
 
     public void GetDamage(int givenDamage)
@@ -134,19 +136,19 @@ public class EnemyS : MonoBehaviour
         else return false;
     }
 
-    public bool isDead()
-    {
-        if (enemyHP < 1)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    //public bool isDead()
+    //{
+    //    if (enemyHP < 1)
+    //    {
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
 
-    public float EnemyEXP()
+    public float GiveEXP()
     {
         return enemyEXP;
     }
@@ -154,5 +156,28 @@ public class EnemyS : MonoBehaviour
     public GameObject EnemyGameObject()
     {
         return enemyObject;
+    }
+
+    public float GiveDamage()
+    {
+        return enemyDamage;
+    }
+
+    public float GiveHP()
+    {
+        return enemyHP;
+    }
+
+    private void Update()
+    {
+        if (enemyHP <= 0)
+        {
+            Dead();
+        }
+    }
+
+    private void Dead()
+    {
+
     }
 }

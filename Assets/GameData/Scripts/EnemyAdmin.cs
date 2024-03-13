@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 
-public class EnemyManagerS : MonoBehaviour
+public class EnemyAdmin : MonoBehaviour
 {
     [SerializeField]
     SoundManager soundManager;
@@ -34,13 +34,13 @@ public class EnemyManagerS : MonoBehaviour
 
 
     [System.NonSerialized]
-    public List<EnemyS> AllEnemyInfoList = new List<EnemyS>();
+    public List<Enemy> AllEnemyInfoList = new List<Enemy>();
+
+    //[System.NonSerialized]
+    //public List<GameObject> AllEnemyObjectList = new List<GameObject>();
 
     [System.NonSerialized]
-    public List<GameObject> AllEnemyObjectList = new List<GameObject>();
-
-    [System.NonSerialized]
-    public List<EnemyS> MissileInfoList = new List<EnemyS>();
+    public List<Enemy> MissileInfoList = new List<Enemy>();
 
     [System.NonSerialized]
     public List<GameObject> MissileObjectList = new List<GameObject>();
@@ -53,10 +53,10 @@ public class EnemyManagerS : MonoBehaviour
     [SerializeField]
     public float spawnMissileRadius = 70;//ミサイルがスポーンするプレイヤーを中心とした外周の半径
 
-   // private float enemySpawnRadius2 = 40;
+   // private float EnemypawnRadius2 = 40;
 
     // [SerializeField]
-    // public int enemySimultaniousNum = 2;
+    // public int EnemyimultaniousNum = 2;
 
     //それぞれの敵のスポーン数(初期状態)
     private int Type1Num = 3;
@@ -139,9 +139,9 @@ public class EnemyManagerS : MonoBehaviour
                 break;
 
         }
-        EnemyS enemy = new EnemyS((int)enHP, enSpeed, enDamage,enEXP,enemyObj,Vector3.zero);
+        Enemy enemy = new Enemy((int)enHP, enSpeed, enDamage,enEXP,enemyObj,Vector3.zero);
         AllEnemyInfoList.Add(enemy);
-        AllEnemyObjectList.Add(enemy.EnemyGameObject());
+        //AllEnemyObjectList.Add(enemy.EnemyGameObject());
     }
 
     //単体生成（場所はランダムに変更）
@@ -199,7 +199,7 @@ public class EnemyManagerS : MonoBehaviour
 
         GameObject enemyObj = Instantiate(enemyType0,enemyPos,Quaternion.Euler(90, 0, enemyRot)* rotation);
 
-        EnemyS enemy = new EnemyS((int)enHP, enSpeed, enDamage,enEXP,enemyObj,missileArrive);
+        Enemy enemy = new Enemy((int)enHP, enSpeed, enDamage,enEXP,enemyObj,missileArrive);
         MissileInfoList.Add(enemy);
         MissileObjectList.Add(enemy.EnemyGameObject());
         //Debug.Log(MissileObjectList.Count);
@@ -285,12 +285,17 @@ public class EnemyManagerS : MonoBehaviour
         }   
     }
 
-    //enemySimultaniousNumは削除
+    //EnemyimultaniousNumは削除
     public void EnemyInit(GameObject player, float enSpawnRadius, float maxTime, float spawnInterval)
     {
         Vector3 enemyPos = Camera.main.ViewportToWorldPoint(new Vector3(1.1f, 1.1f, Camera.main.nearClipPlane));
         enemyPos.z = enemyPos.y;
         enemyPos.y = 0;
         StartCoroutine(Phase1Coroutine(player.transform, enSpawnRadius, maxTime, spawnInterval,missileNumbers));
+    }
+
+    public void RemoveEnemy(Enemy enemy)
+    {
+        Destroy(enemy);
     }
 }

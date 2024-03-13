@@ -1,20 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Pool;
 
-public class Bullet
+public class Bullet:MonoBehaviour
 {
-    float bulletSpeed;
-    Vector3 bulletMoveDir;
-    int bulletDamage;
-    GameObject bulletObject;
+    private float bulletSpeed;
+    private Vector3 bulletMoveDir;
+    private int bulletDamage;
+    private GameObject bulletObject;
 
-    float moveDistance;
-    float destroyDistance;
+    private float moveDistance;
+    private float destroyDistance;
 
-    bool isPenetrate;
+    private bool isPenetrate;
+    private LayerMask bulletHitLayer;
+    private string wall;
 
-    public Bullet(float speed, int damage, Vector3 moveDir, GameObject bulletGameObj, float destroyDist, bool isPen)
+    private DamageManagerS damageManagerS;
+    private PlayerEXPManagerS playerEXPManagerS;
+
+    public Bullet(float speed, int damage, Vector3 moveDir, GameObject bulletGameObj, float destroyDist, bool isPen, LayerMask bHLayer)
     {
         bulletSpeed = speed;
         bulletMoveDir = moveDir;
@@ -23,6 +30,14 @@ public class Bullet
         moveDistance = 0;
         destroyDistance = destroyDist;
         isPenetrate = isPen;
+        bulletHitLayer = bHLayer;
+    
+    }
+
+    public void BulletInit(DamageManagerS _damageManagerS, PlayerEXPManagerS _playerEXPManagerS)
+    {
+        damageManagerS = _damageManagerS;
+        playerEXPManagerS = _playerEXPManagerS;
     }
     
     //動かし続ける
@@ -59,6 +74,69 @@ public class Bullet
         else
         {
             return true;
+        }
+    }
+
+    void Update()
+    {
+        if (isDestroyByDis())
+        {
+            Break();
+        }
+
+        Collider[] colArray = Physics.OverlapSphere(transform.position, transform.lossyScale.x / 2, bulletHitLayer);
+
+        for (int i = 0; i < colArray.Length; i++)
+        {
+            if (colArray.Length < 0)
+            {
+                continue;
+            }
+
+            if (colArray[i].gameObject.tag == wall)
+            {
+                Break();
+                break;
+            }
+
+            if(colArray.GetType() == typeof(Enemy))
+            {
+                Enemy enemy = colArray[i].GetComponent<Enemy>();
+                //ダメージを与える
+                damageManagerS.GiveDamage(this, enemy);
+
+                if (damageManagerS.isEnemyDead(enemy))
+                {
+                    //経験値加算
+                    playerEXPManagerS.GetEXP(enemy);
+
+                    //敵の破壊
+                    EnemyRemove(enemy);
+                }
+
+                if (isPenetrate)
+                {
+                    continue;
+                }
+                else
+                {
+                    damageManagerS.StartCoroutine("PenetrateIntervalTimer");
+                    Break();
+                }
+            }
+
+            BulletGetMove();
+        }
+
+        void EnemyRemove(Enemy enemy)
+        {
+            //要修正
+            Destroy(enemy);
+        }
+
+        void Break()
+        {
+            damageManagerS.BulletRemove(this);
         }
     }
 }

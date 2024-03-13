@@ -31,16 +31,16 @@ public class JunMainSystemS : MonoBehaviour
     //DamageManagerS DMManager;
 
     [SerializeField]
-    EnemyInfoManager EIManager;
+    EnemyAdmin ENManager;
 
-    [SerializeField]
-    PlayerEXPManagerS PEXPManager;
+    //[SerializeField]
+    //PlayerEXPManagerS PEXPManager;
 
     [SerializeField]
     UserInterfaceManager UIManager;
 
-    [SerializeField]
-    EnemyManagerS ENManager;
+    //[SerializeField]
+    //EnemyManagerS ENManager;
 
     //[SerializeField]
     //LevelManager LVManager;
@@ -57,15 +57,15 @@ public class JunMainSystemS : MonoBehaviour
     [SerializeField]
     AttackAdmin attackAdmin;
 
-    [SerializeField]
-    AttackObjectAdmin attackObjectAdmin;
+    //[SerializeField]
+    //AttackObjectAdmin attackObjectAdmin;
 
     Camera PlayerCamera;
     Animator PlayerAnimator;
 
     LayerMask wallLayer = 1 << 6;
 
-    LayerMask bulletHitLayer = 1 << 6 | 1 << 7;
+    //LayerMask bulletHitLayer = 1 << 6 | 1 << 7;
 
     LayerMask playerLayer = 1 << 8;
 
@@ -73,12 +73,13 @@ public class JunMainSystemS : MonoBehaviour
 
     LayerMask missileLayer = 1 << 9;
 
-    List<Bullet> ABIList;
+    //List<Bullet> ABIList;
 
-    List<GameObject> AEOList;
-    List<EnemyS> AEIList;
+    //List<GameObject> AEOList;
+    List<Enemy> AEIList;
+
     List<GameObject> MOList;
-    List<EnemyS> MIList;
+    List<Enemy> MIList;
 
     int gamePhase = 0;
 
@@ -101,11 +102,11 @@ public class JunMainSystemS : MonoBehaviour
         UIManager.LevelUpUIInit();
         UIManager.SliderMaxInit();
         PIManager.LineRendererInit();
-        PEXPManager.EXPdebugTextInit();
+        //PEXPManager.EXPdebugTextInit();
         //LVManager.LevelInit();
         attackAdmin.LVManager.LevelInit();
 
-        attackObjectAdmin.DMManager.PenetrateIntervalInit(0.03f);
+        attackAdmin.DMManager.PenetrateIntervalInit(0.03f);
         HPManager.InvincibleIntervalInit(0.5f);
         HPManager.PlayerHPInit(100);
     }
@@ -120,9 +121,9 @@ public class JunMainSystemS : MonoBehaviour
 
         PlayerCamera = Camera.main;
 
-        ABIList = attackAdmin.SIManager.AllBulletInfoList;
+        //ABIList = attackAdmin.SIManager.AllBulletInfoList;
         AEIList = ENManager.AllEnemyInfoList;
-        AEOList = ENManager.AllEnemyObjectList;
+        //AEOList = ENManager.AllEnemyObjectList;
 
         MIList = ENManager.MissileInfoList;
         MOList = ENManager.MissileObjectList;
@@ -146,9 +147,7 @@ public class JunMainSystemS : MonoBehaviour
 
         gamePhase = 0;
 
-        PEXPManager.AccumulationEXP(2);
-
-   
+        attackAdmin.EXPManager.AccumulationEXP(2);
     }
 
     // Update is called once per frame
@@ -164,32 +163,32 @@ public class JunMainSystemS : MonoBehaviour
 
             case 1:
 
-                UIManager.TextSet(UIManager.levelText, "Lv : ", PEXPManager.EXPtoLevel());
+                UIManager.TextSet(UIManager.levelText, "Lv : ", attackAdmin.EXPManager.EXPtoLevel());
                 if (ENManager.minute == 4) gamePhase = 3;
 
-                //弾の処理
-                if (ABIList.Count > 0)
-                {
-                    for (int i = 0; i < ABIList.Count; i++)
-                    {
-                        //一定距離飛んでいる
-                        if (ABIList[i].isDestroyByDis())
-                        {
-                            attackObjectAdmin.BulletRemove(ABIList, i);
-                            continue;
-                        }
-                        //一定距離飛んでいない
-                        else
-                        {
-                            int beforeLevel = PEXPManager.EXPtoLevel();
-                            //そのまま飛ばす
-                            attackObjectAdmin.BulletProcess(ABIList, AEIList, AEOList, i, bulletHitLayer, "Wall", attackAdmin.LVManager.penetrateLevelArray[attackAdmin.LVManager.LevelofIndex(4)]);
+                ////弾の処理
+                //if (ABIList.Count > 0)
+                //{
+                //    for (int i = 0; i < ABIList.Count; i++)
+                //    {
+                //        ////一定距離飛んでいる
+                //        //if (ABIList[i].isDestroyByDis())
+                //        //{
+                //        //    attackObjectAdmin.BulletRemove(ABIList, i);
+                //        //    continue;
+                //        //}
+                //        //一定距離飛んでいない
+                //        else
+                //        {
+                //            int beforeLevel = PEXPManager.EXPtoLevel();
+                //            //そのまま飛ばす
+                //            attackObjectAdmin.BulletProcess(ABIList, AEIList, AEOList, i, bulletHitLayer, "Wall", attackAdmin.LVManager.penetrateLevelArray[attackAdmin.LVManager.LevelofIndex(4)]);
 
-                            GetEXP(attackObjectAdmin.DMManager.deadEnemiesList);
-                            LevelUpCheckProcess(beforeLevel);
-                        }
-                    }
-                }
+                //            GetEXP(attackObjectAdmin.DMManager.deadEnemiesList);
+                //            LevelUpCheckProcess(beforeLevel);
+                //        }
+                //    }
+                //}
 
                 //敵の処理
                 if (AEIList.Count > 0)
@@ -227,7 +226,7 @@ public class JunMainSystemS : MonoBehaviour
                         }
                     }
                 //Debug.Log(MOList.Count);
-                HPManager.PlayerHPCheck(Player, 2, enemyLayer, AEOList, AEIList, PlayerAnimator);
+                HPManager.PlayerHPCheck(Player, 2, enemyLayer,PlayerAnimator);
                 HPManager.PlayerHPCheckMissile(Player, 2, missileLayer, MOList, MIList, PlayerAnimator);
                 UIManager.SliderValueChange(UIManager.HPSlider, HPManager.playerHP);
 
@@ -377,87 +376,6 @@ public class JunMainSystemS : MonoBehaviour
         }
     }
 
-    ////弾が一回で行う処理　壁に衝突するか　敵に衝突するか　+移動
-    //void BulletProcess(List<Bullet> ABIList, int number, LayerMask bHitLayer, string tagName, bool isPen)
-    //{
-    //    Bullet bullet = ABIList[number];
-    //    Collider[] cols = CLManager.whatBulletCollide(bullet, bHitLayer);
-
-    //    int beforeLevel = PEXPManager.EXPtoLevel();
-    //    //Debug.Log("加算前レベル" + beforeLevel);
-
-    //    //Debug.Log("加算前" + PEXPManager.totalPlayerEXP);
-
-    //    //何かにぶつかっている
-    //    if (cols.Length > 0)
-    //    {
-    //        List<Collider> colOponentList = CLManager.FindWhatYouWant(cols, tagName);
-
-    //        //colsが初っ端から壁だった
-    //        if(colOponentList.Count < 1)
-    //        {
-    //            //弾を破壊
-    //            CLManager.BulletRemove(ABIList, number);
-
-    //            //判定を行ったのでColOpListの中身を削除
-    //            colOponentList.Clear();
-
-    //            return;
-    //        }
-
-    //        //衝突したリストに壁があった
-    //        if(colOponentList.Count < cols.Length)
-    //        {
-    //            //敵にダメージ判定
-    //            PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
-
-    //            //レベルアップするかどうか
-    //            LevelUpCheckProcess(beforeLevel);
-
-    //            //弾を破壊
-    //            CLManager.BulletRemove(ABIList, number);
-
-    //            //判定を行ったのでColOpListの中身を削除
-    //            colOponentList.Clear();
-    //            return;
-    //        }
-    //        //なかった
-    //        else
-    //        {
-    //            //Debug.Log(colOponentList[0].name);
-
-    //            //貫通でない
-    //            if (!isPen)
-    //            {
-    //                PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
-    //                //レベルアップするかどうか
-    //                LevelUpCheckProcess(beforeLevel);
-
-    //                //弾を破壊
-    //                CLManager.BulletRemove(ABIList, number);
-
-    //                //判定を行ったのでColOpListの中身を削除
-    //                colOponentList.Clear();
-    //                return;
-    //            }
-    //            //貫通なら
-    //            else
-    //            {
-    //                PEXPManager.totalPlayerEXP += DMManager.bulletDamegeProcess(colOponentList, AEIList, AEOList, bullet);
-
-    //                //レベルアップするかどうか
-    //                LevelUpCheckProcess(beforeLevel);
-
-    //                //判定を行ったのでColOpListの中身を削除
-    //                colOponentList.Clear();
-    //            }
-    //        }
-    //    }
-
-    //    ABIList[number].BulletGetMove();
-    //    //Debug.Log("うごいた");
-    //}
-
     void BaseObjShotProcess(Vector3 direction, GameObject originObj, GameObject predictObj, GameObject baseObj, LayerMask rayHitLayer, LayerMask collideLayer, float dist)
     {
         //Vector3 mouseVec = PIManager.MouseVector(originObj, PlayerCamera, PIManager.zAdjust);
@@ -490,9 +408,9 @@ public class JunMainSystemS : MonoBehaviour
     void LevelUpCheckProcess(int beforeLevel)
     {
         //print(PEXPManager.totalPlayerEXP);
-        UIManager.SliderValueChange(UIManager.EXPSlider, PEXPManager.BarPersent(beforeLevel));
+        UIManager.SliderValueChange(UIManager.EXPSlider, attackAdmin.EXPManager.BarPersent(beforeLevel));
 
-        int afterLevel = PEXPManager.EXPtoLevel();
+        int afterLevel = attackAdmin.EXPManager.EXPtoLevel();
         //Debug.Log("現在のレベル" + afterLevel);
 
         if (afterLevel > beforeLevel)
@@ -513,13 +431,13 @@ public class JunMainSystemS : MonoBehaviour
         }
     }
 
-    void EnemyProcess(List<EnemyS> AEIList, int number, GameObject target)
+    void EnemyProcess(List<Enemy> AEIList, int number, GameObject target)
     {
         AEIList[number].EnemyNavMove(target.transform, AEIList[number].enemyObject.transform.position);
 
     }
 
-    void MissileProcess(List<EnemyS> MIList, int number)
+    void MissileProcess(List<Enemy> MIList, int number)
     {
         bool isFinish = MIList[number].IsMissileFinish();
         if(isFinish)
@@ -604,21 +522,21 @@ public class JunMainSystemS : MonoBehaviour
         PMManager.MoveAndRot(Player, hitInfo);
         
     }
-    void GetEXP(List<EnemyS> deadEnemiesList)
-    {
-        if (deadEnemiesList.Count < 1)
-        {
-            return;
-        }
+    //void GetEXP(List<Enemy> deadEnemiesList)
+    //{
+    //    if (deadEnemiesList.Count < 1)
+    //    {
+    //        return;
+    //    }
 
-        for (int i = 0; i < deadEnemiesList.Count; i++)
-        {
-            int exp = (int)deadEnemiesList[i].EnemyEXP();
-            PEXPManager.totalPlayerEXP += exp;
-        }
+    //    for (int i = 0; i < deadEnemiesList.Count; i++)
+    //    {
+    //        int exp = (int)deadEnemiesList[i].EnemyEXP();
+    //        PEXPManager.totalPlayerEXP += exp;
+    //    }
 
-        deadEnemiesList.Clear();
-    }
+    //    deadEnemiesList.Clear();
+    //}
     IEnumerator Move(GameObject playerObj, RaycastHit hitInfo, float time)
     {
         PlayerAnimator.SetTrigger("WarpEnd");

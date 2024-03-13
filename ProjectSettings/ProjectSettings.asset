@@ -48,7 +48,6 @@ PlayerSettings:
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 0
-  unsupportedMSAAFallback: 0
   m_SpriteBatchVertexThreshold: 300
   m_MTRendering: 1
   mipStripping: 0
@@ -404,6 +403,7 @@ PlayerSettings:
   switchScreenResolutionBehavior: 2
   switchUseCPUProfiler: 0
   switchEnableFileSystemTrace: 0
+  switchUseGOLDLinker: 0
   switchLTOSetting: 0
   switchApplicationID: 0x01004b9000490000
   switchNSODependencies: 
@@ -756,11 +756,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 9647cdb2-a06b-41dd-8ad3-3f92609b9d4e
+  cloudProjectId: e2134aa0-0777-4e37-ac70-9f0c5a7db7bf
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Unity1Week20231218
-  organizationId: theta1736
+  organizationId: unity_1029209d2cb6a6a90772
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

@@ -89,24 +89,29 @@ public class PlayerEXPManagerS : MonoBehaviour
         return persent;
     }
 
-    public void EXPdebugText()
-    {
-        int level = EXPtoLevel();
-        int toNextLevel = totalPlayerEXP - (int)AccumulationEXP(level);
+    //public void EXPdebugText()
+    //{
+    //    int level = EXPtoLevel();
+    //    int toNextLevel = totalPlayerEXP - (int)AccumulationEXP(level);
 
-        totalEXP.text = "TotalEXP: " + totalPlayerEXP.ToString();
-        Level.text = "Level: " + level.ToString();
-        demandEXP.text = "You need " + demandEXPtoNextLevel(level).ToString() + " EXP to levelUp";
-        EXPtoNextLevel.text = "You have " + toNextLevel.ToString() + "EXP";
-        AccumeEXP.text = "you got " + (int)AccumulationEXP(level) + " for " + level + " level"; 
-    }
+    //    totalEXP.text = "TotalEXP: " + totalPlayerEXP.ToString();
+    //    Level.text = "Level: " + level.ToString();
+    //    demandEXP.text = "You need " + demandEXPtoNextLevel(level).ToString() + " EXP to levelUp";
+    //    EXPtoNextLevel.text = "You have " + toNextLevel.ToString() + "EXP";
+    //    AccumeEXP.text = "you got " + (int)AccumulationEXP(level) + " for " + level + " level"; 
+    //}
 
-    public void EXPdebugTextInit()
+    //public void EXPdebugTextInit()
+    //{
+    //    totalEXP.text = "0";
+    //    Level.text = "0";
+    //    demandEXP.text = "0";
+    //    EXPtoNextLevel.text = "0";
+    //    AccumeEXP.text = "0";
+    //}
+
+    public void GetEXP(Enemy enemy)
     {
-        totalEXP.text = "0";
-        Level.text = "0";
-        demandEXP.text = "0";
-        EXPtoNextLevel.text = "0";
-        AccumeEXP.text = "0";
+        totalPlayerEXP += (int)enemy.GiveEXP();
     }
 }
