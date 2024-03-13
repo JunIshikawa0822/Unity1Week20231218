@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     private Collider enemyCollider;
     private Vector3 enemyPos;
 
+    private EnemyManager enemyManager;
 
     public Enemy(int enHP, float enSpeed, float enDamage, float enEXP, GameObject enemyObj, Vector3 misAr)
     {
@@ -47,9 +48,9 @@ public class Enemy : MonoBehaviour
        // enemyAnim = enAnim;
     }
 
-    public void EnemyInit()
+    public void EnemyInit(EnemyManager _enemyManager)
     {
-
+        enemyManager = _enemyManager;
     }
 
     public void GetDamage(int givenDamage)
@@ -178,6 +179,10 @@ public class Enemy : MonoBehaviour
 
     private void Dead()
     {
+        //経験値加算
+        //playerEXPManager.GetEXP(enemy);
 
+        //敵の破壊
+        
     }
 }

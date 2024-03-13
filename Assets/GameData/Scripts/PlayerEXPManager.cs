@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 //using UnityEditor.PackageManager;
 
-public class PlayerEXPManagerS : MonoBehaviour
+public class PlayerEXPManager : MonoBehaviour
 {
     [System.NonSerialized]
     public int totalPlayerEXP = 0;

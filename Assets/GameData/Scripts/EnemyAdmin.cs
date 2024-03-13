@@ -111,8 +111,6 @@ public class EnemyAdmin : MonoBehaviour
         
     }
     
-    
-
     private void EnemyGenerate(Vector3 enemyPos, float enHP, float enSpeed, float enDamage, float enEXP, float enType)
     {
         

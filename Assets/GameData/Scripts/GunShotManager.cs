@@ -26,7 +26,7 @@ public class GunShotManager : MonoBehaviour
     {
         GameObject bulletObj = Instantiate(bTObjArray[0], instantPos, Quaternion.identity);
         Bullet bullet = new Bullet(0.2f, damage, moveDir, bulletObj, destroyDist, isbPen, bHLayer);
-        bullet.BulletInit(attackAdmin.DMManager, attackAdmin.EXPManager);
+        bullet.BulletInit(attackAdmin.DMManager);
         //AllBulletInfoList.Add(bullet);
     }
 

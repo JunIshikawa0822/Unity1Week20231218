@@ -12,8 +12,6 @@ public class PlayerHPManager : MonoBehaviour
 
     WaitForSeconds invincibleTimeWait;
 
-    
-
     public void PlayerHPInit(int HP)
     {
         playerHP = HP;

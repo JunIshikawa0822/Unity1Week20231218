@@ -6,9 +6,17 @@ public class SoundManager : MonoBehaviour
 {
     public AudioSource bgm;
     public AudioSource se;
-    
-    
-    
+
+    public AudioClip damagesound;
+    public AudioClip destroysound;
+
+    private AttackAdmin attackAdmin;
+
+    public void SoundManagerInit(AttackAdmin _attackAdmin)
+    {
+        attackAdmin = _attackAdmin;
+    }
+
     public void MakeSound(AudioClip sound,float volume)
     {
         se.PlayOneShot(sound,volume);

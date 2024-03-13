@@ -12,10 +12,10 @@ public class AttackAdmin : MonoBehaviour
     public LevelManager LVManager;
 
     [SerializeField]
-    public DamageManagerS DMManager;
+    public DamageManager DMManager;
 
-    [SerializeField]
-    public PlayerEXPManagerS EXPManager;
+    //[SerializeField]
+    //public SoundManager SManager;
 
     [System.NonSerialized]
     public bool fireTimerIsActive = false;
@@ -29,6 +29,8 @@ public class AttackAdmin : MonoBehaviour
     public void AttackAdminInit()
     {
         GSManager.GunShotManagerInit(this);
+        DMManager.DamageManagerInit(this);
+        //SManager.SoundManagerInit(this);
     }
 
     public void AttackIntervalInit()

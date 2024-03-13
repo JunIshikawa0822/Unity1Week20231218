@@ -2,23 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageManagerS : MonoBehaviour
+public class DamageManager : MonoBehaviour
 {
-    public AudioClip damagesound;
-    public AudioClip destroysound;
-    [SerializeField]
-    SoundManager SManager;
+    //public AudioClip damagesound;
+    //public AudioClip destroysound;
+    //[SerializeField]
+    //SoundManager SManager;
 
     [System.NonSerialized]
     public bool isPenetrateActive = false;
+
     //float fireInterval;
     WaitForSeconds penetrateIntervalWait;
 
     private AttackAdmin attackAdmin;
 
-    public void DamageManagerInit()
+    public void DamageManagerInit(AttackAdmin _attackAdmin)
     {
-
+        attackAdmin = _attackAdmin;
     }
 
     public void PenetrateIntervalInit(float interval)
@@ -36,7 +37,7 @@ public class DamageManagerS : MonoBehaviour
         //敵にダメージを与える
         enemy.GetDamage(damage);
 
-        SManager.MakeSound(damagesound, 0.2f);
+        attackAdmin.SManager.MakeSound(attackAdmin.SManager.damagesound, 0.2f);
     }
 
     public bool isEnemyDead(Enemy enemy)

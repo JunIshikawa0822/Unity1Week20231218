@@ -18,8 +18,8 @@ public class Bullet:MonoBehaviour
     private LayerMask bulletHitLayer;
     private string wall;
 
-    private DamageManagerS damageManagerS;
-    private PlayerEXPManagerS playerEXPManagerS;
+    private DamageManager damageManager;
+    //private PlayerEXPManager playerEXPManager;
 
     public Bullet(float speed, int damage, Vector3 moveDir, GameObject bulletGameObj, float destroyDist, bool isPen, LayerMask bHLayer)
     {
@@ -30,14 +30,13 @@ public class Bullet:MonoBehaviour
         moveDistance = 0;
         destroyDistance = destroyDist;
         isPenetrate = isPen;
-        bulletHitLayer = bHLayer;
-    
+        bulletHitLayer = bHLayer;   
     }
 
-    public void BulletInit(DamageManagerS _damageManagerS, PlayerEXPManagerS _playerEXPManagerS)
+    public void BulletInit(DamageManager _damageManager)
     {
-        damageManagerS = _damageManagerS;
-        playerEXPManagerS = _playerEXPManagerS;
+        damageManager = _damageManager;
+        //playerEXPManager = _playerEXPManager;
     }
     
     //動かし続ける
@@ -103,16 +102,16 @@ public class Bullet:MonoBehaviour
             {
                 Enemy enemy = colArray[i].GetComponent<Enemy>();
                 //ダメージを与える
-                damageManagerS.GiveDamage(this, enemy);
+                damageManager.GiveDamage(this, enemy);
 
-                if (damageManagerS.isEnemyDead(enemy))
-                {
-                    //経験値加算
-                    playerEXPManagerS.GetEXP(enemy);
+                //if (damageManager.isEnemyDead(enemy))
+                //{
+                //    //経験値加算
+                //    playerEXPManager.GetEXP(enemy);
 
-                    //敵の破壊
-                    EnemyRemove(enemy);
-                }
+                //    //敵の破壊
+                //    EnemyRemove(enemy);
+                //}
 
                 if (isPenetrate)
                 {
@@ -120,7 +119,7 @@ public class Bullet:MonoBehaviour
                 }
                 else
                 {
-                    damageManagerS.StartCoroutine("PenetrateIntervalTimer");
+                    damageManager.StartCoroutine("PenetrateIntervalTimer");
                     Break();
                 }
             }
@@ -128,15 +127,15 @@ public class Bullet:MonoBehaviour
             BulletGetMove();
         }
 
-        void EnemyRemove(Enemy enemy)
-        {
-            //要修正
-            Destroy(enemy);
-        }
+        //void EnemyRemove(Enemy enemy)
+        //{
+        //    //要修正
+        //    Destroy(enemy);
+        //}
 
         void Break()
         {
-            damageManagerS.BulletRemove(this);
+            damageManager.BulletRemove(this);
         }
     }
 }
