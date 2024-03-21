@@ -39,7 +39,7 @@ public class DamageManager : MonoBehaviour
         //敵にダメージを与える
         enemy.GetDamage(damage);
 
-        attackAdmin.SManager.MakeSound(attackAdmin.SManager.damagesound, 0.2f);
+        //attackAdmin.SManager.MakeSound(attackAdmin.SManager.damagesound, 0.2f);
     }
 
     public bool isEnemyDead(Enemy enemy)

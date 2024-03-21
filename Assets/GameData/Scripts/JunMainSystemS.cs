@@ -147,7 +147,7 @@ public class JunMainSystemS : MonoBehaviour
 
         gamePhase = 0;
 
-        attackAdmin.EXPManager.AccumulationEXP(2);
+        //attackAdmin.EXPManager.AccumulationEXP(2);
     }
 
     // Update is called once per frame
@@ -163,7 +163,7 @@ public class JunMainSystemS : MonoBehaviour
 
             case 1:
 
-                UIManager.TextSet(UIManager.levelText, "Lv : ", attackAdmin.EXPManager.EXPtoLevel());
+                //UIManager.TextSet(UIManager.levelText, "Lv : ", attackAdmin.EXPManager.EXPtoLevel());
                 if (ENManager.minute == 4) gamePhase = 3;
 
                 ////弾の処理
@@ -408,27 +408,27 @@ public class JunMainSystemS : MonoBehaviour
     void LevelUpCheckProcess(int beforeLevel)
     {
         //print(PEXPManager.totalPlayerEXP);
-        UIManager.SliderValueChange(UIManager.EXPSlider, attackAdmin.EXPManager.BarPersent(beforeLevel));
+        //UIManager.SliderValueChange(UIManager.EXPSlider, attackAdmin.EXPManager.BarPersent(beforeLevel));
 
-        int afterLevel = attackAdmin.EXPManager.EXPtoLevel();
+        //int afterLevel = attackAdmin.EXPManager.EXPtoLevel();
         //Debug.Log("現在のレベル" + afterLevel);
 
-        if (afterLevel > beforeLevel)
-        {
-            UIManager.SliderValueChange(UIManager.EXPSlider, 0);
+        //if (afterLevel > beforeLevel)
+        //{
+        //    UIManager.SliderValueChange(UIManager.EXPSlider, 0);
 
-            UIManager.selectedPanelnum = 0;
-            UIManager.onClick = false;
+        //    UIManager.selectedPanelnum = 0;
+        //    UIManager.onClick = false;
 
-            attackAdmin.LVManager.RewardInit();
+        //    attackAdmin.LVManager.RewardInit();
 
-            AgentStopProcess(true);
-            LevelUpUIProcess(true);
+        //    AgentStopProcess(true);
+        //    LevelUpUIProcess(true);
             
-            UIManager.RewardUISet(attackAdmin.LVManager.infotoPanel, attackAdmin.LVManager.rewardsLevelsArray);
+        //    UIManager.RewardUISet(attackAdmin.LVManager.infotoPanel, attackAdmin.LVManager.rewardsLevelsArray);
             
-            gamePhase = 2;
-        }
+        //    gamePhase = 2;
+        //}
     }
 
     void EnemyProcess(List<Enemy> AEIList, int number, GameObject target)
